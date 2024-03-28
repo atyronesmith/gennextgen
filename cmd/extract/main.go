@@ -34,16 +34,19 @@ func main() {
 		os.Exit(0)
 	}
 
-	if dirname := flag.Arg(0); dirname != "" {
-		err := generate.GenSecrets(dirname, *outDir)
-		if err != nil {
+	if dirname := flag.Arg(0); dirname == "" {
+		flag.Usage()
+		os.Exit(1)
+	} else {
+		if err := generate.GenSecrets(dirname, *outDir); err != nil {
 			fmt.Printf("%s\n", err)
 			os.Exit(1)
 		}
-		//		utils.WalkDir(dirname)
-	} else {
-		flag.Usage()
-		os.Exit(1)
+		if err := generate.GenOpenStackControlPlane(dirname, *outDir); err != nil {
+			fmt.Printf("%s\n", err)
+			os.Exit(1)
+		}
+
 	}
 
 }
