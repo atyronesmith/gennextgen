@@ -2,9 +2,9 @@ package generate
 
 import "github.com/atyronesmith/gennextgen/pkg/utils"
 
-func GenOpenStackControlPlane(root string, outDir string) error {
+func GenOpenStackControlPlane(outDir string) error {
 
-	exportVars, err := utils.YamlToMap(root + "overcloud-export.yaml")
+	exportVars, err := utils.YamlToMap(utils.GetFullPath(utils.OVERCLOUD_EXPORT))
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func GenOpenStackControlPlane(root string, outDir string) error {
 	if err != nil {
 		return err
 	}
-	err = utils.WriteByteData(secret, outDir, "openstack-control-plane.yaml")
+	err = utils.WriteByteData(secret.Bytes(), outDir, "openstack-control-plane.yaml")
 
 	return err
 }
