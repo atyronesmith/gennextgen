@@ -1,29 +1,27 @@
 package generate
 
 import (
+	_ "embed"
+
+	"github.com/atyronesmith/gennextgen/pkg/types"
 	"github.com/atyronesmith/gennextgen/pkg/utils"
+	v1 "k8s.io/api/core/v1"
 )
 
-func GenSecrets(root string, outDir string) error {
+func GenSecrets(mappingYaml string, outDir string, cdl *types.ConfigDownload) error {
 
-	parameterDefaults, err := utils.YamlToMap(root + "overcloud-passwords.yaml")
+	parameterDefaults, err := utils.YamlToMap(utils.GetFullPath(utils.OVERCLOUD_PASSWORDS))
 	if err != nil {
 		return err
 	}
 	passwords := parameterDefaults["parameter_defaults"].(map[string]interface{})
-
-	groupVars, err := utils.YamlToMap(root + "config-download/overcloud/group_vars/Controller")
-	if err != nil {
-		return err
-	}
-	serviceConfigs := groupVars["service_configs"].(map[string]interface{})
 
 	err = genKeystoneSecret(outDir, passwords)
 	if err != nil {
 		return err
 	}
 
-	err = genOpenStackSecret(outDir, passwords, serviceConfigs)
+	err = genOpenStackSecret(outDir, cdl)
 	if err != nil {
 		return err
 	}
@@ -36,29 +34,29 @@ func genKeystoneSecret(outDir string, passwords map[string]interface{}) error {
 	if err != nil {
 		return err
 	}
-	err = utils.WriteByteData(secret, outDir, "keystone-secret.yaml")
+	err = utils.WriteByteData(secret.Bytes(), outDir, "keystone-secret.yaml")
 
 	return err
 }
 
-func genOpenStackSecret(outDir string, passwords map[string]interface{}, groupVars map[string]interface{}) error {
-	templateData := struct {
-		Passwords map[string]interface{}
-		GroupVars map[string]interface{}
-		Namespace string
-		Name      string
-	}{
-		Passwords: passwords,
-		GroupVars: groupVars,
-		Namespace: "openstack",
-		Name:      "osp-secret",
+func genOpenStackSecret(outDir string, cdl *types.ConfigDownload) error {
+
+	secret := v1.Secret{}
+	secret.Type = "Opaque"
+	secret.Namespace = "openstack"
+	secret.Name = "osp-secret"
+	secret.Data = make(map[string][]byte)
+
+	for index, s := range cdl.Passwords {
+		secret.Data[index] = []byte(s)
 	}
 
-	secret, err := utils.ProcessTemplate("openstack-service-secret.tmpl", "openstack", utils.GetFuncMap(), templateData)
+	y, err := utils.StructToYamlK8s(secret)
 	if err != nil {
 		return err
 	}
-	err = utils.WriteByteData(secret, outDir, "openstack-service-secret.yaml")
+
+	err = utils.WriteByteData(y, outDir, "osp-secret.yaml")
 
 	return err
 }

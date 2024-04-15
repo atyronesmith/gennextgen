@@ -31,27 +31,7 @@ func GenOpenStackSecret(outDir string, passwords map[string]interface{}, groupVa
 	if err != nil {
 		return err
 	}
-	err = utils.WriteByteData(secret, outDir, "openstack-service-secret.yaml")
+	err = utils.WriteByteData(secret.Bytes(), outDir, "openstack-service-secret.yaml")
 
 	return err
-}
-
-func GetOpenStackPasswords(root string, outDir string) error {
-	parameterDefaults, err := utils.YamlToMap(root + "overcloud-passwords.yaml")
-	if err != nil {
-		return err
-	}
-	passwords := parameterDefaults["parameter_defaults"].(map[string]interface{})
-
-	groupVars, err := utils.YamlToMap(root + "config-download/overcloud/group_vars/Controller")
-	if err != nil {
-		return err
-	}
-
-	err = GenOpenStackSecret(outDir, passwords, groupVars)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

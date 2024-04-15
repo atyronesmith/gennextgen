@@ -1,0 +1,7 @@
+worker_nodes:
+  interface: eno2
+  names:
+  - worker-1
+  - worker-2
+  - worker-3
+  

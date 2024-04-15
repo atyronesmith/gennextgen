@@ -1,11 +1,15 @@
+{{ range $worker := .Workers -}}
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
 metadata:
-  name: {{ $workerNodeName }}
+  name: osp-{{ $worker.NodeName }}
 spec:
   desiredState:
     interfaces:
-    - description: internalapi vlan interface
+{{ range $interface := $worker.Interfaces -}}
+    - description: {{ $interface.Description }}
+{{ range $addressFamily := $interface.AddressFamilies -}}
+      {{ $addressFamily.Name }}:  
       ipv4:
         address:
         - ip: 172.17.0.10
