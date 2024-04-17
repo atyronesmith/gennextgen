@@ -77,6 +77,13 @@ func main() {
 
 		generate.GenerateNad(*outDir, configDownload)
 		//generate.GenNetConfig(dirname)
+
+		err = generate.GenGraph(*outDir, configDownload) // Generate the graph
+		if err != nil {
+			fmt.Printf("%s\n", err)
+			os.Exit(1)
+		}
+
 	}
 
 }

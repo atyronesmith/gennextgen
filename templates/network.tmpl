@@ -1,0 +1,43 @@
+digraph G {
+  fontname="Helvetica,Arial,sans-serif"
+  node [shape="none",fontname="Helvetica,Arial,sans-serif"]
+  edge [fontname="Helvetica,Arial,sans-serif"]
+{{ range .Networks }}
+  {{ $networkName := .Name }}
+  "{{ .Name }}" [tooltip="{{ .Name }}",
+    label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="20">
+    <TR><TD COLSPAN="2" BGCOLOR="lightgray">{{ .Name }}</TD></TR>
+    <TR><TD>Domain</TD><TD> {{ .Domain }} </TD></TR>
+    <TR><TD>Vip</TD><TD> {{ .Vip }} </TD></TR>
+    <TR><TD>Gateway Ip</TD><TD> {{ .GatewayIp }} </TD></TR>
+    <TR><TD>CIDR</TD><TD> {{ .Cidr }} </TD></TR>
+    <TR><TD>MTU</TD><TD> {{ .Mtu }} </TD></TR>
+    </TABLE>>]
+    {{ range .Subnets }}
+    "{{ .Name }}" [tooltip="{{ .Name }}",
+        label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="20">
+        <TR><TD COLSPAN="2" BGCOLOR="lightgray">{{ .Name }}</TD></TR>
+        <TR><TD>Subnet</TD><TD> {{ .Subnet }} </TD></TR>
+        <TR><TD>Vlan</TD><TD> {{ .VlanId }} </TD></TR>
+        </TABLE>>]
+    "{{ .Name }}" -> "{{ $networkName }}" [label="{{ .Name }}"]
+    {{ end -}}
+{{ end -}}
+
+{{/*
+{{ range .Hosts }}
+    "{{ .Name }}" [tooltip="{{ .Name }}",
+        label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="20">
+        <TR><TD COLSPAN="2" BGCOLOR="lightgray">{{ .Name }}</TD></TR>
+        <TR><TD>Def Rt Net</TD><TD> {{ .DefaultRouteNetwork }} </TD></TR>
+        </TABLE>>]
+{{ end -}}
+
+{{ range .Hosts }}
+    {{ $source := .Name }}
+    {{ range $key, $value := .Networks -}}
+        "{{ $source }}" -> "{{ $key }}" [label="{{ $value.IP }}"]
+    {{ end -}}
+{{ end -}}
+*/}}
+}
