@@ -3,10 +3,10 @@ package utils
 import (
 	"bytes"
 	"fmt"
-	"html/template"
 	"math"
 	"os"
 	"strings"
+	"text/template"
 )
 
 func ProcessTemplate(templateFile string, name string, funcMap template.FuncMap, data interface{}) (*bytes.Buffer, error) {

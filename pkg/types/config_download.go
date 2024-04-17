@@ -2,7 +2,7 @@ package types
 
 import (
 	"fmt"
-	"net"
+	"net/netip"
 	"os"
 	"regexp"
 	"strconv"
@@ -37,10 +37,9 @@ type OSPNetwork struct {
 	Name       string              `yaml:"name"`
 	IsRoleNet  bool                `yaml:"is_role_net"`
 	Domain     string              `yaml:"domain"`
-	IP         string              `yaml:"ip"`
-	GatewayIp  string              `yaml:"gateway_ip"`
-	Cidr       string              `yaml:"cidr"`
-	Vip        string              `yaml:"vip"`
+	GatewayIp  netip.Addr          `yaml:"gateway_ip"`
+	Cidr       netip.Prefix        `yaml:"cidr"`
+	Vip        netip.Addr          `yaml:"vip"`
 	Mtu        int                 `yaml:"mtu"`
 	VlanId     int                 `yaml:"vlan_id"`
 	HostRoutes []TripleoHostRoutes `yaml:"host_routes"`
@@ -54,7 +53,7 @@ func (n *OSPNetwork) UnmarshalYaml(node *v3.Node) error {
 
 type OSPNetworkSubnet struct {
 	Name            string
-	Subnet          string
+	Subnet          netip.Prefix
 	VlanId          int
 	AllocationPools []OSPNetworkSubnetPool
 }
@@ -75,13 +74,13 @@ type TripleoHost struct {
 
 type TripleoHostNetwork struct {
 	Name     string
-	IP       net.IP
+	IP       netip.Addr
 	Hostname string
 }
 
 type TripleoRole struct {
 	Name     string
-	Hosts    []TripleoHost
+	Hosts    []*TripleoHost
 	Networks map[string]*OSPNetwork
 	Vars     map[string]interface{}
 }
@@ -177,6 +176,11 @@ func (cdl *ConfigDownload) Process(mappingYaml string) error {
 		return err
 	}
 
+	err = cdl.ProcesNetworks()
+	if err != nil {
+		return err
+	}
+
 	err = cdl.ProcessPasswords(mappingYaml, groupVars)
 	if err != nil {
 		return err
@@ -191,7 +195,11 @@ func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error 
 	if ncm, ok := data["net_cidr_map"]; ok {
 		for k, v := range ncm.(map[string]interface{}) {
 			for _, cidr := range v.([]interface{}) {
-				cdl.Networks[k] = &OSPNetwork{Name: k, Cidr: cidr.(string), IsRoleNet: false}
+				prefix, err := netip.ParsePrefix(cidr.(string))
+				if err != nil {
+					return err
+				}
+				cdl.Networks[k] = &OSPNetwork{Name: k, Cidr: prefix, IsRoleNet: false}
 			}
 		}
 	} else {
@@ -202,8 +210,8 @@ func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error 
 	if cns, ok := data["cloud_names"]; ok {
 		for k, v := range cns.(map[string]interface{}) {
 			netName := strings.Replace(k, "cloud_name_", "", -1)
-			if n, ok := cdl.Networks[netName]; ok {
-				n.Domain = v.(string)
+			if _, ok := cdl.Networks[netName]; ok {
+				cdl.Networks[netName].Domain = v.(string)
 			}
 		}
 	} else {
@@ -212,9 +220,15 @@ func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error 
 
 	// Fill in vip info for the networks
 	if nvm, ok := data["net_vip_map"]; ok {
-		for _, v := range cdl.Networks {
+		for netName, v := range cdl.Networks {
 			if vip, ok := nvm.(map[string]interface{})[v.Name]; ok {
-				v.Vip = vip.(string)
+				if vip != nil && len(vip.(string)) > 0 {
+					if addr, err := netip.ParseAddr(vip.(string)); err == nil {
+						cdl.Networks[netName].Vip = addr
+					} else {
+						return err
+					}
+				}
 			}
 		}
 	} else {
@@ -231,8 +245,8 @@ func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error 
 
 	if snm, ok := data["service_net_map"]; ok {
 		for k, v := range snm.(map[string]interface{}) {
-			if s, ok := cdl.EnabledServices[k]; ok {
-				s.Network = v.(string)
+			if _, ok := cdl.EnabledServices[k]; ok {
+				cdl.EnabledServices[k].Network = v.(string)
 			}
 		}
 	} else {
@@ -241,8 +255,10 @@ func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error 
 
 	if es, ok := data["networks"]; ok {
 		for _, v := range es.(map[string]interface{}) {
-			if n, ok := cdl.Networks[v.(map[string]interface{})["name_lower"].(string)]; ok {
-				n.IsRoleNet = true
+			if netName, ok := v.(map[string]interface{})["name_lower"]; ok {
+				if _, ok := cdl.Networks[netName.(string)]; ok {
+					cdl.Networks[netName.(string)].IsRoleNet = true
+				}
 			}
 		}
 	} else {
@@ -260,22 +276,22 @@ func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error 
 
 func (cdl *ConfigDownload) ProcessGroupVars(data map[string]interface{}) error {
 	for index := range cdl.Networks {
-		net := cdl.Networks[index]
 		if gw, ok := data[index+"_gateway_ip"]; ok {
 			if gw != nil {
-				net.GatewayIp = gw.(string)
+				gwAddr, err := netip.ParseAddr(gw.(string))
+				if err != nil {
+					return err
+				}
+				cdl.Networks[index].GatewayIp = gwAddr
 			}
 		}
-		// if hr, ok := data[index+"_host_routes"].([]interface{}); ok {
-		// 	net.HostRoutes = append(v.HostRoutes, hr.([]string)...)
-		// }
 		if m, ok := data[index+"_mtu"]; ok {
-			net.Mtu = m.(int)
+			cdl.Networks[index].Mtu = m.(int)
 		} else {
 			return fmt.Errorf("Missing mtu for %s\n", index)
 		}
 		if vi, ok := data[index+"_vlan_id"]; ok {
-			net.VlanId = vi.(int)
+			cdl.Networks[index].VlanId = vi.(int)
 		}
 	}
 
@@ -295,6 +311,17 @@ func mapStringGetter(v interface{}, key string, valPtr interface{}) {
 			if value != nil {
 				*p = value.(string)
 			}
+		case *netip.Prefix:
+			if value != nil {
+				*p, _ = netip.ParsePrefix(value.(string))
+			}
+		case *netip.Addr:
+			if value != nil {
+				*p, _ = netip.ParseAddr(value.(string))
+			}
+		default:
+			fmt.Printf("Unknown type: %T\n", p)
+			os.Exit(1)
 		}
 	}
 }
@@ -360,7 +387,8 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 					mapStringGetter(hostVarMap, netName+"_ip", &th.Networks[netName].IP)
 					mapStringGetter(hostVarMap, netName+"_hostname", &th.Networks[netName].Hostname)
 				}
-				role.Hosts = append(role.Hosts, th)
+				role.Hosts = append(role.Hosts, &th)
+				cdl.Hosts[hostName] = &th
 			}
 		}
 		cdl.Roles = append(cdl.Roles, role)
@@ -420,7 +448,8 @@ func (cdl *ConfigDownload) ProcesNetworks() error {
 	}
 
 	for _, netDef := range networkData {
-		net, ok := cdl.Networks[netDef["name_lower"].(string)]
+		netName := netDef["name_lower"].(string)
+		net, ok := cdl.Networks[netName]
 		if !ok {
 			fmt.Printf("Network %s not found in global_vars.yaml!\n", netDef["name_lower"].(string))
 			os.Exit(1)
@@ -428,12 +457,6 @@ func (cdl *ConfigDownload) ProcesNetworks() error {
 		if mtu, ok := netDef["mtu"]; ok {
 			if mtu != net.Mtu {
 				fmt.Printf("MTU mismatch for %s: %d != %d\n", net.Name, mtu, net.Mtu)
-				os.Exit(1)
-			}
-		}
-		if vip, ok := netDef["vip"].(string); ok {
-			if vip != net.Vip {
-				fmt.Printf("VIP mismatch for %s: %s != %s\n", net.Name, vip, net.Vip)
 				os.Exit(1)
 			}
 		}
@@ -446,15 +469,21 @@ func (cdl *ConfigDownload) ProcesNetworks() error {
 			var ospSn OSPNetworkSubnet
 			ospSn.Name = subnetName
 			if cidr, ok := sn.(map[string]interface{})["ip_subnet"].(string); ok {
-				ospSn.Subnet = cidr
+				ospSn.Subnet, err = netip.ParsePrefix(cidr)
+				if err != nil {
+					return err
+				}
 			} else if cidr, ok := sn.(map[string]interface{})["ipv6_subnet"].(string); ok {
-				ospSn.Subnet = cidr
+				ospSn.Subnet, err = netip.ParsePrefix(cidr)
+				if err != nil {
+					return err
+				}
 			} else {
 				fmt.Printf("No subnet definition found for %+v\n", sn)
 				os.Exit(1)
 			}
 			if vlanId, ok := sn.(map[string]interface{})["vlan"]; ok {
-				ospSn.VlanId = int(vlanId.(float64))
+				ospSn.VlanId = int(vlanId.(int))
 			}
 			if ap, ok := sn.(map[string]interface{})["allocation_pools"].([]interface{}); ok {
 				for _, pool := range ap {
@@ -474,7 +503,7 @@ func (cdl *ConfigDownload) ProcesNetworks() error {
 				fmt.Printf("No allocation pools found for %+v\n", sn)
 				os.Exit(1)
 			}
-			net.Subnets = append(net.Subnets, ospSn)
+			cdl.Networks[netName].Subnets = append(cdl.Networks[netName].Subnets, ospSn)
 		}
 	}
 

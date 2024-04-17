@@ -3,8 +3,6 @@ package generate
 import (
 	"bytes"
 	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/atyronesmith/gennextgen/pkg/types"
 	nncp "github.com/atyronesmith/gennextgen/pkg/types/nncp"
@@ -39,10 +37,6 @@ func GenNNCP(outDir string, cdl *types.ConfigDownload) error {
 					Id:        network.VlanId,
 				}
 			}
-			pl, err := strconv.Atoi(strings.Split(network.Cidr, "/")[1])
-			if err != nil {
-				return err
-			}
 
 			ni.Ipv4 = &nncp.IpAddress{
 				Enabled: true,
@@ -50,7 +44,7 @@ func GenNNCP(outDir string, cdl *types.ConfigDownload) error {
 				Address: []nncp.Address{
 					{
 						Ip:           "0.0.0.0",
-						PrefixLength: pl,
+						PrefixLength: network.Cidr.Bits(),
 					},
 				},
 			}

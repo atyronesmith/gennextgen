@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net"
 
 	networkv1 "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
 	whereabouts "github.com/k8snetworkplumbingwg/whereabouts/pkg/types"
@@ -45,9 +46,9 @@ func GenerateNad(outDir string, cdl *types.ConfigDownload) {
 
 		waCfg := whereabouts.IPAMConfig{}
 		waCfg.Type = "whereabouts"
-		waCfg.RangeStart = start
-		waCfg.RangeEnd = end
-		waCfg.Range = network.Cidr
+		waCfg.RangeStart = net.ParseIP(start.String())
+		waCfg.RangeEnd = net.ParseIP(end.String())
+		waCfg.Range = network.Cidr.String()
 
 		cniCfg.IPAM = waCfg
 

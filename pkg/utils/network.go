@@ -2,32 +2,19 @@ package utils
 
 import (
 	"fmt"
-	"net"
+	"net/netip"
 )
 
-func IpOffset(cidr string, offset int) (net.IP, error) {
+func IpOffset(cidr netip.Prefix, offset int) (netip.Addr, error) {
 
-	ip, ipnet, err := net.ParseCIDR(cidr)
-	if err != nil {
-		return nil, err
-	}
+	zero := netip.Addr{}
 
-	ip = ip.Mask(ipnet.Mask)
-	for i := 0; i < offset; inc(ip) {
-		if !ipnet.Contains(ip) {
-			return nil, fmt.Errorf("Offset %d out of range for %s", offset, cidr)
+	start := cidr.Addr().Next()
+	for i := 0; i < offset; i++ {
+		if start == zero {
+			return zero, fmt.Errorf("Error getting IP offset")
 		}
-		i++
+		start = start.Next()
 	}
-
-	return ip, nil
-}
-
-func inc(ip net.IP) {
-	for j := len(ip) - 1; j >= 0; j-- {
-		ip[j]++
-		if ip[j] > 0 {
-			break
-		}
-	}
+	return start, nil
 }
