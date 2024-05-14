@@ -1,0 +1,26 @@
+global_physnet_mtu:
+  config_setting: neutron::global_physnet_mtu
+  service: neutron
+  section: DEFAULT 
+mechanism_drivers:
+  config_setting: neutron::plugins::ml2::mechanism_drivers
+  service: neutron
+  section: ml2
+vhost_sock_dir:
+  config_setting: neutron::plugins::ml2::ovn::vhostuser_socket_dir
+  service: neutron
+  section: ovn
+network_vlan_ranges:
+  config_settings: neutron::plugins::ml2::network_vlan_ranges
+  service: neutron
+  section: ml2_type_vlan
+foo:
+  config_settings:
+  service:
+  section:
+
+foo:
+  config_settings:
+  service:
+  section:
+

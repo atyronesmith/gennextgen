@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/netip"
 
 	networkv1 "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
 	whereabouts "github.com/k8snetworkplumbingwg/whereabouts/pkg/types"
@@ -14,60 +15,42 @@ import (
 	"github.com/atyronesmith/gennextgen/pkg/utils"
 )
 
-func GenerateNad(outDir string, cdl *types.ConfigDownload) {
+func GenNetAttachDef(network *types.OSPNetwork) ([]byte, error) {
+
+	cniCfg := netconf.NewNetConfMacvlan()
+	cniCfg.Name = network.Name
+
 	cfg := utils.GetConfig()
-
-	nads := []networkv1.NetworkAttachmentDefinition{}
-
-	for _, network := range cdl.Networks {
-		nad := networkv1.NetworkAttachmentDefinition{}
-		nad.APIVersion = "k8s.cni.cncf.io/v1"
-		nad.Kind = "NetworkAttachmentDefinition"
-
-		nad.Name = network.Name
-		nad.Namespace = "openstack"
-
-		cniCfg := netconf.NewNetConfMacvlan()
-		cniCfg.Name = network.Name
-		if network.VlanId != 0 {
-			cniCfg.Master = fmt.Sprintf("%s.%d", cfg.WorkerNodes.Interface, network.VlanId)
-		} else {
-			cniCfg.Master = cfg.WorkerNodes.Interface
-		}
-
-		start, err := utils.IpOffset(network.Cidr, 30)
-		if err != nil {
-			fmt.Printf("Error getting IP offset: %v", err)
-		}
-		end, err := utils.IpOffset(network.Cidr, 70)
-		if err != nil {
-			fmt.Printf("Error getting IP offset: %v", err)
-		}
-
-		waCfg := whereabouts.IPAMConfig{}
-		waCfg.Type = "whereabouts"
-		waCfg.RangeStart = net.ParseIP(start.String())
-		waCfg.RangeEnd = net.ParseIP(end.String())
-		waCfg.Range = network.Cidr.String()
-
-		cniCfg.IPAM = waCfg
-
-		c, err := json.MarshalIndent(cniCfg, "", "  ")
-		if err != nil {
-			fmt.Printf("Error marshalling CNIConfig: %v", err)
-
-			return
-		}
-		nad.Spec.Config = string(c)
-
-		nads = append(nads, nad)
+	if network.VlanId != 0 {
+		cniCfg.Master = fmt.Sprintf("%s.%d", cfg.Interface, network.VlanId)
+	} else {
+		cniCfg.Master = cfg.Interface
 	}
+	pf, _ := netip.ParsePrefix("192.168.111.0/24")
 
-	err := GenNadFile(outDir, nads)
+	start, err := utils.IpOffset(pf, 30)
 	if err != nil {
-		fmt.Printf("Error generating NAD file: %v", err)
+		fmt.Printf("Error getting IP offset: %v", err)
 	}
-	// Your code for generating NAD goes here
+	end, err := utils.IpOffset(pf, 70)
+	if err != nil {
+		fmt.Printf("Error getting IP offset: %v", err)
+	}
+
+	waCfg := whereabouts.IPAMConfig{}
+	waCfg.Type = "whereabouts"
+	waCfg.RangeStart = net.ParseIP(start.String())
+	waCfg.RangeEnd = net.ParseIP(end.String())
+	waCfg.Range = pf.String()
+
+	cniCfg.IPAM = waCfg
+
+	c, err := json.MarshalIndent(cniCfg, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }
 
 func GenNadFile(outDir string, nads []networkv1.NetworkAttachmentDefinition) error {

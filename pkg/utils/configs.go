@@ -5,13 +5,14 @@ import (
 )
 
 type RhosoConfig struct {
-	WorkerNodes    WorkerNodes `yaml:"worker_nodes"`
-	ControllerRole string      `yaml:"controller_role,omitempty"`
+	WorkerNodes    []WorkerNode `yaml:"worker_nodes"`
+	Interface      string       `yaml:"interface"`
+	ControllerRole string       `yaml:"controller_role,omitempty"`
 }
 
-type WorkerNodes struct {
-	Names     []string `yaml:"names"`
-	Interface string   `yaml:"interface"`
+type WorkerNode struct {
+	Name string `yaml:"name"`
+	Type string `yaml:"type"`
 }
 
 var rhosoConfig RhosoConfig

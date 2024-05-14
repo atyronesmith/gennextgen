@@ -1,0 +1,89 @@
+control_plane:  
+  worker_nodes:
+    interface: eno2
+    names:
+    - worker-1
+    - worker-2
+    - worker-3
+networks:
+  - name: InternalApiLinkA
+    name_lower: internal_api_link_a
+    vip: true
+    dns_domain: tb8-internal.mship3.kddi.info.
+    mtu: 9000
+    ipv6: true
+    subnets:
+      internal_api_link_a_subnet1:
+        vlan: 2004
+        ipv6_subnet: 2001:268:70fd:1a1a::/64
+        ipv6_allocation_pools: []
+      internal_api_link_a_subnet2:
+        vlan: 2004
+        ipv6_subnet: 2001:268:70fd:1a2a::/64
+        ipv6_allocation_pools: []
+      internal_api_link_a_subnet3:
+        vlan: 2004
+        ipv6_subnet: 2001:268:70fd:1a3a::/64
+        ipv6_allocation_pools: []
+  - name: InternalApiLinkB
+    name_lower: internal_api_link_b
+    vip: true
+    dns_domain: tb8-internal.mship3.kddi.info.
+    mtu: 9000
+    ipv6: true
+    subnets:
+      internal_api_link_b_subnet1:
+        vlan: 2005
+        ipv6_subnet: 2001:268:70fd:1a1b::/64
+        ipv6_allocation_pools: []
+      internal_api_link_b_subnet2:
+        vlan: 2005
+        ipv6_subnet: 2001:268:70fd:1a2b::/64
+        ipv6_allocation_pools: []
+      internal_api_link_b_subnet3:
+        vlan: 2005
+        ipv6_subnet: 2001:268:70fd:1a3b::/64
+        ipv6_allocation_pools: []
+  - name: InternalApi
+    name_lower: internal_api
+    vip: true
+    dns_domain: tb8-internal.mship3.kddi.info.
+    mtu: 9000
+    ipv6: true
+    subnets:
+      internal_api_subnet1:
+        ipv6_subnet: 2001:268:70fd:1000::/64
+        ipv6_allocation_pools: []
+  - name: Tenant
+    name_lower: tenant
+    vip: false
+    mtu: 9000
+    ipv6: true
+    subnets:
+      tenant_subnet1:
+        vlan: 2003
+        ipv6_subnet: 2001:268:70fd:1a1d::/64
+        ipv6_allocation_pools: []
+        routes_ipv6:
+          - destination: 2001:268:70fd:1a2d::/64
+            nexthop: 2001:268:70fd:1a1d::1
+          - destination: 2001:268:70fd:1a3d::/64
+            nexthop: 2001:268:70fd:1a1d::1
+      tenant_subnet2:
+        vlan: 2003
+        ipv6_subnet: 2001:268:70fd:1a2d::/64
+        ipv6_allocation_pools: []
+        routes_ipv6:
+          - destination: 2001:268:70fd:1a1d::/64
+            nexthop: 2001:268:70fd:1a2d::1
+          - destination: 2001:268:70fd:1a3d::/64
+            nexthop: 2001:268:70fd:1a2d::1
+      tenant_subnet3:
+        vlan: 2003
+        ipv6_subnet: 2001:268:70fd:1a3d::/64
+        ipv6_allocation_pools: []
+        routes_ipv6:
+          - destination: 2001:268:70fd:1a1d::/64
+            nexthop: 2001:268:70fd:1a3d::1
+          - destination: 2001:268:70fd:1a2d::/64
+            nexthop: 2001:268:70fd:1a3d::1

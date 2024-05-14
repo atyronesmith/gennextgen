@@ -26,6 +26,16 @@ type Spec struct {
 	NodeSelector map[string]string `yaml:"nodeSelector"`
 }
 
+// NetworkManager backend has two set of DNS configurations:
+
+// Global DNS set by D-BUS interface or NetworkManager.conf.
+// Interface DNS stored in NetworkManager connection as ipv4.dns or ipv6.dns.
+// Nmstate will try to use global DNS via D-BUS interface call, and only use interface level DNS for any of these use case:
+
+// Has IPv6 link-local address as name server: e.g. fe80::deef:1%eth1
+// User want static DNS server appended before dynamic one. In this case, user should define auto-dns: true explicitly along with static DNS.
+// User want to force DNS server stored in interface for static IP interface. This case, user need to state static DNS config along with static IP config.
+
 type DesiredState struct {
 	DnsResolver DnsResolver  `yaml:"dns-resolver,omitempty"`
 	Interfaces  []Interfaces `yaml:"interfaces"`

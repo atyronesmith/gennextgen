@@ -1,0 +1,23 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackInfraNetwork
+metadata:
+  name: InternalApiLinkB
+spec:
+- name_lower: internal_api_link_b
+  vip: true
+  dns_domain: tb8-internal.mship3.kddi.info.
+  mtu: 9000
+  ipv6: true
+  subnets:
+    internal_api_link_b_subnet1:
+      vlan: 2005
+      ipv6_subnet: 2001:268:70fd:1a1b::/64
+      ipv6_allocation_pools: []
+    internal_api_link_b_subnet2:
+      vlan: 2005
+      ipv6_subnet: 2001:268:70fd:1a2b::/64
+      ipv6_allocation_pools: []
+    internal_api_link_b_subnet3:
+      vlan: 2005
+      ipv6_subnet: 2001:268:70fd:1a3b::/64
+      ipv6_allocation_pools: []

@@ -9,16 +9,39 @@ import (
 	"github.com/atyronesmith/gennextgen/pkg/utils"
 )
 
+// Generate an NodeNetworkConfigurationPolicy for each worker node
+// that will host control plane services.  The NNCP will contain
+// information regarding the network interfaces, DNS resolver, and
+// routes for each worker node.  The NNCP will be used to configure
+// the network interfaces on the worker nodes.
+// The NNCP will be generated in YAML format and written to the
+// output directory.
+// The NNCP will be generated based on the configuration download
+// file that contains information about the networks that are
+// available to the worker nodes.
+
 func GenNNCP(outDir string, cdl *types.ConfigDownload) error {
 	cfg := utils.GetConfig()
 
-	nncpList := make([]nncp.NNCP, len(cfg.WorkerNodes.Names))
+	nncpList := make([]nncp.NNCP, len(cfg.WorkerNodes))
 
-	for _, worker := range cfg.WorkerNodes.Names {
+	// TODO -- Initially, map 1:1 between OSP 17.1 Controllers and Worker nodes
+
+	// Take the name of the worker node from the config file
+	for _, worker := range cfg.WorkerNodes {
 		n := nncp.NewNNCP()
 
-		// Need to know the name of the OCP worker node where an OSP service will run
-		n.ObjectMeta.Name = worker
+		// The name of the policy
+		n.ObjectMeta.Name = fmt.Sprintf("%s-%s", worker, cfg.Interface)
+
+		n.ObjectMeta.Labels = map[string]string{
+			"osp/interface": cfg.Interface,
+		}
+
+		n.Spec.NodeSelector = map[string]string{
+			"kubernetes.io/hostname":         worker.Name,
+			"node-role.kubernetes.io/worker": "",
+		}
 
 		for _, network := range cdl.Networks {
 			var ni nncp.Interfaces
@@ -27,13 +50,13 @@ func GenNNCP(outDir string, cdl *types.ConfigDownload) error {
 			ni.State = nncp.Up
 			ni.Mtu = network.Mtu
 			if network.VlanId == 0 {
-				ni.Name = cfg.WorkerNodes.Interface
+				ni.Name = cfg.Interface
 				ni.IntfType = nncp.TypeEthernet
 			} else {
-				ni.Name = fmt.Sprintf("%s.%d", cfg.WorkerNodes.Interface, network.VlanId)
+				ni.Name = fmt.Sprintf("%s.%d", cfg.Interface, network.VlanId)
 				ni.IntfType = nncp.TypeVLAN
 				ni.Vlan = &nncp.Vlan{
-					BaseIface: cfg.WorkerNodes.Interface,
+					BaseIface: cfg.Interface,
 					Id:        network.VlanId,
 				}
 			}
@@ -44,7 +67,7 @@ func GenNNCP(outDir string, cdl *types.ConfigDownload) error {
 				Address: []nncp.Address{
 					{
 						Ip:           "0.0.0.0",
-						PrefixLength: network.Cidr.Bits(),
+						PrefixLength: network.PrefixLen,
 					},
 				},
 			}
