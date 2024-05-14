@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/atyronesmith/gennextgen/pkg/utils"
-	v3 "gopkg.in/yaml.v3"
 	"sigs.k8s.io/yaml"
 )
 
@@ -20,6 +19,13 @@ type ConfigDownload struct {
 	Roles           []TripleoRole
 	PrimaryRoleName string
 	Passwords       map[string]string
+	ConfigSettings  ConfigSettings
+}
+
+type ConfigSettings struct {
+	MechanismDrivers  []string
+	NetworkVlanRanges []string
+	GlobalPhysnetMtu  int
 }
 
 type PasswordMapping struct {
@@ -28,47 +34,63 @@ type PasswordMapping struct {
 	Role    string `yaml:"role"`
 }
 
+type ServiceMapping struct {
+	Setting       string `yaml:"setting"`
+	ConfigVarName string `yaml:"config_var_name"`
+	Service       string `yaml:"service"`
+	Section       string `yaml:"section"`
+}
+
 type OSPServicePasswords struct {
 	Password   string
 	DbPassword string
 }
 
 type OSPNetwork struct {
-	Name       string              `yaml:"name"`
-	IsRoleNet  bool                `yaml:"is_role_net"`
-	Domain     string              `yaml:"domain"`
-	GatewayIp  netip.Addr          `yaml:"gateway_ip"`
-	Cidr       netip.Prefix        `yaml:"cidr"`
-	Vip        netip.Addr          `yaml:"vip"`
-	Mtu        int                 `yaml:"mtu"`
-	VlanId     int                 `yaml:"vlan_id"`
-	HostRoutes []TripleoHostRoutes `yaml:"host_routes"`
-	Subnets    []OSPNetworkSubnet  `yaml:"subnets,omitempty"`
-}
-
-func (n *OSPNetwork) UnmarshalYaml(node *v3.Node) error {
-	fmt.Printf("UnmarshalYaml: %+v\n", node)
-	return nil
+	Name       string             `json:"name"`
+	NameLower  string             `json:"name_lower"`
+	DnsDomain  string             `json:"domain,omitempty"`
+	CloudName  string             `json:"cloud_name,omitempty"`
+	Mtu        int                `json:"mtu"`
+	IpV6       bool               `json:"ipv6"`
+	Vip        netip.Addr         `json:"vip"`
+	Subnets    []OSPNetworkSubnet `json:"subnets,omitempty"`
+	PrefixLen  int                `json:"prefix_len"`
+	VlanId     int                `json:"vlan_id"`
+	HostRoutes []TripleoRoutes    `json:"host_routes"`
 }
 
 type OSPNetworkSubnet struct {
-	Name            string
-	Subnet          netip.Prefix
-	VlanId          int
-	AllocationPools []OSPNetworkSubnetPool
+	Name                string                 `json:"name"`
+	IpSubnet            netip.Prefix           `json:"ip_subnet"`
+	Ipv6Subnet          netip.Prefix           `json:"ipv6_subnet,omitempty"`
+	GatewayIp           netip.Addr             `json:"gateway_ip,omitempty"`
+	GatewayIpV6         netip.Addr             `json:"gateway_ip_v6,omitempty"`
+	AllocationPools     []OSPNetworkSubnetPool `json:"allocationRanges,omitempty"`
+	Ipv6AllocationPools []OSPNetworkSubnetPool `json:"ipv6_allocationRanges,omitempty"`
+	Routes              []TripleoRoutes        `json:"routes,omitempty"`
+	RoutesIpv6          []TripleoRoutes        `json:"routes_ipv6,omitempty"`
+	Vlan                int                    `json:"vlan,omitempty"`
 }
 
 type OSPNetworkSubnetPool struct {
-	Start string
-	End   string
+	Start string `yaml:"start"`
+	End   string `yaml:"end"`
+}
+
+type TripleoRoutes struct {
+	Default     bool   `yaml:"default"`
+	Destination string `yaml:"destination"`
+	NextHop     string `yaml:"nexthop"`
 }
 
 type TripleoHost struct {
 	Name                string
 	CanonicalName       string
 	AnsibleHost         string
-	DefaultRouteNetwork string
+	DefaultRouteNetwork []string
 	Networks            map[string]*TripleoHostNetwork
+	TripleoRole         *TripleoRole
 	Vars                map[string]interface{}
 }
 
@@ -76,20 +98,68 @@ type TripleoHostNetwork struct {
 	Name     string
 	IP       netip.Addr
 	Hostname string
+	Subnet   *OSPNetworkSubnet
 }
 
+//   - tags: (list) list of tags used by other parts of the deployment process to
+//     find the role for a specific type of functionality. Currently a role
+//     with both 'primary' and 'controller' is used as the primary role for the
+//     deployment process. If no roles have 'primary' and 'controller', the
+//     first role in this file is used as the primary role.
+//     The third tag that can be defined here is external_bridge, which is used
+//     to define which node must have a bridge created in a multiple-nic network
+//     config.
+//   - ovsdpdk: (boolean) whether the role is using OVS-DPDK or not.
+//   - storage: (boolean) whether the role is using storage or not.
+//   - ceph: (boolean) whether the role is using Ceph or not.
+//   - compute: (boolean) whether the role is a compute role or not.
+
 type TripleoRole struct {
-	Name     string
+	Name string
+
+	ConfigSettings map[string][]TripleoRoleConfigSetting
+
+	RoleTags []string
 	Hosts    []*TripleoHost
-	Networks map[string]*OSPNetwork
+	Networks map[string]*TripleoRoleNetwork
 	Vars     map[string]interface{}
 }
 
-type TripleoHostRoutes struct {
-	Default     bool   `yaml:"default"`
-	Destination string `yaml:"destination"`
-	NextHop     string `yaml:"nexthop"`
+type TripleoRoleConfigSetting struct {
+	Service string
+	Section string
+	Path    string
+	Value   interface{}
 }
+
+type TripleoRoleNetwork struct {
+	Name       string             `json:"name"`
+	NameLower  string             `json:"name_lower"`
+	DnsDomain  string             `json:"domain,omitempty"`
+	CloudName  string             `json:"cloud_name,omitempty"`
+	Mtu        int                `json:"mtu"`
+	IpV6       bool               `json:"ipv6"`
+	Vip        netip.Addr         `json:"vip"`
+	GatewayIp  netip.Addr         `json:"gateway_ip"`
+	Subnets    []OSPNetworkSubnet `json:"subnets,omitempty"`
+	PrefixLen  int                `json:"prefix_len"`
+	VlanId     int                `json:"vlan_id"`
+	HostRoutes []TripleoRoutes    `json:"host_routes"`
+	IsRoleNet  bool               `json:"is_role_net"`
+}
+
+type RoleType string
+
+const (
+	RoleTypeController    RoleType = "controller"
+	RoleTypeCompute       RoleType = "compute"
+	RoleTypeCephStorage   RoleType = "ceph-storage"
+	RoleTypeBlockStorage  RoleType = "block-storage"
+	RoleTypeObjectStorage RoleType = "object-storage"
+	RoleTypeNetworker     RoleType = "networker"
+	Unknown               RoleType = "unknown"
+)
+
 type OSPService struct {
 	Name       string
 	Network    string
@@ -106,49 +176,33 @@ func NewConfigDownload() *ConfigDownload {
 	}
 }
 
-type BaremetalDeploy []struct {
-	AnsiblePlaybooks []struct {
-		ExtraVars struct {
-			RoleGrowvolsArgs struct {
-				Default string `yaml:"default"`
-			} `yaml:"role_growvols_args"`
-		} `yaml:"extra_vars"`
-		Playbook string `yaml:"playbook"`
-	} `yaml:"ansible_playbooks"`
-	Count    int `yaml:"count"`
-	Defaults struct {
-		NetworkConfig struct {
-			DefaultRouteNetwork []string `yaml:"default_route_network"`
-			Template            string   `yaml:"template"`
-		} `yaml:"network_config"`
-		ResourceClass string `yaml:"resource_class"`
-	} `yaml:"defaults"`
-	Instances []struct {
-		Hostname string `yaml:"hostname"`
-		Name     string `yaml:"name"`
-		Networks []struct {
-			Network string `yaml:"network"`
-			Vif     bool   `yaml:"vif,omitempty"`
-			FixedIP string `yaml:"fixed_ip,omitempty"`
-			Subnet  string `yaml:"subnet,omitempty"`
-		} `yaml:"networks"`
-	} `yaml:"instances"`
-	Name string `yaml:"name"`
-}
-
-func (cdl *ConfigDownload) Process(mappingYaml string) error {
+func (cdl *ConfigDownload) Process(mappingYaml string, serviceMap string) error {
 	//	var nncp types.NNCP
 	cfg := utils.GetConfig()
 
-	gv, err := utils.YamlToMap(utils.GetFullPath(utils.GLOBAL_VARS))
+	gvs, err := GetGlobalVars()
+	if err != nil {
+		return err
+	}
+	err = cdl.ProcessGlobalVars(gvs)
 	if err != nil {
 		return err
 	}
 
-	err = cdl.ProcessGlobalVars(gv)
+	tond, err := GetTripleoOvercloudNetworkData()
 	if err != nil {
 		return err
 	}
+	err = cdl.ProcessTripleoOvercloudNetworkData(tond)
+	if err != nil {
+		return err
+	}
+
+	// b, err := yaml.Marshal(toe)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Printf("%s\n", string(b))
 
 	tai, err := utils.YamlToMap(utils.GetFullPath(utils.TRIPLEO_ANSIBLE_INVENTORY_YAML))
 	if err != nil {
@@ -159,24 +213,22 @@ func (cdl *ConfigDownload) Process(mappingYaml string) error {
 	if err != nil {
 		return err
 	}
+	tor, err := GetTripleoOvercloudRolesData()
+	if err != nil {
+		return err
+	}
+
+	err = cdl.ProcessTripleoOvercloudRoles(tor)
+	if err != nil {
+		return err
+	}
 
 	primaryRole := cdl.PrimaryRoleName
 	if cfg.ControllerRole != "" {
 		primaryRole = cfg.ControllerRole
 	}
 
-	groupVars, err := utils.YamlToMap(utils.GetFullPath("config-download/overcloud/group_vars/" + primaryRole))
-	if err != nil {
-		fmt.Printf("Error while reading group_vars: %v\n", err)
-		return err
-	}
-
-	err = cdl.ProcessGroupVars(groupVars)
-	if err != nil {
-		return err
-	}
-
-	err = cdl.ProcesNetworks()
+	groupVars, err := cdl.ProcessGroupVars(primaryRole)
 	if err != nil {
 		return err
 	}
@@ -185,120 +237,82 @@ func (cdl *ConfigDownload) Process(mappingYaml string) error {
 	if err != nil {
 		return err
 	}
+	err = ProcessConfigSettings(cdl)
+	if err != nil {
+		return err
+	}
+	err = cdl.ProcessTripleoOvercloudEnvironment()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 // Must be run first
-func (cdl *ConfigDownload) ProcessGlobalVars(data map[string]interface{}) error {
-	// get the global list of infra networks
-	if ncm, ok := data["net_cidr_map"]; ok {
-		for k, v := range ncm.(map[string]interface{}) {
-			for _, cidr := range v.([]interface{}) {
-				prefix, err := netip.ParsePrefix(cidr.(string))
-				if err != nil {
+func (cdl *ConfigDownload) ProcessGlobalVars(globalVars *GlobalVars) error {
+	for netName, cidrs := range globalVars.NetCIDRMap {
+		_, ok := cdl.Networks[netName]
+		if !ok {
+			cdl.Networks[netName] = &OSPNetwork{
+				NameLower: netName,
+			}
+			for _, cidr := range cidrs {
+				if addr, err := netip.ParsePrefix(cidr); err == nil {
+					cdl.Networks[netName].Subnets = append(cdl.Networks[netName].Subnets, OSPNetworkSubnet{
+						IpSubnet: addr,
+					})
+				} else {
 					return err
 				}
-				cdl.Networks[k] = &OSPNetwork{Name: k, Cidr: prefix, IsRoleNet: false}
 			}
 		}
-	} else {
-		return fmt.Errorf("Missing net_cidr_map in global_vars.yaml.")
 	}
 
-	// Fill in Domain info for the networks
-	if cns, ok := data["cloud_names"]; ok {
-		for k, v := range cns.(map[string]interface{}) {
-			netName := strings.Replace(k, "cloud_name_", "", -1)
-			if _, ok := cdl.Networks[netName]; ok {
-				cdl.Networks[netName].Domain = v.(string)
+	for cloudName, cn := range globalVars.CloudNames {
+		netName := strings.Replace(cloudName, "cloud_name_", "", -1)
+		if _, ok := cdl.Networks[netName]; ok {
+			cdl.Networks[netName].CloudName = cn
+		}
+	}
+
+	for netName, vip := range globalVars.NetworkVirtualIPS {
+		if _, ok := cdl.Networks[netName]; ok {
+			if addr, err := netip.ParseAddr(vip.IpAddress); err == nil {
+				cdl.Networks[netName].Vip = addr
+			} else {
+				return err
 			}
 		}
-	} else {
-		return fmt.Errorf("Missing cloud_names in global_vars.yaml.")
 	}
 
-	// Fill in vip info for the networks
-	if nvm, ok := data["net_vip_map"]; ok {
-		for netName, v := range cdl.Networks {
-			if vip, ok := nvm.(map[string]interface{})[v.Name]; ok {
-				if vip != nil && len(vip.(string)) > 0 {
-					if addr, err := netip.ParseAddr(vip.(string)); err == nil {
-						cdl.Networks[netName].Vip = addr
-					} else {
-						return err
-					}
-				}
-			}
-		}
-	} else {
-		return fmt.Errorf("Missing net_vip_map in global_vars.yaml.")
-	}
-
-	if es, ok := data["enabled_services"]; ok {
-		for _, v := range es.([]interface{}) {
-			cdl.EnabledServices[v.(string)] = &OSPService{Name: v.(string)}
-		}
-	} else {
-		return fmt.Errorf("Missing enabled_services in global_vars.yaml.")
-	}
-
-	if snm, ok := data["service_net_map"]; ok {
-		for k, v := range snm.(map[string]interface{}) {
-			if _, ok := cdl.EnabledServices[k]; ok {
-				cdl.EnabledServices[k].Network = v.(string)
-			}
-		}
-	} else {
-		return fmt.Errorf("Missing service_net_map in global_vars.yaml.")
-	}
-
-	if es, ok := data["networks"]; ok {
-		for _, v := range es.(map[string]interface{}) {
-			if netName, ok := v.(map[string]interface{})["name_lower"]; ok {
-				if _, ok := cdl.Networks[netName.(string)]; ok {
-					cdl.Networks[netName.(string)].IsRoleNet = true
-				}
-			}
-		}
-	} else {
-		return fmt.Errorf("Missing enabled_services in global_vars.yaml.")
-	}
-
-	if prn, ok := data["primary_role_name"]; ok {
-		cdl.PrimaryRoleName = prn.(string)
-	} else {
-		return fmt.Errorf("Missing primary_role_name in global_vars.yaml.")
-	}
+	cdl.PrimaryRoleName = globalVars.PrimaryRoleName
 
 	return nil
 }
 
-func (cdl *ConfigDownload) ProcessGroupVars(data map[string]interface{}) error {
+func (cdl *ConfigDownload) ProcessGroupVars(primaryRole string) (map[string]interface{}, error) {
+	groupVars, err := utils.YamlToMap(utils.GetFullPath("config-download/overcloud/group_vars/" + primaryRole))
+	if err != nil {
+		fmt.Printf("Error while reading group_vars: %v\n", err)
+		return nil, err
+	}
+
 	for index := range cdl.Networks {
-		if gw, ok := data[index+"_gateway_ip"]; ok {
-			if gw != nil {
-				gwAddr, err := netip.ParseAddr(gw.(string))
-				if err != nil {
-					return err
-				}
-				cdl.Networks[index].GatewayIp = gwAddr
-			}
-		}
-		if m, ok := data[index+"_mtu"]; ok {
+		if m, ok := groupVars[index+"_mtu"]; ok {
 			cdl.Networks[index].Mtu = m.(int)
 		} else {
-			return fmt.Errorf("Missing mtu for %s\n", index)
+			return nil, fmt.Errorf("Missing mtu for %s, in group_vars.yaml\n", index)
 		}
-		if vi, ok := data[index+"_vlan_id"]; ok {
+		if vi, ok := groupVars[index+"_vlan_id"]; ok {
 			cdl.Networks[index].VlanId = vi.(int)
 		}
 	}
 
-	return nil
+	return groupVars, nil
 }
 
-func mapStringGetter(v interface{}, key string, valPtr interface{}) {
+func mapStringGetter(v interface{}, key string, valPtr interface{}) error {
 	if value, ok := v.(map[string]interface{})[key]; ok {
 		switch p := valPtr.(type) {
 		case *int:
@@ -313,85 +327,183 @@ func mapStringGetter(v interface{}, key string, valPtr interface{}) {
 			}
 		case *netip.Prefix:
 			if value != nil {
-				*p, _ = netip.ParsePrefix(value.(string))
+				pf, err := netip.ParsePrefix(value.(string))
+				if err != nil {
+					fmt.Printf("Error parsing prefix: %v\n", err)
+					os.Exit(1)
+				}
+				*p = pf
 			}
 		case *netip.Addr:
 			if value != nil {
-				*p, _ = netip.ParseAddr(value.(string))
+				pf, err := netip.ParseAddr(value.(string))
+				if err != nil {
+					fmt.Printf("Error parsing address: %v\n", err)
+					os.Exit(1)
+				}
+				*p = pf
 			}
 		default:
 			fmt.Printf("Unknown type: %T\n", p)
 			os.Exit(1)
 		}
+	} else {
+		return fmt.Errorf("Missing %s\n", key)
 	}
+
+	return nil
 }
 
 func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interface{}) error {
-	for topKey, topValue := range data {
-		if topKey == "Undercloud" {
+	for roleNameKey, roleData := range data {
+		if roleNameKey == "Undercloud" {
 			continue
 		}
 
 		var role TripleoRole
 
-		role.Networks = make(map[string]*OSPNetwork)
-
+		found := false
 		// Get the role networks
-		if v, ok := topValue.(map[string]interface{})["vars"]; ok {
+		// role networks are common to all hosts in the role
+		if v, ok := roleData.(map[string]interface{})["vars"]; ok {
+			role.Networks = make(map[string]*TripleoRoleNetwork)
+			found = true
+			// tripleo_role_networks is a list of network names
+			// present in the this role
 			if trn, ok := v.(map[string]interface{})["tripleo_role_networks"]; ok {
 				// Get the list of names of networks in this role
 				for _, net := range trn.([]interface{}) {
-					role.Networks[net.(string)] = &OSPNetwork{
+					// Store the information in the common OSPNetwork struct
+					role.Networks[net.(string)] = &TripleoRoleNetwork{
 						Name: net.(string),
 					}
 				}
-				// Look for network specific vars
+				// Look for network specific vars using the list of
+				// networks in this role
 				for netName := range role.Networks {
 					osNet := role.Networks[netName]
 
-					mapStringGetter(v, netName+"_cidr", &osNet.Cidr)
-					mapStringGetter(v, netName+"_gateway_ip", &osNet.GatewayIp)
-					mapStringGetter(v, netName+"_vip", &osNet.Vip)
-					mapStringGetter(v, netName+"_mtu", &osNet.Mtu)
-					mapStringGetter(v, netName+"_vlan_id", &osNet.VlanId)
-
+					// There are two possible names for the subnet cidr,
+					// try both
+					// A PrefixLen is required, so if neither is found, return an error
+					if err := mapStringGetter(v, netName+"_subnet_cidr", &osNet.PrefixLen); err != nil {
+						if err = mapStringGetter(v, netName+"_cidr", &osNet.PrefixLen); err != nil {
+							return err
+						}
+					}
+					// The gateway_ip may be null
+					if err := mapStringGetter(v, netName+"_gateway_ip", &osNet.GatewayIp); err != nil {
+						return err
+					}
+					// There is no Vip
+					// The MTU must exist
+					if err := mapStringGetter(v, netName+"_mtu", &osNet.Mtu); err != nil {
+						return err
+					}
+					// The vlan_id must exist, but may be 0
+					if err := mapStringGetter(v, netName+"_vlan_id", &osNet.VlanId); err != nil {
+						return err
+					}
+					// HostRoutes are optional.  The control plane network usually has them.
 					if hostRoutes, ok := v.(map[string]interface{})[netName+"_host_routes"]; ok {
-						var hrs []TripleoHostRoutes
+						var hrs []TripleoRoutes
+
 						utils.MarshalArray(hostRoutes, &hrs)
 						osNet.HostRoutes = append(osNet.HostRoutes, hrs...)
 					}
 				}
-				if _, ok := v.(map[string]interface{})["tripleo_role_name"]; ok {
-					mapStringGetter(v, "tripleo_role_name", &role.Name)
-				} else {
-					return fmt.Errorf("Missing tripleo_role_name in %s\n", topKey)
-				}
-				role.Vars = v.(map[string]interface{})
 			} else {
-				return fmt.Errorf("Missing tripleo_role_networks in %s\n", topKey)
+				return fmt.Errorf("Missing tripleo_role_networks in %s\n", roleNameKey)
 			}
+			if _, ok := v.(map[string]interface{})["tripleo_role_name"]; ok {
+				if err := mapStringGetter(v, "tripleo_role_name", &role.Name); err != nil {
+					return err
+				}
+			} else {
+				return fmt.Errorf("Missing tripleo_role_name in %s\n", roleNameKey)
+			}
+
+			// Save all the vars for later
+			role.Vars = v.(map[string]interface{})
 		}
 
-		if hosts, ok := topValue.(map[string]interface{})["hosts"]; ok {
+		if hosts, ok := roleData.(map[string]interface{})["hosts"]; ok {
 			for hostName, hostVarMap := range hosts.(map[string]interface{}) {
+				// Create the host object
 				th := TripleoHost{}
+
+				// Set a pointer to the role to speed searches
+				th.TripleoRole = &role
+
 				th.Networks = make(map[string]*TripleoHostNetwork)
 
-				mapStringGetter(hostVarMap, "canonical_hostname", &th.CanonicalName)
-				mapStringGetter(hostVarMap, "ansible_host", &th.AnsibleHost)
-				th.Name = hostName
+				if err := mapStringGetter(hostVarMap, "canonical_hostname", &th.CanonicalName); err != nil {
+					return err
+				}
+
+				if err := mapStringGetter(hostVarMap, "ansible_host", &th.AnsibleHost); err != nil {
+					return err
+				}
+				// TODO - this is a hack to work with GraphViz
+				// Rmove the hyphens from the name in the template
+				th.Name = strings.ReplaceAll(hostName, "-", "_")
+				// Save all the vars for later
 				th.Vars = hostVarMap.(map[string]interface{})
 				// Set host-specific network info
 				for netName := range role.Networks {
+					thn := TripleoHostNetwork{}
 					th.Networks[netName] = &TripleoHostNetwork{}
-					mapStringGetter(hostVarMap, netName+"_ip", &th.Networks[netName].IP)
-					mapStringGetter(hostVarMap, netName+"_hostname", &th.Networks[netName].Hostname)
+					thn.Name = netName
+
+					if err := mapStringGetter(hostVarMap, netName+"_ip", &thn.IP); err != nil {
+						return err
+					}
+					if err := mapStringGetter(hostVarMap, netName+"_hostname", &thn.Hostname); err != nil {
+						return err
+					}
+					if net, ok := cdl.Networks[netName]; ok {
+						found := false
+						// Set a pointer to the subnet the network is attached to
+						for snIndex, sn := range net.Subnets {
+							if sn.IpSubnet.Contains(thn.IP) {
+								thn.Subnet = &net.Subnets[snIndex]
+								found = true
+								goto found
+							}
+							if sn.Ipv6Subnet.Contains(thn.IP) {
+								thn.Subnet = &net.Subnets[snIndex]
+								found = true
+								goto found
+							}
+						}
+						if !found {
+							return fmt.Errorf("ProcessTripleoAnsibleInventory: IP %s not found in subnet for network %s\n", thn.IP, netName)
+						}
+					} else {
+						return fmt.Errorf("ProcessTripleoAnsibleInventory: Network %s not found in global_vars.yaml\n", netName)
+					}
+				found:
+					th.Networks[netName] = &thn
 				}
+				if drn, ok := hostVarMap.(map[string]interface{})["default_route_network"]; ok {
+					var drns []string
+					utils.MarshalArray(drn, &drns)
+
+					th.DefaultRouteNetwork = append(th.DefaultRouteNetwork, drns...)
+				}
+
 				role.Hosts = append(role.Hosts, &th)
+
 				cdl.Hosts[hostName] = &th
 			}
 		}
-		cdl.Roles = append(cdl.Roles, role)
+		if found {
+			if len(role.Name) == 0 {
+				return fmt.Errorf("Empty tripleo_role_name in %s\n", roleNameKey)
+			}
+
+			cdl.Roles = append(cdl.Roles, role)
+		}
 	}
 	return nil
 }
@@ -430,81 +542,10 @@ func (cdl *ConfigDownload) ProcessPasswords(mappingYaml string, globalVars map[s
 			if v, ok := z.(map[string]interface{})[a]; ok {
 				z = v
 			} else {
-				fmt.Printf("Error: %s not found in %+v\n", a, z)
-				os.Exit(1)
+				z = "CHANGE_ME"
 			}
 		}
 		cdl.Passwords[k] = z.(string)
-	}
-
-	return nil
-}
-
-func (cdl *ConfigDownload) ProcesNetworks() error {
-
-	networkData, err := utils.YamlToList(utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_NETWORK_DATA))
-	if err != nil {
-		return err
-	}
-
-	for _, netDef := range networkData {
-		netName := netDef["name_lower"].(string)
-		net, ok := cdl.Networks[netName]
-		if !ok {
-			fmt.Printf("Network %s not found in global_vars.yaml!\n", netDef["name_lower"].(string))
-			os.Exit(1)
-		}
-		if mtu, ok := netDef["mtu"]; ok {
-			if mtu != net.Mtu {
-				fmt.Printf("MTU mismatch for %s: %d != %d\n", net.Name, mtu, net.Mtu)
-				os.Exit(1)
-			}
-		}
-		subnets, ok := netDef["subnets"].(map[string]interface{})
-		if !ok {
-			fmt.Printf("No subnets found for %s\n", net.Name)
-			os.Exit(1)
-		}
-		for subnetName, sn := range subnets {
-			var ospSn OSPNetworkSubnet
-			ospSn.Name = subnetName
-			if cidr, ok := sn.(map[string]interface{})["ip_subnet"].(string); ok {
-				ospSn.Subnet, err = netip.ParsePrefix(cidr)
-				if err != nil {
-					return err
-				}
-			} else if cidr, ok := sn.(map[string]interface{})["ipv6_subnet"].(string); ok {
-				ospSn.Subnet, err = netip.ParsePrefix(cidr)
-				if err != nil {
-					return err
-				}
-			} else {
-				fmt.Printf("No subnet definition found for %+v\n", sn)
-				os.Exit(1)
-			}
-			if vlanId, ok := sn.(map[string]interface{})["vlan"]; ok {
-				ospSn.VlanId = int(vlanId.(int))
-			}
-			if ap, ok := sn.(map[string]interface{})["allocation_pools"].([]interface{}); ok {
-				for _, pool := range ap {
-					ospSn.AllocationPools = append(ospSn.AllocationPools, OSPNetworkSubnetPool{
-						Start: pool.(map[string]interface{})["start"].(string),
-						End:   pool.(map[string]interface{})["end"].(string),
-					})
-				}
-			} else if ap, ok := sn.(map[string]interface{})["ipv6_allocation_pools"].([]interface{}); ok {
-				for _, pool := range ap {
-					ospSn.AllocationPools = append(ospSn.AllocationPools, OSPNetworkSubnetPool{
-						Start: pool.(map[string]interface{})["start"].(string),
-						End:   pool.(map[string]interface{})["end"].(string),
-					})
-				}
-			} else {
-				fmt.Printf("No allocation pools found for %+v\n", sn)
-				os.Exit(1)
-			}
-			cdl.Networks[netName].Subnets = append(cdl.Networks[netName].Subnets, ospSn)
-		}
 	}
 
 	return nil
@@ -532,6 +573,186 @@ func (cdl *ConfigDownload) ProcessDeployStepsOne() error {
 		} else {
 			fmt.Printf("No tripleo_container_image_prepare_content found\n")
 		}
+	}
+
+	return nil
+}
+
+func (cdl *ConfigDownload) ProcessTripleoOvercloudRoles(tord *TripleoOvercloudRolesData) error {
+
+	for _, role := range *tord {
+		for trIndex, tripleoRole := range cdl.Roles {
+			if tripleoRole.Name == role.Name {
+				cdl.Roles[trIndex].RoleTags = append(cdl.Roles[trIndex].RoleTags, role.Tags...)
+			}
+		}
+	}
+
+	return nil
+}
+
+func (cdl *ConfigDownload) ProcessTripleoOvercloudNetworkData(networkData *TripleoOvercloudNetworkData) error {
+
+	for _, netDef := range *networkData {
+		ospNetwork := &OSPNetwork{}
+		cdl.Networks[netDef.NameLower] = ospNetwork
+
+		ospNetwork.Name = netDef.Name
+		ospNetwork.NameLower = netDef.NameLower
+		ospNetwork.DnsDomain = netDef.DNSDomain
+		ospNetwork.IpV6 = netDef.Ipv6
+		ospNetwork.Mtu = netDef.MTU
+		//		ospNetwork.Vip = netDef.Vip
+
+		_, ok := cdl.Networks[netDef.NameLower]
+		if !ok {
+			fmt.Printf("Network %s not found in global_vars.yaml!\n", netDef.Name)
+			os.Exit(1)
+		}
+		for subnetName, sn := range netDef.Subnets {
+			var ospSubnet OSPNetworkSubnet
+
+			ospSubnet.Name = subnetName
+			ospSubnet.Vlan = int(sn.VLAN)
+
+			for _, pool := range sn.AllocationPools {
+				ospSubnet.AllocationPools = append(ospSubnet.AllocationPools, OSPNetworkSubnetPool(pool))
+			}
+
+			if sn.GatewayIpV6 != "" {
+				gatewayIpV6, err := netip.ParseAddr(sn.GatewayIpV6)
+				if err != nil {
+					return err
+				}
+				ospSubnet.GatewayIpV6 = gatewayIpV6
+			}
+
+			for _, route := range sn.Routes {
+				ospSubnet.Routes = append(ospSubnet.Routes, TripleoRoutes(route))
+			}
+
+			if sn.IpSubnet != "" {
+				subnetPrefix, err := netip.ParsePrefix(sn.IpSubnet)
+				if err != nil {
+					return err
+				}
+				ospSubnet.IpSubnet = subnetPrefix
+			}
+
+			if sn.Ipv6Subnet != "" {
+				subnetPrefix, err := netip.ParsePrefix(sn.Ipv6Subnet)
+				if err != nil {
+					return err
+				}
+				ospSubnet.Ipv6Subnet = subnetPrefix
+			}
+
+			for _, route := range sn.RoutesIpv6 {
+				ospSubnet.RoutesIpv6 = append(ospSubnet.RoutesIpv6, TripleoRoutes(route))
+			}
+
+			ospNetwork.Subnets = append(ospNetwork.Subnets, ospSubnet)
+		}
+	}
+
+	return nil
+}
+
+// Extract Control Plane information from the TripleoOvercloudEnvironment
+// The Control Plane network is defined as part of the undercloud
+func (cdl *ConfigDownload) ProcessTripleoOvercloudEnvironment() error {
+
+	environment, err := GetTripleoOvercloudEnvironment()
+	if err != nil {
+		return err
+	}
+
+	net := OSPNetwork{}
+
+	net.NameLower = environment.ParmaterDefaults.CtlplaneNetworkAttributes.Network.Name
+	net.DnsDomain = environment.ParmaterDefaults.CtlplaneNetworkAttributes.Network.DNSDomain
+	net.Mtu = int(environment.ParmaterDefaults.CtlplaneNetworkAttributes.Network.MTU)
+
+	for _, subnet := range environment.ParmaterDefaults.CtlplaneNetworkAttributes.Subnets {
+		ospSubnet := OSPNetworkSubnet{}
+		ospSubnet.Name = subnet.Name
+
+		prefix, err := netip.ParsePrefix(subnet.CIDR)
+		if err != nil {
+			return err
+		}
+		ospSubnet.IpSubnet = prefix
+		//TODO Host Routes
+		net.Subnets = append(net.Subnets, ospSubnet)
+	}
+
+	if len(environment.ParmaterDefaults.ControlPlaneVipData.FixedIPS) > 0 {
+		vipAddr, err := netip.ParseAddr(environment.ParmaterDefaults.ControlPlaneVipData.FixedIPS[0].IPAddress)
+		if err != nil {
+			return err
+		}
+		// TODO -- needs to be an array?
+		net.Vip = vipAddr
+	}
+
+	cdl.Networks[net.NameLower] = &net
+
+	env, err := utils.YamlToMap(utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_ENVIRONMENT))
+	if err != nil {
+		return err
+	}
+
+	defaults := env["parameter_defaults"].(map[string]interface{})
+
+	mapTypes := []string{"ExtraConfig", "ExtraGroupVars", "Parameters"}
+
+	for roleIndex, role := range cdl.Roles {
+		for _, mapType := range mapTypes {
+			key := fmt.Sprintf("%s%s", role.Name, mapType)
+			if roleParams, ok := defaults[key]; ok {
+				fmt.Printf("Processing %s\n", key)
+				for k, v := range roleParams.(map[string]interface{}) {
+					path := strings.Split(k, "::")
+					settingKey := path[len(path)-1]
+					cs := TripleoRoleConfigSetting{
+						Service: path[0],
+						Path:    k,
+						Value:   v,
+					}
+					if len(path) > 1 {
+						cs.Section = path[1]
+					}
+					fmt.Printf("Adding %s\n", settingKey)
+					cdl.Roles[roleIndex].ConfigSettings[settingKey] = append(cdl.Roles[roleIndex].ConfigSettings[settingKey], cs)
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (cdl *ConfigDownload) ProcessConfigSettings(cfgSet map[string]interface{}, serviceMap string) error {
+	mapping := make(map[string]ServiceMapping)
+
+	err := yaml.Unmarshal([]byte(serviceMap), &mapping)
+	if err != nil {
+		return nil
+	}
+
+	drivers, ok := cfgSet["neutron::plugins::ml2::mechanism_drivers"].([]string)
+	if ok {
+		cdl.ConfigSettings.MechanismDrivers = append(cdl.ConfigSettings.MechanismDrivers, drivers...)
+	}
+
+	vlanRanges, ok := cfgSet["neutron::plugins::ml2::network_vlan_ranges"].([]string)
+	if ok {
+		cdl.ConfigSettings.NetworkVlanRanges = append(cdl.ConfigSettings.NetworkVlanRanges, vlanRanges...)
+	}
+
+	physnetMtu, ok := cfgSet["neutron::global_physnet_mtu"].(int)
+	if ok {
+		cdl.ConfigSettings.GlobalPhysnetMtu = physnetMtu
 	}
 
 	return nil

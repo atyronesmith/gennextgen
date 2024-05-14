@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"embed"
 	"fmt"
 
 	"github.com/atyronesmith/gennextgen/pkg/utils"
@@ -11,7 +12,7 @@ import (
 // in the overcloud-passwords.yaml.  Looking at the Ansible code, it looks like most often,
 // the database password is the service password. (service_config_settings.yaml)
 
-func GenOpenStackSecret(outDir string, passwords map[string]interface{}, groupVars map[string]interface{}) error {
+func GenOpenStackSecret(templateDir embed.FS, outDir string, passwords map[string]interface{}, groupVars map[string]interface{}) error {
 
 	type tStruct struct {
 		Passwords map[string]interface{}
@@ -27,7 +28,7 @@ func GenOpenStackSecret(outDir string, passwords map[string]interface{}, groupVa
 		fmt.Printf("XXXX: %s\n", k)
 	}
 
-	secret, err := utils.ProcessTemplate("keystone-secret.tmpl", "keystone", utils.GetFuncMap(), tPlate)
+	secret, err := utils.ProcessTemplate(templateDir, "keystone-secret.tmpl", "keystone", utils.GetFuncMap(), tPlate)
 	if err != nil {
 		return err
 	}

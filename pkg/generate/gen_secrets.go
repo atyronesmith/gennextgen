@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"embed"
 	_ "embed"
 
 	"github.com/atyronesmith/gennextgen/pkg/types"
@@ -8,7 +9,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 )
 
-func GenSecrets(mappingYaml string, outDir string, cdl *types.ConfigDownload) error {
+func GenSecrets(mappingYaml string, templateDir embed.FS, outDir string, cdl *types.ConfigDownload) error {
 
 	parameterDefaults, err := utils.YamlToMap(utils.GetFullPath(utils.OVERCLOUD_PASSWORDS))
 	if err != nil {
@@ -16,7 +17,7 @@ func GenSecrets(mappingYaml string, outDir string, cdl *types.ConfigDownload) er
 	}
 	passwords := parameterDefaults["parameter_defaults"].(map[string]interface{})
 
-	err = genKeystoneSecret(outDir, passwords)
+	err = genKeystoneSecret(templateDir, outDir, passwords)
 	if err != nil {
 		return err
 	}
@@ -28,9 +29,9 @@ func GenSecrets(mappingYaml string, outDir string, cdl *types.ConfigDownload) er
 	return nil
 }
 
-func genKeystoneSecret(outDir string, passwords map[string]interface{}) error {
+func genKeystoneSecret(templateDir embed.FS, outDir string, passwords map[string]interface{}) error {
 
-	secret, err := utils.ProcessTemplate("keystone-secret.tmpl", "keystone", utils.GetFuncMap(), passwords)
+	secret, err := utils.ProcessTemplate(templateDir, "keystone-secret.tmpl", "keystone", utils.GetFuncMap(), passwords)
 	if err != nil {
 		return err
 	}

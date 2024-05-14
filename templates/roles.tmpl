@@ -1,0 +1,63 @@
+digraph G {
+  layout=dot
+  rankdir=LR
+  fontname="Helvetica,Arial,sans-serif"
+  node [shape="none",fontname="Helvetica,Arial,sans-serif"]
+  edge [fontname="Helvetica,Arial,sans-serif"]
+{{ range .Networks }}
+  {{ $networkName := .Name }}
+  "Network_{{ .Name }}" [tooltip="{{ .Name }}",
+    label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="10">
+    <TR><TD COLSPAN="2" BGCOLOR="lightgreen">Network</TD></TR>
+    <TR><TD>Name</TD><TD>{{ .Name }}</TD></TR>
+    <TR><TD>Domain</TD><TD> {{ .Domain }} </TD></TR>
+    <TR><TD>Vip</TD><TD> {{ PrintAddr .Vip }} </TD></TR>
+    <TR><TD>Prefix len</TD><TD> {{ .PrefixLen }} </TD></TR>
+    <TR><TD>MTU</TD><TD> {{ .Mtu }} </TD></TR>
+    </TABLE>>]
+    {{ range .Subnets }}
+    "Subnet_{{ .Name }}" [shape=box,height=100,tooltip="{{ .Name }}",
+        label=
+        <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="4" CELLPADDING="5">
+          <TR><TD BGCOLOR="lightblue">Subnet</TD></TR>
+          <TR><TD>{{ .Name }}</TD></TR>
+          <TR><TD>{{ PrintPrefix .Subnet }}</TD></TR>
+          <TR><TD>vlan {{.VlanId }}</TD></TR>
+          {{ if gt (len .Routes) 330 -}}
+          <TR><TD COLSPAN="2" BGCOLOR="lightgray">Routes</TD></TR>
+          {{ range .Routes -}}
+          <TR>
+            <TD COLSPAN="2" CELLPADDING="0" BORDER="0">
+              <TABLE CELLSPACING="0" CELLPADDING="10" BORDER="0" CELLBORDER="1">
+                <TR><TD>Default</TD><TD> {{ .Default }} </TD></TR>
+                <TR><TD>Destination</TD><TD> {{ .Destination }} </TD></TR>
+                <TR><TD>NextHop</TD><TD> {{ .NextHop }} </TD></TR>
+                <TR><TD CELLPADDING="0"></TD><TD CELLPADDING="0"></TD></TR>
+              </TABLE>
+            </TD>
+          </TR>
+        {{ end -}}
+        {{ end -}}
+        </TABLE>>]
+    "Subnet_{{ .Name }}" -> "Network_{{ $networkName }}"
+    {{ end -}}
+{{ end -}}
+
+{{ range .R0les }}
+    "Host_{{ .Name }}" [tooltip="{{ .Name }}",
+        label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+        <TR><TD COLSPAN="2" BGCOLOR="lightgray">{{ .Name }}</TD></TR>
+        {{ range $key, $value := .Networks -}}
+            <TR><TD>{{ $value.Name }}</TD><TD PORT="{{ $value.Name }}"> {{ $value.IP }} </TD></TR>
+        {{ end -}}
+        </TABLE>>]
+{{ end -}}
+
+{{ range .Hosts }}
+    {{ $source := .Name }}
+    {{ range $key, $value := .Networks -}}
+        Host_{{ $source }}:{{ $key }} -> Subnet_{{ $value.Subnet.Name }}
+    {{ end -}}
+{{ end -}}
+
+}

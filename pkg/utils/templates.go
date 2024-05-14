@@ -2,16 +2,17 @@ package utils
 
 import (
 	"bytes"
+	"embed"
 	"fmt"
 	"math"
-	"os"
+	"net/netip"
 	"strings"
 	"text/template"
 )
 
-func ProcessTemplate(templateFile string, name string, funcMap template.FuncMap, data interface{}) (*bytes.Buffer, error) {
+func ProcessTemplate(templateDir embed.FS, templateFile string, name string, funcMap template.FuncMap, data interface{}) (*bytes.Buffer, error) {
 
-	fBuf, err := os.ReadFile("templates/" + templateFile)
+	fBuf, err := templateDir.ReadFile("templates/" + templateFile)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read template file: %s, %v", templateFile, err)
 	}
@@ -78,6 +79,23 @@ func GetFuncMap() template.FuncMap {
 			} else {
 				return *intPtr
 			}
+		},
+		"PrintAddr": func(addr *netip.Addr) string {
+			zero := netip.Addr{}
+			if addr == nil || *addr == zero {
+				return "---"
+			}
+			return addr.String()
+		},
+		"PrintPrefix": func(prefix *netip.Prefix) string {
+			zero := netip.Prefix{}
+			if prefix == nil || *prefix == zero {
+				return "---"
+			}
+			return prefix.String()
+		},
+		"Multiply": func(a int, b int) int {
+			return a * b
 		},
 	}
 }

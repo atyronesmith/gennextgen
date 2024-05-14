@@ -1,0 +1,22 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackInfraNetwork
+metadata:
+  name: CtlPlane
+spec:
+  name_lower: ctlplane
+  vip: false
+  dns_domain: tb8-internal.mship3.kddi.info.
+  mtu: 9000
+  ipv6: true
+  subnets:
+    ctlplane_subnet1:
+      ipv6_subnet: 2001:268:70fd:1a1c::/64
+      ipv6_allocation_pools: []
+    ctlplane_subnet2:
+      ipv6_subnet: 2001:268:70fd:1a2c::/64
+      ipv6_allocation_pools: []
+    ctlplane_subnet3:
+      ipv6_subnet: 2001:268:70fd:1a3c::/64
+      ipv6_allocation_pools: []
+
+

@@ -1,0 +1,38 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackInfraNetwork
+metadata:
+  name: Tenant
+spec:
+- name_lower: tenant
+  vip: false
+  mtu: 9000
+  ipv6: true
+  subnets:
+    tenant_subnet1:
+      vlan: 2003
+      ipv6_subnet: 2001:268:70fd:1a1d::/64
+      ipv6_allocation_pools: []
+      routes_ipv6:
+        - destination: 2001:268:70fd:1a2d::/64
+          nexthop: 2001:268:70fd:1a1d::1
+        - destination: 2001:268:70fd:1a3d::/64
+          nexthop: 2001:268:70fd:1a1d::1
+    tenant_subnet2:
+      vlan: 2003
+      ipv6_subnet: 2001:268:70fd:1a2d::/64
+      ipv6_allocation_pools: []
+      routes_ipv6:
+        - destination: 2001:268:70fd:1a1d::/64
+          nexthop: 2001:268:70fd:1a2d::1
+        - destination: 2001:268:70fd:1a3d::/64
+          nexthop: 2001:268:70fd:1a2d::1
+    tenant_subnet3:
+      vlan: 2003
+      ipv6_subnet: 2001:268:70fd:1a3d::/64
+      ipv6_allocation_pools: []
+      routes_ipv6:
+        - destination: 2001:268:70fd:1a1d::/64
+          nexthop: 2001:268:70fd:1a3d::1
+        - destination: 2001:268:70fd:1a2d::/64
+          nexthop: 2001:268:70fd:1a3d::1
+      

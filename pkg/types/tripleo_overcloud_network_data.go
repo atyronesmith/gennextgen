@@ -1,60 +1,59 @@
 package types
 
-type OvercloudNetwork struct {
-	Name      string                   `json:"name"`
-	NameLower string                   `json:"name_lower"`
-	Vip       bool                     `json:"vip"`
-	Mtu       int                      `json:"mtu"`
-	Subnets   []OvercloudNetworkSubnet `json:"subnets"`
+import "github.com/atyronesmith/gennextgen/pkg/utils"
+
+type TripleoOvercloudNetworkData []TripleoOvercloudNetworkDataEntry
+
+type TripleoOvercloudNetworkDataEntry struct {
+	Name      string                                       `yaml:"name"`
+	NameLower string                                       `yaml:"name_lower"`
+	Vip       bool                                         `yaml:"vip"`
+	DNSDomain string                                       `yaml:"dns_domain,omitempty"`
+	MTU       int                                          `yaml:"mtu"`
+	Ipv6      bool                                         `yaml:"ipv6"`
+	Subnets   map[string]TripleoOvercloudNetworkDataSubnet `yaml:"subnets"`
+	Enabled   bool                                         `yaml:"enabled"`
 }
 
-type OvercloudNetworkSubnet struct {
-	IpSubnet        string                                 `json:"ip_subnet"`
-	AllocationPools []OvercloudNetworkSubnetAllocationPool `json:"allocation_pools"`
-	Vlan            int                                    `json:"vlan"`
+type TripleoOvercloudNetworkDataSubnet struct {
+	Enabled             bool             `yaml:"enabled"`
+	VLAN                int64            `yaml:"vlan"`
+	AllocationPools     []AllocationPool `yaml:"allocation_pools"`
+	GatewayIp           string           `yaml:"gateway_ip"`
+	GatewayIpV6         string           `yaml:"gateway_ipv6"`
+	Routes              []RoutesIpv6     `yaml:"routes,omitempty"`
+	IpSubnet            string           `yaml:"ip_subnet"`
+	Ipv6Subnet          string           `yaml:"ipv6_subnet"`
+	Ipv6AllocationPools []AllocationPool `yaml:"ipv6_allocation_pools"`
+	RoutesIpv6          []RoutesIpv6     `yaml:"routes_ipv6,omitempty"`
 }
 
-type OvercloudNetworkSubnetAllocationPool struct {
-	Start string `json:"start"`
-	End   string `json:"end"`
+type AllocationPool struct {
+	Start string `yaml:"start"`
+	End   string `yaml:"end"`
 }
 
-type TripleoOvercloudNetworkData struct {
-	Networks []OvercloudNetwork `json:"networks"`
+type RoutesIpv6 struct {
+	Default     bool   `yaml:"default"`
+	Destination string `yaml:"destination"`
+	NextHop     string `yaml:"nexthop"`
 }
 
-func (tond *TripleoOvercloudNetworkData) Process(data []map[string]interface{}) error {
-	var taod TripleoOvercloudNetworkData
-
-	for _, net := range data {
-		var on OvercloudNetwork
-		on.Name = net["name"].(string)
-		on.NameLower = net["name_lower"].(string)
-		on.Vip = net["vip"].(bool)
-		on.Mtu = net["mtu"].(int)
-		for _, subnet := range net["subnets"].(map[string]interface{}) {
-			var os OvercloudNetworkSubnet
-			os.IpSubnet = subnet.(map[string]interface{})["ip_subnet"].(string)
-			os.Vlan = subnet.(map[string]interface{})["vlan"].(int)
-			for _, pool := range subnet.(map[string]interface{})["allocation_pools"].([]interface{}) {
-				var oap OvercloudNetworkSubnetAllocationPool
-				oap.Start = pool.(map[string]interface{})["start"].(string)
-				oap.End = pool.(map[string]interface{})["end"].(string)
-				os.AllocationPools = append(os.AllocationPools, oap)
-			}
-			on.Subnets = append(on.Subnets, os)
-		}
-		taod.Networks = append(taod.Networks, on)
-	}
-
-	return nil
+type InternalAPISubnet1 struct {
+	Ipv6Subnet          string        `yaml:"ipv6_subnet"`
+	Ipv6AllocationPools []interface{} `yaml:"ipv6_allocation_pools"`
 }
 
-func (tond *TripleoOvercloudNetworkData) GetNetwork(name string) *OvercloudNetwork {
-	for _, network := range tond.Networks {
-		if network.Name == name {
-			return &network
+var tripleoOvercloudNetworkData TripleoOvercloudNetworkData
+
+func GetTripleoOvercloudNetworkData() (*TripleoOvercloudNetworkData, error) {
+	if len(tripleoOvercloudNetworkData) == 0 {
+		tripleoOvercloudNetworkData = TripleoOvercloudNetworkData{}
+		err := utils.YamlToStruct(utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_NETWORK_DATA), &tripleoOvercloudNetworkData)
+		if err != nil {
+			return nil, err
 		}
 	}
-	return nil
+	return &tripleoOvercloudNetworkData, nil
+
 }

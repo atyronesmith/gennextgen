@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 )
 
 var rootDir string = "./overcloud-deploy"
 
 const (
+	TRIPLEO_OVERCLOUD_ROLES_DATA   string = "tripleo-overcloud-roles-data.yaml"
+	TRIPLEO_OVERCLOUD_ENVIRONMENT  string = "environment/tripleo-overcloud-environment.yaml"
 	TRIPLEO_ANSIBLE_INVENTORY_YAML string = "tripleo-ansible-inventory.yaml"
 	OVERCLOUD_EXPORT               string = "overcloud-export.yaml"
 	OVERCLOUD_PASSWORDS            string = "overcloud-passwords.yaml"
@@ -62,6 +66,35 @@ func WalkDir(dirname string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func SearchFileRegex(path string, targetFileRegex string) ([]string, error) {
+
+	targetFileRegex = strings.ReplaceAll(targetFileRegex, "*", ".*")
+	targetFileRegex = strings.ReplaceAll(targetFileRegex, "?", ".")
+
+	fileReg, err := regexp.Compile(targetFileRegex)
+	if err != nil {
+		return nil, err
+	}
+
+	fileList := make([]string, 0)
+
+	err = filepath.WalkDir(path, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if !d.IsDir() && fileReg.Match([]byte(filepath.Base(path))) {
+			fullPath, err := filepath.Abs(path)
+			if err != nil {
+				return err
+			}
+			fileList = append(fileList, fullPath)
+		}
+		return nil
+	})
+
+	return fileList, err
 }
 
 func WriteByteData(buf []byte, dir string, fileName string) error {

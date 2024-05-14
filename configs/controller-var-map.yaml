@@ -1,0 +1,4334 @@
+aodh::alarm_history_time_to_live: '86400'
+aodh::api::enable_proxy_headers_parsing: true
+aodh::api::gnocchi_external_project_owner: service
+aodh::api::service_name: httpd
+aodh::db::database_connection: mysql+pymysql://aodh:mnqHmKlikZVNDGlZAzvJLMwvg@[2001:268:70fd:1000::a000]/aodh?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+aodh::expirer::hour: '0'
+aodh::expirer::maxdelay: '3600'
+aodh::expirer::minute: '1'
+aodh::expirer::month: '*'
+aodh::expirer::monthday: '*'
+aodh::expirer::weekday: '*'
+aodh::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+aodh::keystone::authtoken::interface: internal
+aodh::keystone::authtoken::memcache_use_advanced_pool: true
+aodh::keystone::authtoken::password: mnqHmKlikZVNDGlZAzvJLMwvg
+aodh::keystone::authtoken::project_domain_name: Default
+aodh::keystone::authtoken::project_name: service
+aodh::keystone::authtoken::region_name: tb8
+aodh::keystone::authtoken::user_domain_name: Default
+aodh::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+aodh::logging::debug: true
+aodh::notification_driver:
+- messagingv2
+aodh::policy::policies: {}
+aodh::rabbit_heartbeat_in_pthread: false
+aodh::service_credentials::auth_url: http://[2001:268:70fd:1000::a000]:5000
+aodh::service_credentials::password: mnqHmKlikZVNDGlZAzvJLMwvg
+aodh::service_credentials::project_domain_name: Default
+aodh::service_credentials::project_name: service
+aodh::service_credentials::region_name: tb8
+aodh::service_credentials::user_domain_name: Default
+aodh::wsgi::apache::bind_host: '%{hiera(''internal_api'')}'
+aodh::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+aodh::wsgi::apache::ssl: false
+aodh::wsgi::apache::wsgi_process_display_name: aodh_wsgi
+aodh_redis_password: wsdmn8tXD4hKbpA44CqypAjqC
+apache::default_mods: false
+apache::default_vhost: false
+apache::ip: '%{hiera(''internal_api'')}'
+apache::mod::alias::icons_options: None
+apache::mod::prefork::maxrequestworkers: 256
+apache::mod::prefork::serverlimit: 256
+apache::mod::remoteip::proxy_ips:
+- 2001:268:70fd:1000::/64
+apache::server_signature: 'Off'
+apache::server_tokens: Prod
+apache::timeout: 90
+apache::trace_enable: 'Off'
+barbican::api::db_auto_create: false
+barbican::api::enable_queue: true
+barbican::api::enabled_certificate_plugins:
+- simple_certificate
+barbican::api::host_href: http://tb8.mship3.kddi.info:9311
+barbican::api::logging::debug: true
+barbican::api::notification_driver:
+- messagingv2
+barbican::api::rabbit_heartbeat_in_pthread: false
+barbican::api::service_name: httpd
+barbican::db::database_connection: mysql+pymysql://barbican:stkowfb39RqpYK1fcXnaPBF8Z@[2001:268:70fd:1000::a000]/barbican?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+barbican::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+barbican::keystone::authtoken::interface: internal
+barbican::keystone::authtoken::memcache_use_advanced_pool: true
+barbican::keystone::authtoken::password: stkowfb39RqpYK1fcXnaPBF8Z
+barbican::keystone::authtoken::project_name: service
+barbican::keystone::authtoken::region_name: tb8
+barbican::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+barbican::keystone::notification::enable_keystone_notification: true
+barbican::keystone::notification::keystone_notification_topic: barbican_notifications
+barbican::plugins::simple_crypto::global_default: true
+barbican::plugins::simple_crypto::simple_crypto_plugin_kek: x5twfH1YJ6bV050Vtyrs9hPn_oPSnKQ2IEI64wS0q_A=
+barbican::policy::policies:
+  barbican-admin:
+    key: admin
+    value: role:admin
+  barbican-consumer_get:
+    key: consumer:get
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_acl_read:
+    key: container_acl_read
+    value: '''read'':%(target.container.read)s'
+  barbican-container_acls_delete:
+    key: container_acls:delete
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_acls_get:
+    key: container_acls:get
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_acls_put_patch:
+    key: container_acls:put_patch
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_consumers_delete:
+    key: container_consumers:delete
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_consumers_get:
+    key: container_consumers:get
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_consumers_post:
+    key: container_consumers:post
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_delete:
+    key: container:delete
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_get:
+    key: container:get
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_acl_read or rule:container_project_admin
+  barbican-container_is_not_private_read:
+    key: container_is_not_private_read
+    value: '''True'':%(target.container.read_project_access)s'
+  barbican-container_owner:
+    key: container_owner
+    value: user_id:%(target.container.creator_id)s
+  barbican-container_project_admin:
+    key: container_project_admin
+    value: rule:admin and project_id:%(target.container.project_id)s
+  barbican-container_project_member:
+    key: container_project_member
+    value: rule:member and project_id:%(target.container.project_id)s
+  barbican-container_secret_delete:
+    key: container_secret:delete
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-container_secret_post:
+    key: container_secret:post
+    value: rule:container_project_member and (rule:container_owner or rule:container_is_not_private_read)
+      or rule:container_project_admin
+  barbican-containers_get:
+    key: containers:get
+    value: rule:member
+  barbican-containers_post:
+    key: containers:post
+    value: rule:member
+  barbican-member:
+    key: member
+    value: role:member
+  barbican-order_delete:
+    key: order:delete
+    value: rule:order_project_member
+  barbican-order_get:
+    key: order:get
+    value: rule:order_project_member
+  barbican-order_project_member:
+    key: order_project_member
+    value: rule:member and project_id:%(target.order.project_id)s
+  barbican-orders_get:
+    key: orders:get
+    value: rule:member
+  barbican-orders_post:
+    key: orders:post
+    value: rule:member
+  barbican-orders_put:
+    key: orders:put
+    value: rule:member
+  barbican-project_quotas_delete:
+    key: project_quotas:delete
+    value: rule:admin
+  barbican-project_quotas_get:
+    key: project_quotas:get
+    value: rule:admin
+  barbican-project_quotas_put:
+    key: project_quotas:put
+    value: rule:admin
+  barbican-quotas_get:
+    key: quotas:get
+    value: rule:reader
+  barbican-reader:
+    key: reader
+    value: role:reader
+  barbican-secret_acl_read:
+    key: secret_acl_read
+    value: '''read'':%(target.secret.read)s'
+  barbican-secret_acls_delete:
+    key: secret_acls:delete
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_acls_get:
+    key: secret_acls:get
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_acls_put_patch:
+    key: secret_acls:put_patch
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_decrypt:
+    key: secret:decrypt
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_acl_read or rule:secret_project_admin
+  barbican-secret_delete:
+    key: secret:delete
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_get:
+    key: secret:get
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_acl_read or rule:secret_project_admin
+  barbican-secret_is_not_private_read:
+    key: secret_is_not_private_read
+    value: '''True'':%(target.secret.read_project_access)s'
+  barbican-secret_meta_delete:
+    key: secret_meta:delete
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_meta_get:
+    key: secret_meta:get
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_acl_read or rule:secret_project_admin
+  barbican-secret_meta_post:
+    key: secret_meta:post
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_meta_put:
+    key: secret_meta:put
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secret_owner:
+    key: secret_owner
+    value: user_id:%(target.secret.creator_id)s
+  barbican-secret_project_admin:
+    key: secret_project_admin
+    value: rule:admin and project_id:%(target.secret.project_id)s
+  barbican-secret_project_member:
+    key: secret_project_member
+    value: rule:member and project_id:%(target.secret.project_id)s
+  barbican-secret_put:
+    key: secret:put
+    value: rule:secret_project_member and (rule:secret_owner or rule:secret_is_not_private_read)
+      or rule:secret_project_admin
+  barbican-secrets_get:
+    key: secrets:get
+    value: rule:member
+  barbican-secrets_post:
+    key: secrets:post
+    value: rule:member
+  barbican-secretstore_get:
+    key: secretstore:get
+    value: rule:reader
+  barbican-secretstore_preferred_delete:
+    key: secretstore_preferred:delete
+    value: rule:admin
+  barbican-secretstore_preferred_post:
+    key: secretstore_preferred:post
+    value: rule:admin
+  barbican-secretstores_get:
+    key: secretstores:get
+    value: rule:reader
+  barbican-secretstores_get_global_default:
+    key: secretstores:get_global_default
+    value: rule:reader
+  barbican-secretstores_get_preferred:
+    key: secretstores:get_preferred
+    value: rule:reader
+  barbican-transport_key_delete:
+    key: transport_key:delete
+    value: rule:admin
+  barbican-transport_key_get:
+    key: transport_key:get
+    value: rule:reader
+  barbican-transport_keys_get:
+    key: transport_keys:get
+    value: rule:reader
+  barbican-transport_keys_post:
+    key: transport_keys:post
+    value: rule:admin
+barbican::wsgi::apache::bind_host: '%{hiera(''internal_api'')}'
+barbican::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+barbican::wsgi::apache::ssl: false
+barbican::wsgi::apache::workers: '%{::processorcount}'
+ceilometer::agent::notification::manage_event_pipeline: true
+ceilometer::agent::notification::manage_pipeline: true
+ceilometer::agent::polling::manage_polling: true
+ceilometer::agent::polling::tenant_name_discovery: false
+ceilometer::agent::service_credentials::auth_project_domain_name: Default
+ceilometer::agent::service_credentials::auth_url: http://[2001:268:70fd:1000::a000]:5000
+ceilometer::agent::service_credentials::interface: internalURL
+ceilometer::agent::service_credentials::password: 3Itvh1LOO0VmgafzXi2yKPbVx
+ceilometer::agent::service_credentials::project_name: service
+ceilometer::agent::service_credentials::region_name: tb8
+ceilometer::agent::service_credentials::user_domain_name: Default
+ceilometer::amqp_notify_address_prefix: ''
+ceilometer::amqp_rpc_address_prefix: ''
+ceilometer::host: '%{hiera(''fqdn_canonical'')}'
+ceilometer::logging::debug: true
+ceilometer::notification_driver:
+- messagingv2
+ceilometer::rabbit_heartbeat_in_pthread: false
+ceilometer::snmpd_readonly_user_password: eB2uNC14I618IbNlF50uNf0m
+ceilometer::snmpd_readonly_username: ro_snmp_user
+ceilometer::telemetry_secret: n2emdodF9Qpg3oueiltJCA9fa
+ceilometer_redis_password: wsdmn8tXD4hKbpA44CqypAjqC
+central_namespace: true
+cinder::api::bind_host: '%{hiera(''fqdn_internal_api'')}'
+cinder::api::default_volume_type: standard-high
+cinder::api::enable_proxy_headers_parsing: true
+cinder::api::service_name: httpd
+cinder::backend_host: hostgroup
+cinder::backup::backup_max_operations: 15
+cinder::backup::backup_workers: 1
+cinder::backup::ceph::backup_ceph_conf: /etc/ceph/ceph.conf
+cinder::backup::ceph::backup_ceph_pool: backups
+cinder::backup::ceph::backup_ceph_user: openstack
+cinder::backup::enabled: false
+cinder::backup::manage_service: false
+cinder::cron::db_purge::age: '30'
+cinder::cron::db_purge::destination: /var/log/cinder/cinder-rowsflush.log
+cinder::cron::db_purge::hour: '0'
+cinder::cron::db_purge::maxdelay: '3600'
+cinder::cron::db_purge::minute: '1'
+cinder::cron::db_purge::month: '*'
+cinder::cron::db_purge::monthday: '*'
+cinder::cron::db_purge::user: cinder
+cinder::cron::db_purge::weekday: '*'
+cinder::database_connection: mysql+pymysql://cinder:cTo1zsjoSUWJBXJs60P7DVwqa@[2001:268:70fd:1000::a000]/cinder?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+cinder::db::database_db_max_retries: -1
+cinder::db::database_max_retries: -1
+cinder::glance::glance_api_servers: http://[2001:268:70fd:1000::a000]:9293
+cinder::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+cinder::keystone::authtoken::interface: internal
+cinder::keystone::authtoken::memcache_use_advanced_pool: true
+cinder::keystone::authtoken::password: cTo1zsjoSUWJBXJs60P7DVwqa
+cinder::keystone::authtoken::project_domain_name: Default
+cinder::keystone::authtoken::project_name: service
+cinder::keystone::authtoken::region_name: tb8
+cinder::keystone::authtoken::user_domain_name: Default
+cinder::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+cinder::keystone::service_user::auth_type: password
+cinder::keystone::service_user::auth_url: http://[2001:268:70fd:1000::a000]:5000/
+cinder::keystone::service_user::password: cTo1zsjoSUWJBXJs60P7DVwqa
+cinder::keystone::service_user::project_name: service
+cinder::keystone::service_user::region_name: tb8
+cinder::keystone::service_user::send_service_user_token: true
+cinder::logging::debug: true
+cinder::notification_driver:
+- messagingv2
+cinder::nova::auth_type: password
+cinder::nova::auth_url: http://[2001:268:70fd:1000::a000]:5000/
+cinder::nova::interface: admin
+cinder::nova::password: p4Uk7GHjh7GEaG9Ztd6kkZWtX
+cinder::nova::project_name: service
+cinder::nova::region_name: tb8
+cinder::policy::policies:
+  cinder-admin_api:
+    key: admin_api
+    value: is_admin:True or (role:admin and is_admin_project:True)
+  cinder-admin_or_owner:
+    key: admin_or_owner
+    value: is_admin:True or (role:admin and is_admin_project:True) or project_id:%(project_id)s
+  cinder-backup_backup-import:
+    key: backup:backup-import
+    value: rule:admin_api
+  cinder-backup_backup_project_attribute:
+    key: backup:backup_project_attribute
+    value: rule:admin_api
+  cinder-backup_create:
+    key: backup:create
+    value: rule:system_admin_or_project_member
+  cinder-backup_delete:
+    key: backup:delete
+    value: rule:system_admin_or_project_member
+  cinder-backup_export-import:
+    key: backup:export-import
+    value: rule:admin_api
+  cinder-backup_get:
+    key: backup:get
+    value: rule:system_admin_or_project_reader
+  cinder-backup_get_all:
+    key: backup:get_all
+    value: rule:system_admin_or_project_reader
+  cinder-backup_restore:
+    key: backup:restore
+    value: rule:system_admin_or_project_member
+  cinder-backup_update:
+    key: backup:update
+    value: rule:system_admin_or_project_member
+  cinder-clusters_get:
+    key: clusters:get
+    value: rule:admin_api
+  cinder-clusters_get_all:
+    key: clusters:get_all
+    value: rule:admin_api
+  cinder-clusters_update:
+    key: clusters:update
+    value: rule:admin_api
+  cinder-context_is_admin:
+    key: context_is_admin
+    value: role:admin
+  cinder-group_access_group_types_specs:
+    key: group:access_group_types_specs
+    value: rule:admin_api
+  cinder-group_create:
+    key: group:create
+    value: rule:system_admin_or_project_member
+  cinder-group_create_group_snapshot:
+    key: group:create_group_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-group_delete:
+    key: group:delete
+    value: rule:system_admin_or_project_member
+  cinder-group_delete_group_snapshot:
+    key: group:delete_group_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-group_disable_replication:
+    key: group:disable_replication
+    value: rule:system_admin_or_project_member
+  cinder-group_enable_replication:
+    key: group:enable_replication
+    value: rule:system_admin_or_project_member
+  cinder-group_failover_replication:
+    key: group:failover_replication
+    value: rule:system_admin_or_project_member
+  cinder-group_get:
+    key: group:get
+    value: rule:system_admin_or_project_reader
+  cinder-group_get_all:
+    key: group:get_all
+    value: rule:system_admin_or_project_reader
+  cinder-group_get_all_group_snapshots:
+    key: group:get_all_group_snapshots
+    value: rule:system_admin_or_project_reader
+  cinder-group_get_group_snapshot:
+    key: group:get_group_snapshot
+    value: rule:system_admin_or_project_reader
+  cinder-group_group_project_attribute:
+    key: group:group_project_attribute
+    value: rule:admin_api
+  cinder-group_group_snapshot_project_attribute:
+    key: group:group_snapshot_project_attribute
+    value: rule:admin_api
+  cinder-group_group_types_manage:
+    key: group:group_types:manage
+    value: rule:admin_api
+  cinder-group_group_types_specs:
+    key: group:group_types_specs
+    value: rule:admin_api
+  cinder-group_list_replication_targets:
+    key: group:list_replication_targets
+    value: rule:system_admin_or_project_member
+  cinder-group_reset_group_snapshot_status:
+    key: group:reset_group_snapshot_status
+    value: rule:admin_api
+  cinder-group_reset_status:
+    key: group:reset_status
+    value: rule:admin_api
+  cinder-group_update:
+    key: group:update
+    value: rule:system_admin_or_project_member
+  cinder-group_update_group_snapshot:
+    key: group:update_group_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-limits_extension_used_limits:
+    key: limits_extension:used_limits
+    value: rule:system_admin_or_project_reader
+  cinder-message_delete:
+    key: message:delete
+    value: rule:system_admin_or_project_member
+  cinder-message_get:
+    key: message:get
+    value: rule:system_admin_or_project_reader
+  cinder-message_get_all:
+    key: message:get_all
+    value: rule:system_admin_or_project_reader
+  cinder-scheduler_extension_scheduler_stats_get_pools:
+    key: scheduler_extension:scheduler_stats:get_pools
+    value: rule:admin_api
+  cinder-snapshot_extension_list_manageable:
+    key: snapshot_extension:list_manageable
+    value: rule:admin_api
+  cinder-snapshot_extension_snapshot_actions_update_snapshot_status:
+    key: snapshot_extension:snapshot_actions:update_snapshot_status
+    value: rule:system_admin_or_project_member
+  cinder-snapshot_extension_snapshot_manage:
+    key: snapshot_extension:snapshot_manage
+    value: rule:admin_api
+  cinder-snapshot_extension_snapshot_unmanage:
+    key: snapshot_extension:snapshot_unmanage
+    value: rule:admin_api
+  cinder-system_admin_or_project_member:
+    key: system_admin_or_project_member
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  cinder-system_admin_or_project_reader:
+    key: system_admin_or_project_reader
+    value: role:admin or (role:reader and project_id:%(project_id)s)
+  cinder-system_or_domain_or_project_admin:
+    key: system_or_domain_or_project_admin
+    value: (role:admin and system_scope:all) or (role:admin and domain_id:%(domain_id)s)
+      or (role:admin and project_id:%(project_id)s)
+  cinder-volume_accept_transfer:
+    key: volume:accept_transfer
+    value: rule:system_admin_or_project_member
+  cinder-volume_attachment_complete:
+    key: volume:attachment_complete
+    value: rule:system_admin_or_project_member
+  cinder-volume_attachment_create:
+    key: volume:attachment_create
+    value: rule:system_admin_or_project_member
+  cinder-volume_attachment_delete:
+    key: volume:attachment_delete
+    value: rule:system_admin_or_project_member
+  cinder-volume_attachment_update:
+    key: volume:attachment_update
+    value: rule:system_admin_or_project_member
+  cinder-volume_create:
+    key: volume:create
+    value: rule:system_admin_or_project_member
+  cinder-volume_create_from_image:
+    key: volume:create_from_image
+    value: rule:system_admin_or_project_member
+  cinder-volume_create_snapshot:
+    key: volume:create_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-volume_create_transfer:
+    key: volume:create_transfer
+    value: rule:system_admin_or_project_member
+  cinder-volume_create_volume_metadata:
+    key: volume:create_volume_metadata
+    value: rule:system_admin_or_project_member
+  cinder-volume_delete:
+    key: volume:delete
+    value: rule:system_admin_or_project_member
+  cinder-volume_delete_snapshot:
+    key: volume:delete_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-volume_delete_snapshot_metadata:
+    key: volume:delete_snapshot_metadata
+    value: rule:system_admin_or_project_member
+  cinder-volume_delete_transfer:
+    key: volume:delete_transfer
+    value: rule:system_admin_or_project_member
+  cinder-volume_delete_volume_metadata:
+    key: volume:delete_volume_metadata
+    value: rule:system_admin_or_project_member
+  cinder-volume_extend:
+    key: volume:extend
+    value: rule:system_admin_or_project_member
+  cinder-volume_extend_attached_volume:
+    key: volume:extend_attached_volume
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_access_types_extra_specs:
+    key: volume_extension:access_types_extra_specs
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_access_types_qos_specs_id:
+    key: volume_extension:access_types_qos_specs_id
+    value: rule:admin_api
+  cinder-volume_extension_backup_admin_actions_force_delete:
+    key: volume_extension:backup_admin_actions:force_delete
+    value: rule:admin_api
+  cinder-volume_extension_backup_admin_actions_reset_status:
+    key: volume_extension:backup_admin_actions:reset_status
+    value: rule:admin_api
+  cinder-volume_extension_capabilities:
+    key: volume_extension:capabilities
+    value: rule:admin_api
+  cinder-volume_extension_default_get:
+    key: volume_extension:default_get
+    value: rule:admin_api
+  cinder-volume_extension_default_get_all:
+    key: volume_extension:default_get_all
+    value: rule:admin_api
+  cinder-volume_extension_default_set_or_update:
+    key: volume_extension:default_set_or_update
+    value: rule:admin_api
+  cinder-volume_extension_default_unset:
+    key: volume_extension:default_unset
+    value: rule:admin_api
+  cinder-volume_extension_extended_snapshot_attributes:
+    key: volume_extension:extended_snapshot_attributes
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_hosts:
+    key: volume_extension:hosts
+    value: rule:admin_api
+  cinder-volume_extension_list_manageable:
+    key: volume_extension:list_manageable
+    value: rule:admin_api
+  cinder-volume_extension_qos_specs_manage_create:
+    key: volume_extension:qos_specs_manage:create
+    value: rule:admin_api
+  cinder-volume_extension_qos_specs_manage_delete:
+    key: volume_extension:qos_specs_manage:delete
+    value: rule:admin_api
+  cinder-volume_extension_qos_specs_manage_get:
+    key: volume_extension:qos_specs_manage:get
+    value: rule:admin_api
+  cinder-volume_extension_qos_specs_manage_get_all:
+    key: volume_extension:qos_specs_manage:get_all
+    value: rule:admin_api
+  cinder-volume_extension_qos_specs_manage_update:
+    key: volume_extension:qos_specs_manage:update
+    value: rule:admin_api
+  cinder-volume_extension_quota_classes:
+    key: volume_extension:quota_classes
+    value: rule:admin_api
+  cinder-volume_extension_quotas_delete:
+    key: volume_extension:quotas:delete
+    value: rule:admin_api
+  cinder-volume_extension_quotas_show:
+    key: volume_extension:quotas:show
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_quotas_update:
+    key: volume_extension:quotas:update
+    value: rule:admin_api
+  cinder-volume_extension_services_index:
+    key: volume_extension:services:index
+    value: rule:admin_api
+  cinder-volume_extension_services_update:
+    key: volume_extension:services:update
+    value: rule:admin_api
+  cinder-volume_extension_snapshot_admin_actions_force_delete:
+    key: volume_extension:snapshot_admin_actions:force_delete
+    value: rule:admin_api
+  cinder-volume_extension_snapshot_admin_actions_reset_status:
+    key: volume_extension:snapshot_admin_actions:reset_status
+    value: rule:admin_api
+  cinder-volume_extension_type_get:
+    key: volume_extension:type_get
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_type_get_all:
+    key: volume_extension:type_get_all
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_types_extra_specs_create:
+    key: volume_extension:types_extra_specs:create
+    value: rule:admin_api
+  cinder-volume_extension_types_extra_specs_delete:
+    key: volume_extension:types_extra_specs:delete
+    value: rule:admin_api
+  cinder-volume_extension_types_extra_specs_index:
+    key: volume_extension:types_extra_specs:index
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_types_extra_specs_show:
+    key: volume_extension:types_extra_specs:show
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_types_extra_specs_update:
+    key: volume_extension:types_extra_specs:update
+    value: rule:admin_api
+  cinder-volume_extension_types_manage:
+    key: volume_extension:types_manage
+    value: rule:admin_api
+  cinder-volume_extension_volume_actions_attach:
+    key: volume_extension:volume_actions:attach
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_begin_detaching:
+    key: volume_extension:volume_actions:begin_detaching
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_detach:
+    key: volume_extension:volume_actions:detach
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_initialize_connection:
+    key: volume_extension:volume_actions:initialize_connection
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_reserve:
+    key: volume_extension:volume_actions:reserve
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_roll_detaching:
+    key: volume_extension:volume_actions:roll_detaching
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_terminate_connection:
+    key: volume_extension:volume_actions:terminate_connection
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_unreserve:
+    key: volume_extension:volume_actions:unreserve
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_upload_image:
+    key: volume_extension:volume_actions:upload_image
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_actions_upload_public:
+    key: volume_extension:volume_actions:upload_public
+    value: rule:admin_api
+  cinder-volume_extension_volume_admin_actions_force_delete:
+    key: volume_extension:volume_admin_actions:force_delete
+    value: rule:admin_api
+  cinder-volume_extension_volume_admin_actions_force_detach:
+    key: volume_extension:volume_admin_actions:force_detach
+    value: rule:admin_api
+  cinder-volume_extension_volume_admin_actions_migrate_volume:
+    key: volume_extension:volume_admin_actions:migrate_volume
+    value: rule:admin_api
+  cinder-volume_extension_volume_admin_actions_migrate_volume_completion:
+    key: volume_extension:volume_admin_actions:migrate_volume_completion
+    value: rule:admin_api
+  cinder-volume_extension_volume_admin_actions_reset_status:
+    key: volume_extension:volume_admin_actions:reset_status
+    value: rule:admin_api
+  cinder-volume_extension_volume_encryption_metadata:
+    key: volume_extension:volume_encryption_metadata
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_volume_host_attribute:
+    key: volume_extension:volume_host_attribute
+    value: rule:admin_api
+  cinder-volume_extension_volume_image_metadata:
+    key: volume_extension:volume_image_metadata
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_manage:
+    key: volume_extension:volume_manage
+    value: rule:admin_api
+  cinder-volume_extension_volume_mig_status_attribute:
+    key: volume_extension:volume_mig_status_attribute
+    value: rule:admin_api
+  cinder-volume_extension_volume_tenant_attribute:
+    key: volume_extension:volume_tenant_attribute
+    value: rule:system_admin_or_project_reader
+  cinder-volume_extension_volume_type_access:
+    key: volume_extension:volume_type_access
+    value: rule:system_admin_or_project_member
+  cinder-volume_extension_volume_type_access_addProjectAccess:
+    key: volume_extension:volume_type_access:addProjectAccess
+    value: rule:admin_api
+  cinder-volume_extension_volume_type_access_removeProjectAccess:
+    key: volume_extension:volume_type_access:removeProjectAccess
+    value: rule:admin_api
+  cinder-volume_extension_volume_type_encryption:
+    key: volume_extension:volume_type_encryption
+    value: rule:admin_api
+  cinder-volume_extension_volume_type_encryption_create:
+    key: volume_extension:volume_type_encryption:create
+    value: rule:admin_api
+  cinder-volume_extension_volume_type_encryption_delete:
+    key: volume_extension:volume_type_encryption:delete
+    value: rule:admin_api
+  cinder-volume_extension_volume_type_encryption_get:
+    key: volume_extension:volume_type_encryption:get
+    value: rule:admin_api
+  cinder-volume_extension_volume_type_encryption_update:
+    key: volume_extension:volume_type_encryption:update
+    value: rule:admin_api
+  cinder-volume_extension_volume_unmanage:
+    key: volume_extension:volume_unmanage
+    value: rule:admin_api
+  cinder-volume_failover_host:
+    key: volume:failover_host
+    value: rule:admin_api
+  cinder-volume_force_delete:
+    key: volume:force_delete
+    value: rule:admin_api
+  cinder-volume_freeze_host:
+    key: volume:freeze_host
+    value: rule:admin_api
+  cinder-volume_get:
+    key: volume:get
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_all:
+    key: volume:get_all
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_all_snapshots:
+    key: volume:get_all_snapshots
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_all_transfers:
+    key: volume:get_all_transfers
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_snapshot:
+    key: volume:get_snapshot
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_snapshot_metadata:
+    key: volume:get_snapshot_metadata
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_transfer:
+    key: volume:get_transfer
+    value: rule:system_admin_or_project_reader
+  cinder-volume_get_volume_metadata:
+    key: volume:get_volume_metadata
+    value: rule:system_admin_or_project_reader
+  cinder-volume_multiattach:
+    key: volume:multiattach
+    value: rule:system_admin_or_project_member
+  cinder-volume_multiattach_bootable_volume:
+    key: volume:multiattach_bootable_volume
+    value: rule:system_admin_or_project_member
+  cinder-volume_retype:
+    key: volume:retype
+    value: rule:system_admin_or_project_member
+  cinder-volume_revert_to_snapshot:
+    key: volume:revert_to_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-volume_thaw_host:
+    key: volume:thaw_host
+    value: rule:admin_api
+  cinder-volume_update:
+    key: volume:update
+    value: rule:system_admin_or_project_member
+  cinder-volume_update_readonly_flag:
+    key: volume:update_readonly_flag
+    value: rule:system_admin_or_project_member
+  cinder-volume_update_snapshot:
+    key: volume:update_snapshot
+    value: rule:system_admin_or_project_member
+  cinder-volume_update_snapshot_metadata:
+    key: volume:update_snapshot_metadata
+    value: rule:system_admin_or_project_member
+  cinder-volume_update_volume_admin_metadata:
+    key: volume:update_volume_admin_metadata
+    value: rule:admin_api
+  cinder-volume_update_volume_metadata:
+    key: volume:update_volume_metadata
+    value: rule:system_admin_or_project_member
+  cinder-workers_cleanup:
+    key: workers:cleanup
+    value: rule:admin_api
+cinder::rabbit_heartbeat_in_pthread: false
+cinder::rabbit_heartbeat_timeout_threshold: 60
+cinder::rpc_response_timeout: 60
+cinder::scheduler::scheduler_driver: cinder.scheduler.filter_scheduler.FilterScheduler
+cinder::storage_availability_zone: ''
+cinder::volume::enabled: false
+cinder::volume::manage_service: false
+cinder::wsgi::apache::bind_host: '%{hiera(''internal_api'')}'
+cinder::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+cinder::wsgi::apache::ssl: false
+cinder::wsgi::apache::vhost_custom_fragment: Timeout 60
+cinder::wsgi::apache::workers: '12'
+corosync_ipv6: true
+corosync_token_timeout: 10000
+enable_aodh_expirer: true
+enable_fencing: true
+enable_galera: true
+enable_load_balancer: true
+glance::api::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+glance::api::authtoken::interface: internal
+glance::api::authtoken::memcache_use_advanced_pool: true
+glance::api::authtoken::password: sBpUTaWDHKsRGb2UFM3ts7HTR
+glance::api::authtoken::project_domain_name: Default
+glance::api::authtoken::project_name: service
+glance::api::authtoken::region_name: tb8
+glance::api::authtoken::user_domain_name: Default
+glance::api::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+glance::api::bind_host: '%{hiera(''internal_api'')}'
+glance::api::db::database_connection: mysql+pymysql://glance:sBpUTaWDHKsRGb2UFM3ts7HTR@[2001:268:70fd:1000::a000]/glance?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+glance::api::disk_formats:
+- raw
+glance::api::enable_proxy_headers_parsing: true
+glance::api::enable_v1_api: false
+glance::api::enable_v2_api: true
+glance::api::enabled_import_methods:
+- web-download
+glance::api::ignore_user_roles:
+- admin
+glance::api::image_conversion_output_format: raw
+glance::api::image_import_plugins:
+- no_op
+- image_conversion
+glance::api::image_member_quota: 128
+glance::api::inject_metadata_properties: []
+glance::api::logging::debug: true
+glance::api::node_staging_uri: file:///var/lib/glance/staging
+glance::api::os_region_name: tb8
+glance::api::pipeline: keystone
+glance::api::workers: '12'
+glance::backend::file::filesystem_thin_provisioning: false
+glance::backend::rbd::rbd_store_ceph_conf: /etc/ceph/ceph.conf
+glance::backend::rbd::rbd_store_pool: images
+glance::backend::rbd::rbd_store_user: openstack
+glance::backend::rbd::rbd_thin_provisioning: false
+glance::backend::swift::swift_store_auth_address: http://[2001:268:70fd:1000::a000]:5000/v3
+glance::backend::swift::swift_store_auth_version: 3
+glance::backend::swift::swift_store_create_container_on_put: true
+glance::backend::swift::swift_store_key: sBpUTaWDHKsRGb2UFM3ts7HTR
+glance::backend::swift::swift_store_user: service:glance
+glance::cron::db_purge::age: '30'
+glance::cron::db_purge::destination: /var/log/glance/glance-rowsflush.log
+glance::cron::db_purge::hour: '0'
+glance::cron::db_purge::max_rows: '100'
+glance::cron::db_purge::maxdelay: '3600'
+glance::cron::db_purge::minute: '1'
+glance::cron::db_purge::month: '*'
+glance::cron::db_purge::monthday: '*'
+glance::cron::db_purge::user: glance
+glance::cron::db_purge::weekday: '*'
+glance::notify::rabbitmq::notification_driver:
+- messagingv2
+glance::notify::rabbitmq::rabbit_heartbeat_in_pthread: false
+glance::policy::policies:
+  glance-add_image:
+    key: add_image
+    value: role:admin or (role:member and project_id:%(project_id)s and project_id:%(owner)s)
+  glance-add_member:
+    key: add_member
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-add_metadef_namespace:
+    key: add_metadef_namespace
+    value: rule:metadef_admin
+  glance-add_metadef_object:
+    key: add_metadef_object
+    value: rule:metadef_admin
+  glance-add_metadef_property:
+    key: add_metadef_property
+    value: rule:metadef_admin
+  glance-add_metadef_resource_type_association:
+    key: add_metadef_resource_type_association
+    value: rule:metadef_admin
+  glance-add_metadef_tag:
+    key: add_metadef_tag
+    value: rule:metadef_admin
+  glance-add_metadef_tags:
+    key: add_metadef_tags
+    value: rule:metadef_admin
+  glance-add_task:
+    key: add_task
+    value: rule:default
+  glance-communitize_image:
+    key: communitize_image
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-context_is_admin:
+    key: context_is_admin
+    value: role:admin
+  glance-copy_image:
+    key: copy_image
+    value: role:admin
+  glance-deactivate:
+    key: deactivate
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-default:
+    key: default
+    value: ''
+  glance-delete_image:
+    key: delete_image
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-delete_image_location:
+    key: delete_image_location
+    value: role:admin
+  glance-delete_member:
+    key: delete_member
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-delete_metadef_namespace:
+    key: delete_metadef_namespace
+    value: rule:metadef_admin
+  glance-delete_metadef_object:
+    key: delete_metadef_object
+    value: rule:metadef_admin
+  glance-delete_metadef_tag:
+    key: delete_metadef_tag
+    value: rule:metadef_admin
+  glance-delete_metadef_tags:
+    key: delete_metadef_tags
+    value: rule:metadef_admin
+  glance-download_image:
+    key: download_image
+    value: role:admin or (role:member and (project_id:%(project_id)s or project_id:%(member_id)s
+      or 'community':%(visibility)s or 'public':%(visibility)s or 'shared':%(visibility)s))
+  glance-get_image:
+    key: get_image
+    value: role:admin or (role:reader and (project_id:%(project_id)s or project_id:%(member_id)s
+      or 'community':%(visibility)s or 'public':%(visibility)s or 'shared':%(visibility)s))
+  glance-get_image_location:
+    key: get_image_location
+    value: role:admin or (role:reader and project_id:%(project_id)s)
+  glance-get_images:
+    key: get_images
+    value: role:admin or (role:reader and project_id:%(project_id)s)
+  glance-get_member:
+    key: get_member
+    value: role:admin or (role:reader and project_id:%(project_id)s)
+  glance-get_members:
+    key: get_members
+    value: role:admin or (role:reader and project_id:%(project_id)s)
+  glance-get_metadef_namespace:
+    key: get_metadef_namespace
+    value: rule:metadef_default
+  glance-get_metadef_namespaces:
+    key: get_metadef_namespaces
+    value: rule:metadef_default
+  glance-get_metadef_object:
+    key: get_metadef_object
+    value: rule:metadef_default
+  glance-get_metadef_objects:
+    key: get_metadef_objects
+    value: rule:metadef_default
+  glance-get_metadef_properties:
+    key: get_metadef_properties
+    value: rule:metadef_default
+  glance-get_metadef_property:
+    key: get_metadef_property
+    value: rule:metadef_default
+  glance-get_metadef_resource_type:
+    key: get_metadef_resource_type
+    value: rule:metadef_default
+  glance-get_metadef_tag:
+    key: get_metadef_tag
+    value: rule:metadef_default
+  glance-get_metadef_tags:
+    key: get_metadef_tags
+    value: rule:metadef_default
+  glance-get_task:
+    key: get_task
+    value: rule:default
+  glance-get_tasks:
+    key: get_tasks
+    value: rule:default
+  glance-list_metadef_resource_types:
+    key: list_metadef_resource_types
+    value: rule:metadef_default
+  glance-manage_image_cache:
+    key: manage_image_cache
+    value: role:admin
+  glance-metadef_admin:
+    key: metadef_admin
+    value: role:admin
+  glance-metadef_default:
+    key: metadef_default
+    value: ''
+  glance-modify_image:
+    key: modify_image
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-modify_member:
+    key: modify_member
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-modify_metadef_namespace:
+    key: modify_metadef_namespace
+    value: rule:metadef_admin
+  glance-modify_metadef_object:
+    key: modify_metadef_object
+    value: rule:metadef_admin
+  glance-modify_metadef_property:
+    key: modify_metadef_property
+    value: rule:metadef_admin
+  glance-modify_metadef_tag:
+    key: modify_metadef_tag
+    value: rule:metadef_admin
+  glance-modify_task:
+    key: modify_task
+    value: rule:default
+  glance-publicize_image:
+    key: publicize_image
+    value: role:admin
+  glance-reactivate:
+    key: reactivate
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-remove_metadef_property:
+    key: remove_metadef_property
+    value: rule:metadef_admin
+  glance-remove_metadef_resource_type_association:
+    key: remove_metadef_resource_type_association
+    value: rule:metadef_admin
+  glance-set_image_location:
+    key: set_image_location
+    value: role:admin or (role:member and project_id:%(project_id)s)
+  glance-tasks_api_access:
+    key: tasks_api_access
+    value: role:admin
+  glance-upload_image:
+    key: upload_image
+    value: role:admin or (role:member and project_id:%(project_id)s)
+glance_backend: rbd
+glance_log_file: ''
+glance_notifier_strategy: noop
+gnocchi::api::enable_proxy_headers_parsing: true
+gnocchi::api::enabled: true
+gnocchi::api::service_name: httpd
+gnocchi::cors::allow_headers: Content-Type,Cache-Control,Content-Language,Expires,Last-Modified,Pragma,X-Auth-Token
+gnocchi::cors::allow_methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+gnocchi::cors::expose_headers: Content-Type,Cache-Control,Content-Language,Expires,Last-Modified,Pragma
+gnocchi::cors::max_age: 3600
+gnocchi::db::database_connection: mysql+pymysql://gnocchi:Q6DQdXDv9WcMNgZj7kYnQctQ2@[2001:268:70fd:1000::a000]/gnocchi?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+gnocchi::db::sync::extra_opts: ' --sacks-number 128'
+gnocchi::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+gnocchi::keystone::authtoken::interface: internal
+gnocchi::keystone::authtoken::memcache_use_advanced_pool: true
+gnocchi::keystone::authtoken::password: Q6DQdXDv9WcMNgZj7kYnQctQ2
+gnocchi::keystone::authtoken::project_domain_name: Default
+gnocchi::keystone::authtoken::project_name: service
+gnocchi::keystone::authtoken::region_name: tb8
+gnocchi::keystone::authtoken::user_domain_name: Default
+gnocchi::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+gnocchi::logging::debug: true
+gnocchi::metricd::metric_processing_delay: 30
+gnocchi::metricd::workers: '12'
+gnocchi::policy::policies: {}
+gnocchi::statsd::archive_policy_name: low
+gnocchi::statsd::flush_delay: 10
+gnocchi::statsd::resource_id: 0a8b55df-f90f-491c-8cb9-7cdecec6fc26
+gnocchi::storage::ceph::ceph_conffile: /etc/ceph/ceph.conf
+gnocchi::storage::ceph::ceph_keyring: /etc/ceph/ceph.client.openstack.keyring
+gnocchi::storage::ceph::ceph_pool: metrics
+gnocchi::storage::ceph::ceph_username: openstack
+gnocchi::storage::file::file_basepath: /var/lib/gnocchi
+gnocchi::storage::s3::s3_access_key_id: ''
+gnocchi::storage::s3::s3_bucket_prefix: ''
+gnocchi::storage::s3::s3_endpoint_url: ''
+gnocchi::storage::s3::s3_region_name: ''
+gnocchi::storage::s3::s3_secret_access_key: ''
+gnocchi::storage::swift::swift_auth_version: 3
+gnocchi::storage::swift::swift_authurl: http://[2001:268:70fd:1000::a000]:5000/v3
+gnocchi::storage::swift::swift_endpoint_type: internalURL
+gnocchi::storage::swift::swift_key: Q6DQdXDv9WcMNgZj7kYnQctQ2
+gnocchi::storage::swift::swift_user: service:gnocchi
+gnocchi::wsgi::apache::bind_host: '%{hiera(''internal_api'')}'
+gnocchi::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+gnocchi::wsgi::apache::ssl: false
+gnocchi::wsgi::apache::wsgi_process_display_name: gnocchi_wsgi
+gnocchi_redis_password: wsdmn8tXD4hKbpA44CqypAjqC
+hacluster_pwd: SmR3bBmVjjCJ6qHP
+haproxy_docker: true
+heat::api::bind_host: '%{hiera(''internal_api'')}'
+heat::api::service_name: httpd
+heat::api_cfn::bind_host: '%{hiera(''internal_api'')}'
+heat::api_cfn::service_name: httpd
+heat::cache::backend: dogpile.cache.memcached
+heat::cache::enabled: true
+heat::cache::resource_finder_caching: false
+heat::cache::tls_enabled: false
+heat::cors::allow_headers: Content-Type,Cache-Control,Content-Language,Expires,Last-Modified,Pragma,X-Auth-Token
+heat::cors::expose_headers: Content-Type,Cache-Control,Content-Language,Expires,Last-Modified,Pragma
+heat::cors::max_age: 3600
+heat::cron::purge_deleted::age: '30'
+heat::cron::purge_deleted::age_type: days
+heat::cron::purge_deleted::destination: /dev/null
+heat::cron::purge_deleted::ensure: present
+heat::cron::purge_deleted::hour: '0'
+heat::cron::purge_deleted::maxdelay: '3600'
+heat::cron::purge_deleted::minute: '1'
+heat::cron::purge_deleted::month: '*'
+heat::cron::purge_deleted::monthday: '*'
+heat::cron::purge_deleted::user: heat
+heat::cron::purge_deleted::weekday: '*'
+heat::database_connection: mysql+pymysql://heat:qR4hto51qcXKGIDzqUDZSxc3t@[2001:268:70fd:1000::a000]/heat?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+heat::db::database_db_max_retries: -1
+heat::db::database_max_retries: -1
+heat::enable_proxy_headers_parsing: true
+heat::engine::auth_encryption_key: v6orZonvJuOUihmVY6b8jQYwhn3YhSd5
+heat::engine::client_retry_limit: 2
+heat::engine::configure_delegated_roles: false
+heat::engine::convergence_engine: true
+heat::engine::heat_metadata_server_url: http://tb8.mship3.kddi.info:8000
+heat::engine::heat_waitcondition_server_url: http://tb8.mship3.kddi.info:8000/v1/waitcondition
+heat::engine::max_nested_stack_depth: 6
+heat::engine::max_resources_per_stack: -1
+heat::engine::num_engine_workers: 12
+heat::engine::plugin_dirs: []
+heat::engine::reauthentication_auth_method: ''
+heat::engine::trusts_delegated_roles: []
+heat::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+heat::keystone::authtoken::interface: internal
+heat::keystone::authtoken::memcache_use_advanced_pool: true
+heat::keystone::authtoken::password: qR4hto51qcXKGIDzqUDZSxc3t
+heat::keystone::authtoken::project_domain_name: Default
+heat::keystone::authtoken::project_name: service
+heat::keystone::authtoken::region_name: tb8
+heat::keystone::authtoken::user_domain_name: Default
+heat::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+heat::keystone::domain::domain_admin: heat_stack_domain_admin
+heat::keystone::domain::domain_admin_email: heat_stack_domain_admin@localhost
+heat::keystone::domain::domain_name: heat_stack
+heat::keystone::domain::domain_password: E3WGWdjTMqEKKqGEUy8hEN9Ka
+heat::keystone_ec2_uri: http://[2001:268:70fd:1000::a000]:5000/v3/ec2tokens
+heat::logging::debug: true
+heat::max_json_body_size: 4194304
+heat::notification_driver:
+- messagingv2
+heat::policy::policies:
+  heat-actions_action:
+    key: actions:action
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-actions_cancel_update:
+    key: actions:cancel_update
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-actions_cancel_without_rollback:
+    key: actions:cancel_without_rollback
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-actions_check:
+    key: actions:check
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-actions_resume:
+    key: actions:resume
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-actions_snapshot:
+    key: actions:snapshot
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-actions_suspend:
+    key: actions:suspend
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-allow_everybody:
+    key: allow_everybody
+    value: ''
+  heat-build_info_build_info:
+    key: build_info:build_info
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_CancelUpdateStack:
+    key: cloudformation:CancelUpdateStack
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-cloudformation_CreateStack:
+    key: cloudformation:CreateStack
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-cloudformation_DeleteStack:
+    key: cloudformation:DeleteStack
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-cloudformation_DescribeStackEvents:
+    key: cloudformation:DescribeStackEvents
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_DescribeStackResource:
+    key: cloudformation:DescribeStackResource
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+      or (role:heat_stack_user and project_id:%(project_id)s)
+  heat-cloudformation_DescribeStackResources:
+    key: cloudformation:DescribeStackResources
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_DescribeStacks:
+    key: cloudformation:DescribeStacks
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_EstimateTemplateCost:
+    key: cloudformation:EstimateTemplateCost
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_GetTemplate:
+    key: cloudformation:GetTemplate
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_ListStackResources:
+    key: cloudformation:ListStackResources
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_ListStacks:
+    key: cloudformation:ListStacks
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-cloudformation_UpdateStack:
+    key: cloudformation:UpdateStack
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-cloudformation_ValidateTemplate:
+    key: cloudformation:ValidateTemplate
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-context_is_admin:
+    key: context_is_admin
+    value: (role:admin and is_admin_project:True) OR (role:admin and system_scope:all)
+  heat-deny_everybody:
+    key: deny_everybody
+    value: '!'
+  heat-deny_stack_user:
+    key: deny_stack_user
+    value: not role:heat_stack_user
+  heat-events_index:
+    key: events:index
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-events_show:
+    key: events:show
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-project_admin:
+    key: project_admin
+    value: role:admin
+  heat-resource_index:
+    key: resource:index
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-resource_mark_unhealthy:
+    key: resource:mark_unhealthy
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-resource_metadata:
+    key: resource:metadata
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+      or (role:heat_stack_user and project_id:%(project_id)s)
+  heat-resource_show:
+    key: resource:show
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-resource_signal:
+    key: resource:signal
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+      or (role:heat_stack_user and project_id:%(project_id)s)
+  heat-resource_types_OS__Blazar__Host:
+    key: resource_types:OS::Blazar::Host
+    value: rule:project_admin
+  heat-resource_types_OS__Cinder__EncryptedVolumeType:
+    key: resource_types:OS::Cinder::EncryptedVolumeType
+    value: rule:project_admin
+  heat-resource_types_OS__Cinder__QoSAssociation:
+    key: resource_types:OS::Cinder::QoSAssociation
+    value: rule:project_admin
+  heat-resource_types_OS__Cinder__QoSSpecs:
+    key: resource_types:OS::Cinder::QoSSpecs
+    value: rule:project_admin
+  heat-resource_types_OS__Cinder__Quota:
+    key: resource_types:OS::Cinder::Quota
+    value: rule:project_admin
+  heat-resource_types_OS__Cinder__VolumeType:
+    key: resource_types:OS::Cinder::VolumeType
+    value: rule:project_admin
+  heat-resource_types_OS__Keystone__*:
+    key: resource_types:OS::Keystone::*
+    value: rule:project_admin
+  heat-resource_types_OS__Manila__ShareType:
+    key: resource_types:OS::Manila::ShareType
+    value: rule:project_admin
+  heat-resource_types_OS__Neutron__ProviderNet:
+    key: resource_types:OS::Neutron::ProviderNet
+    value: rule:project_admin
+  heat-resource_types_OS__Neutron__QoSBandwidthLimitRule:
+    key: resource_types:OS::Neutron::QoSBandwidthLimitRule
+    value: rule:allow_everybody
+  heat-resource_types_OS__Neutron__QoSDscpMarkingRule:
+    key: resource_types:OS::Neutron::QoSDscpMarkingRule
+    value: rule:allow_everybody
+  heat-resource_types_OS__Neutron__QoSMinimumBandwidthRule:
+    key: resource_types:OS::Neutron::QoSMinimumBandwidthRule
+    value: rule:allow_everybody
+  heat-resource_types_OS__Neutron__QoSPolicy:
+    key: resource_types:OS::Neutron::QoSPolicy
+    value: rule:allow_everybody
+  heat-resource_types_OS__Neutron__Quota:
+    key: resource_types:OS::Neutron::Quota
+    value: rule:project_admin
+  heat-resource_types_OS__Neutron__Segment:
+    key: resource_types:OS::Neutron::Segment
+    value: rule:project_admin
+  heat-resource_types_OS__Nova__Flavor:
+    key: resource_types:OS::Nova::Flavor
+    value: rule:project_admin
+  heat-resource_types_OS__Nova__HostAggregate:
+    key: resource_types:OS::Nova::HostAggregate
+    value: rule:project_admin
+  heat-resource_types_OS__Nova__Quota:
+    key: resource_types:OS::Nova::Quota
+    value: rule:project_admin
+  heat-resource_types_OS__Octavia__Flavor:
+    key: resource_types:OS::Octavia::Flavor
+    value: rule:project_admin
+  heat-resource_types_OS__Octavia__FlavorProfile:
+    key: resource_types:OS::Octavia::FlavorProfile
+    value: rule:project_admin
+  heat-resource_types_OS__Octavia__Quota:
+    key: resource_types:OS::Octavia::Quota
+    value: rule:project_admin
+  heat-service_index:
+    key: service:index
+    value: role:reader and system_scope:all
+  heat-software_configs_create:
+    key: software_configs:create
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-software_configs_delete:
+    key: software_configs:delete
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-software_configs_global_index:
+    key: software_configs:global_index
+    value: role:reader and system_scope:all
+  heat-software_configs_index:
+    key: software_configs:index
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-software_configs_show:
+    key: software_configs:show
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-software_deployments_create:
+    key: software_deployments:create
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-software_deployments_delete:
+    key: software_deployments:delete
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-software_deployments_index:
+    key: software_deployments:index
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-software_deployments_metadata:
+    key: software_deployments:metadata
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+      or (role:heat_stack_user and project_id:%(project_id)s)
+  heat-software_deployments_show:
+    key: software_deployments:show
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-software_deployments_update:
+    key: software_deployments:update
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_abandon:
+    key: stacks:abandon
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_create:
+    key: stacks:create
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_delete:
+    key: stacks:delete
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_delete_snapshot:
+    key: stacks:delete_snapshot
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_detail:
+    key: stacks:detail
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_environment:
+    key: stacks:environment
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_export:
+    key: stacks:export
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_files:
+    key: stacks:files
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_generate_template:
+    key: stacks:generate_template
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_global_index:
+    key: stacks:global_index
+    value: role:reader and system_scope:all
+  heat-stacks_index:
+    key: stacks:index
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_list_outputs:
+    key: stacks:list_outputs
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_list_resource_types:
+    key: stacks:list_resource_types
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_list_snapshots:
+    key: stacks:list_snapshots
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_list_template_functions:
+    key: stacks:list_template_functions
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_list_template_versions:
+    key: stacks:list_template_versions
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_lookup:
+    key: stacks:lookup
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+      or (role:heat_stack_user and project_id:%(project_id)s)
+  heat-stacks_preview:
+    key: stacks:preview
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_preview_update:
+    key: stacks:preview_update
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_preview_update_patch:
+    key: stacks:preview_update_patch
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_resource_schema:
+    key: stacks:resource_schema
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_restore_snapshot:
+    key: stacks:restore_snapshot
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_show:
+    key: stacks:show
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_show_output:
+    key: stacks:show_output
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_show_snapshot:
+    key: stacks:show_snapshot
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_snapshot:
+    key: stacks:snapshot
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_template:
+    key: stacks:template
+    value: (role:reader and system_scope:all) or (role:reader and project_id:%(project_id)s)
+  heat-stacks_update:
+    key: stacks:update
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_update_no_change:
+    key: stacks:update_no_change
+    value: rule:stacks:update_patch
+  heat-stacks_update_patch:
+    key: stacks:update_patch
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+  heat-stacks_validate_template:
+    key: stacks:validate_template
+    value: (role:admin and system_scope:all) or (role:member and project_id:%(project_id)s)
+heat::rabbit_heartbeat_in_pthread: false
+heat::rabbit_heartbeat_timeout_threshold: 60
+heat::region_name: tb8
+heat::rpc_response_timeout: 600
+heat::wsgi::apache_api::bind_host: '%{hiera(''internal_api'')}'
+heat::wsgi::apache_api::servername: '%{hiera(''fqdn_internal_api'')}'
+heat::wsgi::apache_api::ssl: false
+heat::wsgi::apache_api::vhost_custom_fragment: Timeout 600
+heat::wsgi::apache_api::workers: 12
+heat::wsgi::apache_api_cfn::bind_host: '%{hiera(''internal_api'')}'
+heat::wsgi::apache_api_cfn::servername: '%{hiera(''fqdn_internal_api'')}'
+heat::wsgi::apache_api_cfn::ssl: false
+heat::wsgi::apache_api_cfn::workers: 12
+heat::yaql_limit_iterators: 1000
+heat::yaql_memory_quota: 100000
+horizon::allowed_hosts:
+- '*'
+horizon::bind_address: '%{hiera(''internal_api'')}'
+horizon::cache_backend: django.core.cache.backends.memcached.MemcachedCache
+horizon::customization_module: ''
+horizon::disable_password_reveal: true
+horizon::disallow_iframe_embed: true
+horizon::django_debug: true
+horizon::django_session_engine: django.contrib.sessions.backends.cache
+horizon::enable_secure_proxy_ssl_header: true
+horizon::enable_user_pass: UNSET
+horizon::enforce_password_check: true
+horizon::file_upload_temp_dir: /var/tmp
+horizon::help_url: http://docs.openstack.org
+horizon::keystone_url: http://tb8.mship3.kddi.info:5000/v3
+horizon::listen_ssl: false
+horizon::log_level: DEBUG
+horizon::password_validator: ''
+horizon::password_validator_help: ''
+horizon::secret_key: 5hoaBHsBGR
+horizon::secure_cookies: false
+horizon::secure_proxy_addr_header: HTTP_X_FORWARDED_FOR
+horizon::servername: '%{hiera(''fqdn_internal_api'')}'
+horizon::session_timeout: 1800
+horizon::timezone: Asia/Tokyo
+horizon::vhost_extra_params:
+  limitreqbody: 0
+if:
+- false
+- neutron::policy::enforce_new_defaults: true
+  neutron::policy::enforce_scope: true
+innodb_buffer_pool_size: 1G
+keystone::cache::backend: dogpile.cache.memcached
+keystone::cache::enabled: true
+keystone::cache::tls_enabled: false
+keystone::credential_keys:
+  /etc/keystone/credential-keys/0:
+    content: vOzz8zUTfxuKFglFVu-0OGkTdIVlCuI28Nxz-DiWXDY=
+  /etc/keystone/credential-keys/1:
+    content: CNr0Fc1WjPwXED_rEVx5tL4tA-wX6Iy9RnPeDjXidao=
+keystone::cron::trust_flush::destination: /var/log/keystone/keystone-trustflush.log
+keystone::cron::trust_flush::ensure: present
+keystone::cron::trust_flush::hour: '*'
+keystone::cron::trust_flush::maxdelay: 0
+keystone::cron::trust_flush::minute: '1'
+keystone::cron::trust_flush::month: '*'
+keystone::cron::trust_flush::monthday: '*'
+keystone::cron::trust_flush::user: keystone
+keystone::cron::trust_flush::weekday: '*'
+keystone::database_connection: mysql+pymysql://keystone:NpR28d94pmbxzNfkvhzGJgnaR@[2001:268:70fd:1000::a000]/keystone?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+keystone::db::database_db_max_retries: -1
+keystone::db::database_max_retries: -1
+keystone::enable_credential_setup: true
+keystone::enable_fernet_setup: true
+keystone::enable_proxy_headers_parsing: true
+keystone::enable_ssl: false
+keystone::fernet_keys:
+  /etc/keystone/fernet-keys/0:
+    content: ywvaeT_RMuBZJkEXFtFe0UP1bS4fqGwYEnXUflyF6rc=
+  /etc/keystone/fernet-keys/1:
+    content: KSmOQwe_pFKuuOgJeYyU7BfygockJX6j_2ZtaAaapME=
+keystone::fernet_max_active_keys: 5
+keystone::fernet_replace_keys: true
+keystone::logging::debug: true
+keystone::notification_driver:
+- messagingv2
+keystone::notification_format: basic
+keystone::policy::policies:
+  keystone-admin_required:
+    key: admin_required
+    value: role:admin
+  keystone-identity_add_endpoint_group_to_project:
+    key: identity:add_endpoint_group_to_project
+    value: rule:admin_required
+  keystone-identity_add_endpoint_to_project:
+    key: identity:add_endpoint_to_project
+    value: rule:admin_required
+  keystone-identity_add_user_to_group:
+    key: identity:add_user_to_group
+    value: rule:admin_required or (role:admin and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.user.domain_id)s)
+  keystone-identity_authorize_request_token:
+    key: identity:authorize_request_token
+    value: rule:admin_required
+  keystone-identity_check_endpoint_in_project:
+    key: identity:check_endpoint_in_project
+    value: rule:admin_required
+  keystone-identity_check_grant:
+    key: identity:check_grant
+    value: rule:admin_required or ((role:reader and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:reader and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.domain.id)s) or (role:reader and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:reader and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.domain.id)s)) and (domain_id:%(target.role.domain_id)s
+      or None:%(target.role.domain_id)s)
+  keystone-identity_check_implied_role:
+    key: identity:check_implied_role
+    value: rule:admin_required
+  keystone-identity_check_policy_association_for_endpoint:
+    key: identity:check_policy_association_for_endpoint
+    value: rule:admin_required
+  keystone-identity_check_policy_association_for_region_and_service:
+    key: identity:check_policy_association_for_region_and_service
+    value: rule:admin_required
+  keystone-identity_check_policy_association_for_service:
+    key: identity:check_policy_association_for_service
+    value: rule:admin_required
+  keystone-identity_check_system_grant_for_group:
+    key: identity:check_system_grant_for_group
+    value: rule:admin_required
+  keystone-identity_check_system_grant_for_user:
+    key: identity:check_system_grant_for_user
+    value: rule:admin_required
+  keystone-identity_check_token:
+    key: identity:check_token
+    value: rule:admin_required or rule:token_subject
+  keystone-identity_check_user_in_group:
+    key: identity:check_user_in_group
+    value: rule:admin_required or (role:reader and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.user.domain_id)s)
+  keystone-identity_create_application_credential:
+    key: identity:create_application_credential
+    value: user_id:%(user_id)s
+  keystone-identity_create_consumer:
+    key: identity:create_consumer
+    value: rule:admin_required
+  keystone-identity_create_credential:
+    key: identity:create_credential
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_create_domain:
+    key: identity:create_domain
+    value: rule:admin_required
+  keystone-identity_create_domain_config:
+    key: identity:create_domain_config
+    value: rule:admin_required
+  keystone-identity_create_domain_role:
+    key: identity:create_domain_role
+    value: rule:admin_required
+  keystone-identity_create_endpoint:
+    key: identity:create_endpoint
+    value: rule:admin_required
+  keystone-identity_create_endpoint_group:
+    key: identity:create_endpoint_group
+    value: rule:admin_required
+  keystone-identity_create_grant:
+    key: identity:create_grant
+    value: rule:admin_required or ((role:admin and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:admin and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.domain.id)s) or (role:admin and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:admin and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.domain.id)s)) and (domain_id:%(target.role.domain_id)s
+      or None:%(target.role.domain_id)s)
+  keystone-identity_create_group:
+    key: identity:create_group
+    value: rule:admin_required or (role:admin and domain_id:%(target.group.domain_id)s)
+  keystone-identity_create_identity_provider:
+    key: identity:create_identity_provider
+    value: rule:admin_required
+  keystone-identity_create_implied_role:
+    key: identity:create_implied_role
+    value: rule:admin_required
+  keystone-identity_create_limits:
+    key: identity:create_limits
+    value: rule:admin_required
+  keystone-identity_create_mapping:
+    key: identity:create_mapping
+    value: rule:admin_required
+  keystone-identity_create_policy:
+    key: identity:create_policy
+    value: rule:admin_required
+  keystone-identity_create_policy_association_for_endpoint:
+    key: identity:create_policy_association_for_endpoint
+    value: rule:admin_required
+  keystone-identity_create_policy_association_for_region_and_service:
+    key: identity:create_policy_association_for_region_and_service
+    value: rule:admin_required
+  keystone-identity_create_policy_association_for_service:
+    key: identity:create_policy_association_for_service
+    value: rule:admin_required
+  keystone-identity_create_project:
+    key: identity:create_project
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+  keystone-identity_create_project_tag:
+    key: identity:create_project_tag
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+      or (role:admin and project_id:%(target.project.id)s)
+  keystone-identity_create_protocol:
+    key: identity:create_protocol
+    value: rule:admin_required
+  keystone-identity_create_region:
+    key: identity:create_region
+    value: rule:admin_required
+  keystone-identity_create_registered_limits:
+    key: identity:create_registered_limits
+    value: rule:admin_required
+  keystone-identity_create_role:
+    key: identity:create_role
+    value: rule:admin_required
+  keystone-identity_create_service:
+    key: identity:create_service
+    value: rule:admin_required
+  keystone-identity_create_service_provider:
+    key: identity:create_service_provider
+    value: rule:admin_required
+  keystone-identity_create_system_grant_for_group:
+    key: identity:create_system_grant_for_group
+    value: rule:admin_required
+  keystone-identity_create_system_grant_for_user:
+    key: identity:create_system_grant_for_user
+    value: rule:admin_required
+  keystone-identity_create_trust:
+    key: identity:create_trust
+    value: user_id:%(trust.trustor_user_id)s
+  keystone-identity_create_user:
+    key: identity:create_user
+    value: rule:admin_required or (role:admin and token.domain.id:%(target.user.domain_id)s)
+  keystone-identity_delete_access_rule:
+    key: identity:delete_access_rule
+    value: rule:admin_required or user_id:%(target.user.id)s
+  keystone-identity_delete_access_token:
+    key: identity:delete_access_token
+    value: rule:admin_required
+  keystone-identity_delete_application_credential:
+    key: identity:delete_application_credential
+    value: rule:admin_required or rule:owner
+  keystone-identity_delete_consumer:
+    key: identity:delete_consumer
+    value: rule:admin_required
+  keystone-identity_delete_credential:
+    key: identity:delete_credential
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_delete_domain:
+    key: identity:delete_domain
+    value: rule:admin_required
+  keystone-identity_delete_domain_config:
+    key: identity:delete_domain_config
+    value: rule:admin_required
+  keystone-identity_delete_domain_role:
+    key: identity:delete_domain_role
+    value: rule:admin_required
+  keystone-identity_delete_endpoint:
+    key: identity:delete_endpoint
+    value: rule:admin_required
+  keystone-identity_delete_endpoint_group:
+    key: identity:delete_endpoint_group
+    value: rule:admin_required
+  keystone-identity_delete_group:
+    key: identity:delete_group
+    value: rule:admin_required or (role:admin and domain_id:%(target.group.domain_id)s)
+  keystone-identity_delete_identity_provider:
+    key: identity:delete_identity_provider
+    value: rule:admin_required
+  keystone-identity_delete_implied_role:
+    key: identity:delete_implied_role
+    value: rule:admin_required
+  keystone-identity_delete_limit:
+    key: identity:delete_limit
+    value: rule:admin_required
+  keystone-identity_delete_mapping:
+    key: identity:delete_mapping
+    value: rule:admin_required
+  keystone-identity_delete_policy:
+    key: identity:delete_policy
+    value: rule:admin_required
+  keystone-identity_delete_policy_association_for_endpoint:
+    key: identity:delete_policy_association_for_endpoint
+    value: rule:admin_required
+  keystone-identity_delete_policy_association_for_region_and_service:
+    key: identity:delete_policy_association_for_region_and_service
+    value: rule:admin_required
+  keystone-identity_delete_policy_association_for_service:
+    key: identity:delete_policy_association_for_service
+    value: rule:admin_required
+  keystone-identity_delete_project:
+    key: identity:delete_project
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+  keystone-identity_delete_project_tag:
+    key: identity:delete_project_tag
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+      or (role:admin and project_id:%(target.project.id)s)
+  keystone-identity_delete_project_tags:
+    key: identity:delete_project_tags
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+      or (role:admin and project_id:%(target.project.id)s)
+  keystone-identity_delete_protocol:
+    key: identity:delete_protocol
+    value: rule:admin_required
+  keystone-identity_delete_region:
+    key: identity:delete_region
+    value: rule:admin_required
+  keystone-identity_delete_registered_limit:
+    key: identity:delete_registered_limit
+    value: rule:admin_required
+  keystone-identity_delete_role:
+    key: identity:delete_role
+    value: rule:admin_required
+  keystone-identity_delete_service:
+    key: identity:delete_service
+    value: rule:admin_required
+  keystone-identity_delete_service_provider:
+    key: identity:delete_service_provider
+    value: rule:admin_required
+  keystone-identity_delete_trust:
+    key: identity:delete_trust
+    value: rule:admin_required or user_id:%(target.trust.trustor_user_id)s
+  keystone-identity_delete_user:
+    key: identity:delete_user
+    value: rule:admin_required or (role:admin and token.domain.id:%(target.user.domain_id)s)
+  keystone-identity_ec2_create_credential:
+    key: identity:ec2_create_credential
+    value: rule:admin_required or rule:owner
+  keystone-identity_ec2_delete_credential:
+    key: identity:ec2_delete_credential
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_ec2_get_credential:
+    key: identity:ec2_get_credential
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_ec2_list_credentials:
+    key: identity:ec2_list_credentials
+    value: rule:admin_required or rule:owner
+  keystone-identity_get_access_rule:
+    key: identity:get_access_rule
+    value: rule:admin_required or user_id:%(target.user.id)s
+  keystone-identity_get_access_token:
+    key: identity:get_access_token
+    value: rule:admin_required
+  keystone-identity_get_access_token_role:
+    key: identity:get_access_token_role
+    value: rule:admin_required
+  keystone-identity_get_application_credential:
+    key: identity:get_application_credential
+    value: rule:admin_required or rule:owner
+  keystone-identity_get_auth_catalog:
+    key: identity:get_auth_catalog
+    value: ''
+  keystone-identity_get_auth_domains:
+    key: identity:get_auth_domains
+    value: ''
+  keystone-identity_get_auth_projects:
+    key: identity:get_auth_projects
+    value: ''
+  keystone-identity_get_auth_system:
+    key: identity:get_auth_system
+    value: ''
+  keystone-identity_get_consumer:
+    key: identity:get_consumer
+    value: rule:admin_required
+  keystone-identity_get_credential:
+    key: identity:get_credential
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_get_domain:
+    key: identity:get_domain
+    value: rule:admin_required or token.domain.id:%(target.domain.id)s or token.project.domain.id:%(target.domain.id)s
+  keystone-identity_get_domain_config:
+    key: identity:get_domain_config
+    value: rule:admin_required
+  keystone-identity_get_domain_config_default:
+    key: identity:get_domain_config_default
+    value: rule:admin_required
+  keystone-identity_get_domain_role:
+    key: identity:get_domain_role
+    value: rule:admin_required
+  keystone-identity_get_endpoint:
+    key: identity:get_endpoint
+    value: rule:admin_required
+  keystone-identity_get_endpoint_group:
+    key: identity:get_endpoint_group
+    value: rule:admin_required
+  keystone-identity_get_endpoint_group_in_project:
+    key: identity:get_endpoint_group_in_project
+    value: rule:admin_required
+  keystone-identity_get_group:
+    key: identity:get_group
+    value: rule:admin_required or (role:reader and domain_id:%(target.group.domain_id)s)
+  keystone-identity_get_identity_provider:
+    key: identity:get_identity_provider
+    value: rule:admin_required
+  keystone-identity_get_implied_role:
+    key: identity:get_implied_role
+    value: rule:admin_required
+  keystone-identity_get_limit:
+    key: identity:get_limit
+    value: rule:admin_required or (domain_id:%(target.limit.domain.id)s or domain_id:%(target.limit.project.domain_id)s)
+      or (project_id:%(target.limit.project_id)s and not None:%(target.limit.project_id)s)
+  keystone-identity_get_limit_model:
+    key: identity:get_limit_model
+    value: ''
+  keystone-identity_get_mapping:
+    key: identity:get_mapping
+    value: rule:admin_required
+  keystone-identity_get_policy:
+    key: identity:get_policy
+    value: rule:admin_required
+  keystone-identity_get_policy_for_endpoint:
+    key: identity:get_policy_for_endpoint
+    value: rule:admin_required
+  keystone-identity_get_project:
+    key: identity:get_project
+    value: rule:admin_required or (role:reader and domain_id:%(target.project.domain_id)s)
+      or project_id:%(target.project.id)s
+  keystone-identity_get_project_tag:
+    key: identity:get_project_tag
+    value: rule:admin_required or (role:reader and domain_id:%(target.project.domain_id)s)
+      or project_id:%(target.project.id)s
+  keystone-identity_get_protocol:
+    key: identity:get_protocol
+    value: rule:admin_required
+  keystone-identity_get_region:
+    key: identity:get_region
+    value: ''
+  keystone-identity_get_registered_limit:
+    key: identity:get_registered_limit
+    value: ''
+  keystone-identity_get_role:
+    key: identity:get_role
+    value: rule:admin_required
+  keystone-identity_get_role_for_trust:
+    key: identity:get_role_for_trust
+    value: rule:admin_required or user_id:%(target.trust.trustor_user_id)s or user_id:%(target.trust.trustee_user_id)s
+  keystone-identity_get_security_compliance_domain_config:
+    key: identity:get_security_compliance_domain_config
+    value: ''
+  keystone-identity_get_service:
+    key: identity:get_service
+    value: rule:admin_required
+  keystone-identity_get_service_provider:
+    key: identity:get_service_provider
+    value: rule:admin_required
+  keystone-identity_get_trust:
+    key: identity:get_trust
+    value: rule:admin_required or user_id:%(target.trust.trustor_user_id)s or user_id:%(target.trust.trustee_user_id)s
+  keystone-identity_get_user:
+    key: identity:get_user
+    value: rule:admin_required or (role:reader and token.domain.id:%(target.user.domain_id)s)
+      or user_id:%(target.user.id)s
+  keystone-identity_list_access_rules:
+    key: identity:list_access_rules
+    value: rule:admin_required or user_id:%(target.user.id)s
+  keystone-identity_list_access_token_roles:
+    key: identity:list_access_token_roles
+    value: rule:admin_required
+  keystone-identity_list_access_tokens:
+    key: identity:list_access_tokens
+    value: rule:admin_required
+  keystone-identity_list_application_credentials:
+    key: identity:list_application_credentials
+    value: rule:admin_required or rule:owner
+  keystone-identity_list_consumers:
+    key: identity:list_consumers
+    value: rule:admin_required
+  keystone-identity_list_credentials:
+    key: identity:list_credentials
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_list_domain_roles:
+    key: identity:list_domain_roles
+    value: rule:admin_required
+  keystone-identity_list_domains:
+    key: identity:list_domains
+    value: rule:admin_required
+  keystone-identity_list_domains_for_user:
+    key: identity:list_domains_for_user
+    value: ''
+  keystone-identity_list_endpoint_groups:
+    key: identity:list_endpoint_groups
+    value: rule:admin_required
+  keystone-identity_list_endpoint_groups_for_project:
+    key: identity:list_endpoint_groups_for_project
+    value: rule:admin_required
+  keystone-identity_list_endpoints:
+    key: identity:list_endpoints
+    value: rule:admin_required
+  keystone-identity_list_endpoints_associated_with_endpoint_group:
+    key: identity:list_endpoints_associated_with_endpoint_group
+    value: rule:admin_required
+  keystone-identity_list_endpoints_for_policy:
+    key: identity:list_endpoints_for_policy
+    value: rule:admin_required
+  keystone-identity_list_endpoints_for_project:
+    key: identity:list_endpoints_for_project
+    value: rule:admin_required
+  keystone-identity_list_grants:
+    key: identity:list_grants
+    value: rule:admin_required or (role:reader and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:reader and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.domain.id)s) or (role:reader and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:reader and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.domain.id)s)
+  keystone-identity_list_groups:
+    key: identity:list_groups
+    value: rule:admin_required or (role:reader and domain_id:%(target.group.domain_id)s)
+  keystone-identity_list_groups_for_user:
+    key: identity:list_groups_for_user
+    value: rule:admin_required or (role:reader and domain_id:%(target.user.domain_id)s)
+      or user_id:%(user_id)s
+  keystone-identity_list_identity_providers:
+    key: identity:list_identity_providers
+    value: rule:admin_required
+  keystone-identity_list_implied_roles:
+    key: identity:list_implied_roles
+    value: rule:admin_required
+  keystone-identity_list_limits:
+    key: identity:list_limits
+    value: ''
+  keystone-identity_list_mappings:
+    key: identity:list_mappings
+    value: rule:admin_required
+  keystone-identity_list_policies:
+    key: identity:list_policies
+    value: rule:admin_required
+  keystone-identity_list_project_tags:
+    key: identity:list_project_tags
+    value: rule:admin_required or (role:reader and domain_id:%(target.project.domain_id)s)
+      or project_id:%(target.project.id)s
+  keystone-identity_list_projects:
+    key: identity:list_projects
+    value: rule:admin_required or (role:reader and domain_id:%(target.domain_id)s)
+  keystone-identity_list_projects_associated_with_endpoint_group:
+    key: identity:list_projects_associated_with_endpoint_group
+    value: rule:admin_required
+  keystone-identity_list_projects_for_endpoint:
+    key: identity:list_projects_for_endpoint
+    value: rule:admin_required
+  keystone-identity_list_projects_for_user:
+    key: identity:list_projects_for_user
+    value: ''
+  keystone-identity_list_protocols:
+    key: identity:list_protocols
+    value: rule:admin_required
+  keystone-identity_list_regions:
+    key: identity:list_regions
+    value: ''
+  keystone-identity_list_registered_limits:
+    key: identity:list_registered_limits
+    value: ''
+  keystone-identity_list_revoke_events:
+    key: identity:list_revoke_events
+    value: rule:service_or_admin
+  keystone-identity_list_role_assignments:
+    key: identity:list_role_assignments
+    value: rule:admin_required or (role:reader and domain_id:%(target.domain_id)s)
+  keystone-identity_list_role_assignments_for_tree:
+    key: identity:list_role_assignments_for_tree
+    value: rule:admin_required or (role:reader and domain_id:%(target.project.domain_id)s)
+      or (role:admin and project_id:%(target.project.id)s)
+  keystone-identity_list_role_inference_rules:
+    key: identity:list_role_inference_rules
+    value: rule:admin_required
+  keystone-identity_list_roles:
+    key: identity:list_roles
+    value: rule:admin_required
+  keystone-identity_list_roles_for_trust:
+    key: identity:list_roles_for_trust
+    value: rule:admin_required or user_id:%(target.trust.trustor_user_id)s or user_id:%(target.trust.trustee_user_id)s
+  keystone-identity_list_service_providers:
+    key: identity:list_service_providers
+    value: rule:admin_required
+  keystone-identity_list_services:
+    key: identity:list_services
+    value: rule:admin_required
+  keystone-identity_list_system_grants_for_group:
+    key: identity:list_system_grants_for_group
+    value: rule:admin_required
+  keystone-identity_list_system_grants_for_user:
+    key: identity:list_system_grants_for_user
+    value: rule:admin_required
+  keystone-identity_list_trusts:
+    key: identity:list_trusts
+    value: rule:admin_required
+  keystone-identity_list_trusts_for_trustee:
+    key: identity:list_trusts_for_trustee
+    value: rule:admin_required or user_id:%(target.trust.trustee_user_id)s
+  keystone-identity_list_trusts_for_trustor:
+    key: identity:list_trusts_for_trustor
+    value: rule:admin_required or user_id:%(target.trust.trustor_user_id)s
+  keystone-identity_list_user_projects:
+    key: identity:list_user_projects
+    value: rule:admin_required or (role:reader and domain_id:%(target.user.domain_id)s)
+      or user_id:%(target.user.id)s
+  keystone-identity_list_users:
+    key: identity:list_users
+    value: rule:admin_required or (role:reader and domain_id:%(target.domain_id)s)
+  keystone-identity_list_users_in_group:
+    key: identity:list_users_in_group
+    value: rule:admin_required or (role:reader and domain_id:%(target.group.domain_id)s)
+  keystone-identity_remove_endpoint_from_project:
+    key: identity:remove_endpoint_from_project
+    value: rule:admin_required
+  keystone-identity_remove_endpoint_group_from_project:
+    key: identity:remove_endpoint_group_from_project
+    value: rule:admin_required
+  keystone-identity_remove_user_from_group:
+    key: identity:remove_user_from_group
+    value: rule:admin_required or (role:admin and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.user.domain_id)s)
+  keystone-identity_revocation_list:
+    key: identity:revocation_list
+    value: rule:service_or_admin
+  keystone-identity_revoke_grant:
+    key: identity:revoke_grant
+    value: rule:admin_required or ((role:admin and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:admin and domain_id:%(target.user.domain_id)s
+      and domain_id:%(target.domain.id)s) or (role:admin and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.project.domain_id)s) or (role:admin and domain_id:%(target.group.domain_id)s
+      and domain_id:%(target.domain.id)s)) and (domain_id:%(target.role.domain_id)s
+      or None:%(target.role.domain_id)s)
+  keystone-identity_revoke_system_grant_for_group:
+    key: identity:revoke_system_grant_for_group
+    value: rule:admin_required
+  keystone-identity_revoke_system_grant_for_user:
+    key: identity:revoke_system_grant_for_user
+    value: rule:admin_required
+  keystone-identity_revoke_token:
+    key: identity:revoke_token
+    value: rule:admin_required or rule:token_subject
+  keystone-identity_update_consumer:
+    key: identity:update_consumer
+    value: rule:admin_required
+  keystone-identity_update_credential:
+    key: identity:update_credential
+    value: rule:admin_required or user_id:%(target.credential.user_id)s
+  keystone-identity_update_domain:
+    key: identity:update_domain
+    value: rule:admin_required
+  keystone-identity_update_domain_config:
+    key: identity:update_domain_config
+    value: rule:admin_required
+  keystone-identity_update_domain_role:
+    key: identity:update_domain_role
+    value: rule:admin_required
+  keystone-identity_update_endpoint:
+    key: identity:update_endpoint
+    value: rule:admin_required
+  keystone-identity_update_endpoint_group:
+    key: identity:update_endpoint_group
+    value: rule:admin_required
+  keystone-identity_update_group:
+    key: identity:update_group
+    value: rule:admin_required or (role:admin and domain_id:%(target.group.domain_id)s)
+  keystone-identity_update_identity_provider:
+    key: identity:update_identity_provider
+    value: rule:admin_required
+  keystone-identity_update_limit:
+    key: identity:update_limit
+    value: rule:admin_required
+  keystone-identity_update_mapping:
+    key: identity:update_mapping
+    value: rule:admin_required
+  keystone-identity_update_policy:
+    key: identity:update_policy
+    value: rule:admin_required
+  keystone-identity_update_project:
+    key: identity:update_project
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+  keystone-identity_update_project_tags:
+    key: identity:update_project_tags
+    value: rule:admin_required or (role:admin and domain_id:%(target.project.domain_id)s)
+      or (role:admin and project_id:%(target.project.id)s)
+  keystone-identity_update_protocol:
+    key: identity:update_protocol
+    value: rule:admin_required
+  keystone-identity_update_region:
+    key: identity:update_region
+    value: rule:admin_required
+  keystone-identity_update_registered_limit:
+    key: identity:update_registered_limit
+    value: rule:admin_required
+  keystone-identity_update_role:
+    key: identity:update_role
+    value: rule:admin_required
+  keystone-identity_update_service:
+    key: identity:update_service
+    value: rule:admin_required
+  keystone-identity_update_service_provider:
+    key: identity:update_service_provider
+    value: rule:admin_required
+  keystone-identity_update_user:
+    key: identity:update_user
+    value: rule:admin_required or (role:admin and token.domain.id:%(target.user.domain_id)s)
+  keystone-identity_validate_token:
+    key: identity:validate_token
+    value: rule:admin_required or rule:service_role or rule:token_subject
+keystone::rabbit_heartbeat_in_pthread: false
+keystone::rabbit_heartbeat_timeout_threshold: 60
+keystone::service_name: httpd
+keystone::token_expiration: 86400
+keystone::token_provider: fernet
+keystone::wsgi::apache::api_port:
+- 5000
+- '35357'
+keystone::wsgi::apache::bind_host:
+- '%{hiera(''internal_api'')}'
+- '%{hiera(''internal_api'')}'
+keystone::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+keystone::wsgi::apache::ssl: false
+keystone::wsgi::apache::threads: 1
+keystone::wsgi::apache::workers: '24'
+keystone_enable_db_purge: true
+keystone_resources_managed: false
+keystone_ssl_certificate: ''
+keystone_ssl_certificate_key: ''
+memcached::disable_cachedump: true
+memcached::listen:
+- ::1
+- '%{hiera(''internal_api'')}'
+memcached::listen_ip:
+- ::1
+- '%{hiera(''internal_api'')}'
+memcached::listen_ip_uri:
+- ::1
+- '%{hiera(''internal_api_uri'')}'
+memcached::logstdout: true
+memcached::max_connections: 8192
+memcached::max_memory: 50%
+memcached::tcp_port: 11211
+memcached::udp_port: 0
+memcached::verbosity: vv
+memcached_ipv6: true
+mysql::server::manage_config_file: true
+mysql::server::package_name: mariadb-galera-server
+mysql::server::root_password: EffNtAkmJa
+mysql_auth_ed25519: false
+mysql_bind_host: '%{hiera(''internal_api'')}'
+mysql_clustercheck_password: mf7ZxycsujfXjQ8xMWbBQnBFf
+mysql_ipv6: true
+mysql_max_connections: 4096
+neutron::allow_overlapping_ips: true
+neutron::bind_host: '%{hiera(''internal_api'')}'
+neutron::core_plugin: ml2
+neutron::db::database_connection: mysql+pymysql://neutron:jYtadEvcg4aqZArGgDc2kyGVT@[2001:268:70fd:1000::a000]/ovs_neutron?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+neutron::db::database_db_max_retries: -1
+neutron::db::database_max_retries: -1
+neutron::db::sync::db_sync_timeout: 300
+neutron::db::sync::extra_params: ''
+neutron::dhcp_agent_notification: false
+neutron::dns_domain: openstacklocal
+neutron::global_physnet_mtu: 9000
+neutron::host: '%{hiera(''fqdn_canonical'')}'
+neutron::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+neutron::keystone::authtoken::interface: internal
+neutron::keystone::authtoken::memcache_use_advanced_pool: true
+neutron::keystone::authtoken::password: jYtadEvcg4aqZArGgDc2kyGVT
+neutron::keystone::authtoken::project_domain_name: Default
+neutron::keystone::authtoken::project_name: service
+neutron::keystone::authtoken::region_name: tb8
+neutron::keystone::authtoken::user_domain_name: Default
+neutron::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+neutron::logging::debug: true
+neutron::notification_driver:
+- messagingv2
+neutron::plugins::ml2::extension_drivers:
+- qos
+- port_security
+- dns_domain_ports
+neutron::plugins::ml2::flat_networks:
+- datacentre
+neutron::plugins::ml2::max_header_size: 38
+neutron::plugins::ml2::mechanism_drivers:
+- sriovnicswitch
+- ovn
+neutron::plugins::ml2::network_vlan_ranges:
+- ovs_dpdk1:64:2048
+- ovs_dpdk2:64:2048
+- ovs_dpdk3:64:2048
+- sriov_net1_port0:64:3840
+- sriov_net1_port1:64:3840
+- sriov_net2_port0:64:3840
+- sriov_net2_port1:64:3840
+- sriov_net3_port0:64:3840
+- sriov_net3_port1:64:3840
+neutron::plugins::ml2::overlay_ip_version: 6
+neutron::plugins::ml2::ovn::dns_servers:
+- 2001:268:70ff:1000::8888
+- 2001:268:70ff:1000::8844
+neutron::plugins::ml2::ovn::dvr_enabled: 'True'
+neutron::plugins::ml2::ovn::network_log_burst_limit: 25
+neutron::plugins::ml2::ovn::network_log_rate_limit: 100
+neutron::plugins::ml2::ovn::neutron_sync_mode: log
+neutron::plugins::ml2::ovn::ovn_emit_need_to_frag: false
+neutron::plugins::ml2::ovn::ovn_metadata_enabled: true
+neutron::plugins::ml2::ovn::ovsdb_connection_timeout: 180
+neutron::plugins::ml2::ovn::ovsdb_probe_interval: 60000
+neutron::plugins::ml2::ovn::vhostuser_socket_dir: /var/lib/vhost_sockets
+neutron::plugins::ml2::ovs_driver::vnic_type_blacklist: []
+neutron::plugins::ml2::sriov_driver::vnic_type_blacklist: []
+neutron::plugins::ml2::tenant_network_types:
+- geneve
+- vlan
+neutron::plugins::ml2::tunnel_id_ranges:
+- 1:4094
+neutron::plugins::ml2::type_drivers:
+- geneve
+- vxlan
+- vlan
+- flat
+neutron::plugins::ml2::vni_ranges:
+- 1:65536
+neutron::policy::policies:
+  neutron-add_extraroutes:
+    key: add_extraroutes
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-add_prefixes:
+    key: add_prefixes
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-add_router_interface:
+    key: add_router_interface
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-add_subports:
+    key: add_subports
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-admin_api:
+    key: admin_api
+    value: role:admin
+  neutron-admin_only:
+    key: admin_only
+    value: rule:context_is_admin
+  neutron-admin_or_data_plane_int:
+    key: admin_or_data_plane_int
+    value: rule:context_is_admin or role:data_plane_integrator
+  neutron-admin_or_ext_parent_owner:
+    key: admin_or_ext_parent_owner
+    value: rule:context_is_admin or tenant_id:%(ext_parent:tenant_id)s
+  neutron-admin_or_network_owner:
+    key: admin_or_network_owner
+    value: rule:context_is_admin or tenant_id:%(network:tenant_id)s
+  neutron-admin_or_owner:
+    key: admin_or_owner
+    value: rule:context_is_admin or rule:owner
+  neutron-admin_or_sg_owner:
+    key: admin_or_sg_owner
+    value: rule:context_is_admin or tenant_id:%(security_group:tenant_id)s
+  neutron-admin_owner_or_network_owner:
+    key: admin_owner_or_network_owner
+    value: rule:owner or rule:admin_or_network_owner
+  neutron-admin_owner_or_sg_owner:
+    key: admin_owner_or_sg_owner
+    value: rule:owner or rule:admin_or_sg_owner
+  neutron-context_is_admin:
+    key: context_is_admin
+    value: role:admin
+  neutron-context_is_advsvc:
+    key: context_is_advsvc
+    value: role:advsvc
+  neutron-create_address_scope:
+    key: create_address_scope
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_address_scope_shared:
+    key: create_address_scope:shared
+    value: rule:admin_api
+  neutron-create_dhcp-network:
+    key: create_dhcp-network
+    value: rule:admin_api
+  neutron-create_flavor:
+    key: create_flavor
+    value: rule:admin_api
+  neutron-create_flavor_service_profile:
+    key: create_flavor_service_profile
+    value: rule:admin_api
+  neutron-create_floatingip:
+    key: create_floatingip
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_floatingip_floating_ip_address:
+    key: create_floatingip:floating_ip_address
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_floatingip_port_forwarding:
+    key: create_floatingip_port_forwarding
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-create_l3-router:
+    key: create_l3-router
+    value: rule:admin_api
+  neutron-create_log:
+    key: create_log
+    value: rule:admin_api
+  neutron-create_metering_label:
+    key: create_metering_label
+    value: rule:admin_api
+  neutron-create_metering_label_rule:
+    key: create_metering_label_rule
+    value: rule:admin_api
+  neutron-create_network:
+    key: create_network
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_network_is_default:
+    key: create_network:is_default
+    value: rule:admin_api
+  neutron-create_network_port_security_enabled:
+    key: create_network:port_security_enabled
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_network_provider_network_type:
+    key: create_network:provider:network_type
+    value: rule:admin_api
+  neutron-create_network_provider_physical_network:
+    key: create_network:provider:physical_network
+    value: rule:admin_api
+  neutron-create_network_provider_segmentation_id:
+    key: create_network:provider:segmentation_id
+    value: rule:admin_api
+  neutron-create_network_router_external:
+    key: create_network:router:external
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-create_network_segment_range:
+    key: create_network_segment_range
+    value: rule:admin_api
+  neutron-create_network_segments:
+    key: create_network:segments
+    value: rule:admin_api
+  neutron-create_network_shared:
+    key: create_network:shared
+    value: rule:admin_api
+  neutron-create_policy:
+    key: create_policy
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_policy_bandwidth_limit_rule:
+    key: create_policy_bandwidth_limit_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_policy_dscp_marking_rule:
+    key: create_policy_dscp_marking_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_policy_minimum_bandwidth_rule:
+    key: create_policy_minimum_bandwidth_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_port:
+    key: create_port
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_port_allowed_address_pairs:
+    key: create_port:allowed_address_pairs
+    value: rule:admin_api or rule:network_owner
+  neutron-create_port_allowed_address_pairs_ip_address:
+    key: create_port:allowed_address_pairs:ip_address
+    value: rule:admin_api or rule:network_owner
+  neutron-create_port_allowed_address_pairs_mac_address:
+    key: create_port:allowed_address_pairs:mac_address
+    value: rule:admin_api or rule:network_owner
+  neutron-create_port_binding_host_id:
+    key: create_port:binding:host_id
+    value: rule:admin_api
+  neutron-create_port_binding_profile:
+    key: create_port:binding:profile
+    value: rule:admin_api
+  neutron-create_port_binding_vnic_type:
+    key: create_port:binding:vnic_type
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_port_device_owner:
+    key: create_port:device_owner
+    value: not rule:network_device or rule:admin_api or rule:context_is_advsvc or
+      rule:network_owner
+  neutron-create_port_fixed_ips:
+    key: create_port:fixed_ips
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api or rule:shared
+  neutron-create_port_fixed_ips_ip_address:
+    key: create_port:fixed_ips:ip_address
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api
+  neutron-create_port_fixed_ips_subnet_id:
+    key: create_port:fixed_ips:subnet_id
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api or rule:shared
+  neutron-create_port_mac_address:
+    key: create_port:mac_address
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api
+  neutron-create_port_port_security_enabled:
+    key: create_port:port_security_enabled
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api
+  neutron-create_rbac_policy:
+    key: create_rbac_policy
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_rbac_policy_target_tenant:
+    key: create_rbac_policy:target_tenant
+    value: rule:admin_api or (not field:rbac_policy:target_tenant=*)
+  neutron-create_router:
+    key: create_router
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_router_conntrack_helper:
+    key: create_router_conntrack_helper
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-create_router_distributed:
+    key: create_router:distributed
+    value: rule:admin_api
+  neutron-create_router_external_gateway_info:
+    key: create_router:external_gateway_info
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_router_external_gateway_info_enable_snat:
+    key: create_router:external_gateway_info:enable_snat
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_router_external_gateway_info_external_fixed_ips:
+    key: create_router:external_gateway_info:external_fixed_ips
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_router_external_gateway_info_network_id:
+    key: create_router:external_gateway_info:network_id
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_router_ha:
+    key: create_router:ha
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_security_group:
+    key: create_security_group
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_security_group_rule:
+    key: create_security_group_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_segment:
+    key: create_segment
+    value: rule:admin_api
+  neutron-create_service_profile:
+    key: create_service_profile
+    value: rule:admin_api
+  neutron-create_subnet:
+    key: create_subnet
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:network_owner
+  neutron-create_subnet_segment_id:
+    key: create_subnet:segment_id
+    value: rule:admin_api
+  neutron-create_subnet_service_types:
+    key: create_subnet:service_types
+    value: rule:admin_api
+  neutron-create_subnetpool:
+    key: create_subnetpool
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-create_subnetpool_is_default:
+    key: create_subnetpool:is_default
+    value: rule:admin_api
+  neutron-create_subnetpool_shared:
+    key: create_subnetpool:shared
+    value: rule:admin_api
+  neutron-create_trunk:
+    key: create_trunk
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-default:
+    key: default
+    value: rule:admin_or_owner
+  neutron-delete_address_scope:
+    key: delete_address_scope
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_agent:
+    key: delete_agent
+    value: rule:admin_api
+  neutron-delete_alias_bandwidth_limit_rule:
+    key: delete_alias_bandwidth_limit_rule
+    value: rule:delete_policy_bandwidth_limit_rule
+  neutron-delete_alias_dscp_marking_rule:
+    key: delete_alias_dscp_marking_rule
+    value: rule:delete_policy_dscp_marking_rule
+  neutron-delete_alias_minimum_bandwidth_rule:
+    key: delete_alias_minimum_bandwidth_rule
+    value: rule:delete_policy_minimum_bandwidth_rule
+  neutron-delete_auto_allocated_topology:
+    key: delete_auto_allocated_topology
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_dhcp-network:
+    key: delete_dhcp-network
+    value: rule:admin_api
+  neutron-delete_flavor:
+    key: delete_flavor
+    value: rule:admin_api
+  neutron-delete_flavor_service_profile:
+    key: delete_flavor_service_profile
+    value: rule:admin_api
+  neutron-delete_floatingip:
+    key: delete_floatingip
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_floatingip_port_forwarding:
+    key: delete_floatingip_port_forwarding
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-delete_l3-router:
+    key: delete_l3-router
+    value: rule:admin_api
+  neutron-delete_log:
+    key: delete_log
+    value: rule:admin_api
+  neutron-delete_metering_label:
+    key: delete_metering_label
+    value: rule:admin_api
+  neutron-delete_metering_label_rule:
+    key: delete_metering_label_rule
+    value: rule:admin_api
+  neutron-delete_network:
+    key: delete_network
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_network_segment_range:
+    key: delete_network_segment_range
+    value: rule:admin_api
+  neutron-delete_policy:
+    key: delete_policy
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_policy_bandwidth_limit_rule:
+    key: delete_policy_bandwidth_limit_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_policy_dscp_marking_rule:
+    key: delete_policy_dscp_marking_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_policy_minimum_bandwidth_rule:
+    key: delete_policy_minimum_bandwidth_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_port:
+    key: delete_port
+    value: rule:context_is_advsvc or rule:admin_api or (role:member and project_id:%(project_id)s)
+      or rule:network_owner
+  neutron-delete_quota:
+    key: delete_quota
+    value: rule:admin_api
+  neutron-delete_rbac_policy:
+    key: delete_rbac_policy
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_router:
+    key: delete_router
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_router_conntrack_helper:
+    key: delete_router_conntrack_helper
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-delete_security_group:
+    key: delete_security_group
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_security_group_rule:
+    key: delete_security_group_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_segment:
+    key: delete_segment
+    value: rule:admin_api
+  neutron-delete_service_profile:
+    key: delete_service_profile
+    value: rule:admin_api
+  neutron-delete_subnet:
+    key: delete_subnet
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:network_owner
+  neutron-delete_subnetpool:
+    key: delete_subnetpool
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-delete_trunk:
+    key: delete_trunk
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-ext_parent_owner:
+    key: ext_parent_owner
+    value: tenant_id:%(ext_parent:tenant_id)s
+  neutron-external:
+    key: external
+    value: field:networks:router:external=True
+  neutron-get_address_group:
+    key: get_address_group
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared_address_groups
+  neutron-get_address_scope:
+    key: get_address_scope
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared_address_scopes
+  neutron-get_agent:
+    key: get_agent
+    value: rule:admin_api
+  neutron-get_alias_bandwidth_limit_rule:
+    key: get_alias_bandwidth_limit_rule
+    value: rule:get_policy_bandwidth_limit_rule
+  neutron-get_alias_dscp_marking_rule:
+    key: get_alias_dscp_marking_rule
+    value: rule:get_policy_dscp_marking_rule
+  neutron-get_alias_minimum_bandwidth_rule:
+    key: get_alias_minimum_bandwidth_rule
+    value: rule:get_policy_minimum_bandwidth_rule
+  neutron-get_auto_allocated_topology:
+    key: get_auto_allocated_topology
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_availability_zone:
+    key: get_availability_zone
+    value: rule:admin_api
+  neutron-get_dhcp-agents:
+    key: get_dhcp-agents
+    value: rule:admin_api
+  neutron-get_dhcp-networks:
+    key: get_dhcp-networks
+    value: rule:admin_api
+  neutron-get_flavor:
+    key: get_flavor
+    value: rule:admin_api or role:reader
+  neutron-get_flavor_service_profile:
+    key: get_flavor_service_profile
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_floatingip:
+    key: get_floatingip
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_floatingip_pool:
+    key: get_floatingip_pool
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_floatingip_port_forwarding:
+    key: get_floatingip_port_forwarding
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-get_l3-agents:
+    key: get_l3-agents
+    value: rule:admin_api
+  neutron-get_l3-routers:
+    key: get_l3-routers
+    value: rule:admin_api
+  neutron-get_log:
+    key: get_log
+    value: rule:admin_api
+  neutron-get_loggable_resource:
+    key: get_loggable_resource
+    value: rule:admin_api
+  neutron-get_metering_label:
+    key: get_metering_label
+    value: rule:admin_api
+  neutron-get_metering_label_rule:
+    key: get_metering_label_rule
+    value: rule:admin_api
+  neutron-get_network:
+    key: get_network
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared
+      or rule:external or rule:context_is_advsvc
+  neutron-get_network_ip_availability:
+    key: get_network_ip_availability
+    value: rule:admin_api
+  neutron-get_network_provider_network_type:
+    key: get_network:provider:network_type
+    value: rule:admin_api
+  neutron-get_network_provider_physical_network:
+    key: get_network:provider:physical_network
+    value: rule:admin_api
+  neutron-get_network_provider_segmentation_id:
+    key: get_network:provider:segmentation_id
+    value: rule:admin_api
+  neutron-get_network_router_external:
+    key: get_network:router:external
+    value: role:reader
+  neutron-get_network_segment_range:
+    key: get_network_segment_range
+    value: rule:admin_api
+  neutron-get_network_segments:
+    key: get_network:segments
+    value: rule:admin_api
+  neutron-get_policy:
+    key: get_policy
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared_qos_policy
+  neutron-get_policy_bandwidth_limit_rule:
+    key: get_policy_bandwidth_limit_rule
+    value: rule:admin_api or (role:reader and project_id:%(ext_parent:project_id)s)
+  neutron-get_policy_dscp_marking_rule:
+    key: get_policy_dscp_marking_rule
+    value: rule:admin_api or (role:reader and project_id:%(ext_parent:project_id)s)
+  neutron-get_policy_minimum_bandwidth_rule:
+    key: get_policy_minimum_bandwidth_rule
+    value: rule:admin_api or (role:reader and project_id:%(ext_parent:project_id)s)
+  neutron-get_port:
+    key: get_port
+    value: rule:context_is_advsvc or rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_port_binding_host_id:
+    key: get_port:binding:host_id
+    value: rule:admin_api
+  neutron-get_port_binding_profile:
+    key: get_port:binding:profile
+    value: rule:admin_api
+  neutron-get_port_binding_vif_details:
+    key: get_port:binding:vif_details
+    value: rule:admin_api
+  neutron-get_port_binding_vif_type:
+    key: get_port:binding:vif_type
+    value: rule:admin_api
+  neutron-get_port_resource_request:
+    key: get_port:resource_request
+    value: rule:admin_api
+  neutron-get_quota:
+    key: get_quota
+    value: rule:admin_api
+  neutron-get_rbac_policy:
+    key: get_rbac_policy
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_router:
+    key: get_router
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_router_conntrack_helper:
+    key: get_router_conntrack_helper
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-get_router_distributed:
+    key: get_router:distributed
+    value: rule:admin_api
+  neutron-get_router_ha:
+    key: get_router:ha
+    value: rule:admin_api
+  neutron-get_rule_type:
+    key: get_rule_type
+    value: role:reader
+  neutron-get_security_group:
+    key: get_security_group
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared_security_group
+  neutron-get_security_group_rule:
+    key: get_security_group_rule
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:sg_owner
+  neutron-get_segment:
+    key: get_segment
+    value: rule:admin_api
+  neutron-get_service_profile:
+    key: get_service_profile
+    value: rule:admin_api
+  neutron-get_service_provider:
+    key: get_service_provider
+    value: role:reader
+  neutron-get_subnet:
+    key: get_subnet
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared
+  neutron-get_subnet_segment_id:
+    key: get_subnet:segment_id
+    value: rule:admin_api
+  neutron-get_subnetpool:
+    key: get_subnetpool
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s) or rule:shared_subnetpools
+  neutron-get_subports:
+    key: get_subports
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-get_trunk:
+    key: get_trunk
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-network_device:
+    key: network_device
+    value: 'field:port:device_owner=~^network:'
+  neutron-network_owner:
+    key: network_owner
+    value: tenant_id:%(network:tenant_id)s
+  neutron-onboard_network_subnets:
+    key: onboard_network_subnets
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-owner:
+    key: owner
+    value: tenant_id:%(tenant_id)s
+  neutron-regular_user:
+    key: regular_user
+    value: ''
+  neutron-remove_extraroutes:
+    key: remove_extraroutes
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-remove_prefixes:
+    key: remove_prefixes
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-remove_router_interface:
+    key: remove_router_interface
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-remove_subports:
+    key: remove_subports
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-restrict_wildcard:
+    key: restrict_wildcard
+    value: (not field:rbac_policy:target_tenant=*) or rule:admin_api
+  neutron-sg_owner:
+    key: sg_owner
+    value: tenant_id:%(security_group:tenant_id)s
+  neutron-shared:
+    key: shared
+    value: field:networks:shared=True
+  neutron-shared_address_groups:
+    key: shared_address_groups
+    value: field:address_groups:shared=True
+  neutron-shared_address_scopes:
+    key: shared_address_scopes
+    value: field:address_scopes:shared=True
+  neutron-shared_policy:
+    key: shared_qos_policy
+    value: field:policies:shared=True
+  neutron-shared_security_group:
+    key: shared_security_group
+    value: field:security_groups:shared=True
+  neutron-shared_subnetpools:
+    key: shared_subnetpools
+    value: field:subnetpools:shared=True
+  neutron-update_address_scope:
+    key: update_address_scope
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_address_scope_shared:
+    key: update_address_scope:shared
+    value: rule:admin_api
+  neutron-update_agent:
+    key: update_agent
+    value: rule:admin_api
+  neutron-update_alias_bandwidth_limit_rule:
+    key: update_alias_bandwidth_limit_rule
+    value: rule:update_policy_bandwidth_limit_rule
+  neutron-update_alias_dscp_marking_rule:
+    key: update_alias_dscp_marking_rule
+    value: rule:update_policy_dscp_marking_rule
+  neutron-update_alias_minimum_bandwidth_rule:
+    key: update_alias_minimum_bandwidth_rule
+    value: rule:update_policy_minimum_bandwidth_rule
+  neutron-update_flavor:
+    key: update_flavor
+    value: rule:admin_api
+  neutron-update_floatingip:
+    key: update_floatingip
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_floatingip_port_forwarding:
+    key: update_floatingip_port_forwarding
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-update_log:
+    key: update_log
+    value: rule:admin_api
+  neutron-update_network:
+    key: update_network
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_network_is_default:
+    key: update_network:is_default
+    value: rule:admin_api
+  neutron-update_network_port_security_enabled:
+    key: update_network:port_security_enabled
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_network_provider_network_type:
+    key: update_network:provider:network_type
+    value: rule:admin_api
+  neutron-update_network_provider_physical_network:
+    key: update_network:provider:physical_network
+    value: rule:admin_api
+  neutron-update_network_provider_segmentation_id:
+    key: update_network:provider:segmentation_id
+    value: rule:admin_api
+  neutron-update_network_router_external:
+    key: update_network:router:external
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  neutron-update_network_segment_range:
+    key: update_network_segment_range
+    value: rule:admin_api
+  neutron-update_network_segments:
+    key: update_network:segments
+    value: rule:admin_api
+  neutron-update_network_shared:
+    key: update_network:shared
+    value: rule:admin_api
+  neutron-update_policy:
+    key: update_policy
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_policy_bandwidth_limit_rule:
+    key: update_policy_bandwidth_limit_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_policy_dscp_marking_rule:
+    key: update_policy_dscp_marking_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_policy_minimum_bandwidth_rule:
+    key: update_policy_minimum_bandwidth_rule
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_port:
+    key: update_port
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:context_is_advsvc
+  neutron-update_port_allowed_address_pairs:
+    key: update_port:allowed_address_pairs
+    value: rule:admin_api or rule:network_owner
+  neutron-update_port_allowed_address_pairs_ip_address:
+    key: update_port:allowed_address_pairs:ip_address
+    value: rule:admin_api or rule:network_owner
+  neutron-update_port_allowed_address_pairs_mac_address:
+    key: update_port:allowed_address_pairs:mac_address
+    value: rule:admin_api or rule:network_owner
+  neutron-update_port_binding_host_id:
+    key: update_port:binding:host_id
+    value: rule:admin_api
+  neutron-update_port_binding_profile:
+    key: update_port:binding:profile
+    value: rule:admin_api
+  neutron-update_port_binding_vnic_type:
+    key: update_port:binding:vnic_type
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:context_is_advsvc
+  neutron-update_port_data_plane_status:
+    key: update_port:data_plane_status
+    value: rule:admin_api or role:data_plane_integrator
+  neutron-update_port_device_owner:
+    key: update_port:device_owner
+    value: not rule:network_device or rule:context_is_advsvc or rule:network_owner
+      or rule:admin_api
+  neutron-update_port_fixed_ips:
+    key: update_port:fixed_ips
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api
+  neutron-update_port_fixed_ips_ip_address:
+    key: update_port:fixed_ips:ip_address
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api
+  neutron-update_port_fixed_ips_subnet_id:
+    key: update_port:fixed_ips:subnet_id
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api or rule:shared
+  neutron-update_port_mac_address:
+    key: update_port:mac_address
+    value: rule:admin_api or rule:context_is_advsvc
+  neutron-update_port_port_security_enabled:
+    key: update_port:port_security_enabled
+    value: rule:context_is_advsvc or rule:network_owner or rule:admin_api
+  neutron-update_quota:
+    key: update_quota
+    value: rule:admin_api
+  neutron-update_rbac_policy:
+    key: update_rbac_policy
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_rbac_policy_target_tenant:
+    key: update_rbac_policy:target_tenant
+    value: rule:admin_api or (not field:rbac_policy:target_tenant=*)
+  neutron-update_router:
+    key: update_router
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_router_conntrack_helper:
+    key: update_router_conntrack_helper
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:ext_parent_owner
+  neutron-update_router_distributed:
+    key: update_router:distributed
+    value: rule:admin_api
+  neutron-update_router_external_gateway_info:
+    key: update_router:external_gateway_info
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_router_external_gateway_info_enable_snat:
+    key: update_router:external_gateway_info:enable_snat
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_router_external_gateway_info_external_fixed_ips:
+    key: update_router:external_gateway_info:external_fixed_ips
+    value: rule:admin_api
+  neutron-update_router_external_gateway_info_network_id:
+    key: update_router:external_gateway_info:network_id
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_router_ha:
+    key: update_router:ha
+    value: rule:admin_api
+  neutron-update_security_group:
+    key: update_security_group
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_segment:
+    key: update_segment
+    value: rule:admin_api
+  neutron-update_service_profile:
+    key: update_service_profile
+    value: rule:admin_api
+  neutron-update_subnet:
+    key: update_subnet
+    value: rule:admin_api or (role:member and project_id:%(project_id)s) or rule:network_owner
+  neutron-update_subnet_segment_id:
+    key: update_subnet:segment_id
+    value: rule:admin_api
+  neutron-update_subnet_service_types:
+    key: update_subnet:service_types
+    value: rule:admin_api
+  neutron-update_subnetpool:
+    key: update_subnetpool
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+  neutron-update_subnetpool_is_default:
+    key: update_subnetpool:is_default
+    value: rule:admin_api
+  neutron-update_trunk:
+    key: update_trunk
+    value: rule:admin_api or (role:member and project_id:%(project_id)s)
+neutron::purge_config: false
+neutron::quota::quota_port: '-1'
+neutron::quota::quota_security_group: '-1'
+neutron::rabbit_heartbeat_in_pthread: false
+neutron::rabbit_heartbeat_timeout_threshold: 60
+neutron::report_interval: 300
+neutron::server::agent_down_time: 600
+neutron::server::allow_automatic_l3agent_failover: 'True'
+neutron::server::api_workers: '12'
+neutron::server::default_availability_zones:
+- az-a
+neutron::server::dhcp_load_type: networks
+neutron::server::enable_dvr: 'True'
+neutron::server::enable_proxy_headers_parsing: true
+neutron::server::igmp_snooping_enable: false
+neutron::server::network_scheduler_driver: neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler
+neutron::server::notifications::nova::auth_url: http://[2001:268:70fd:1000::a000]:5000
+neutron::server::notifications::nova::endpoint_type: internal
+neutron::server::notifications::nova::password: p4Uk7GHjh7GEaG9Ztd6kkZWtX
+neutron::server::notifications::nova::project_domain_name: Default
+neutron::server::notifications::nova::project_name: service
+neutron::server::notifications::nova::region_name: tb8
+neutron::server::notifications::nova::user_domain_name: Default
+neutron::server::placement::auth_type: password
+neutron::server::placement::auth_url: http://[2001:268:70fd:1000::a000]:5000
+neutron::server::placement::password: p4Uk7GHjh7GEaG9Ztd6kkZWtX
+neutron::server::placement::project_domain_name: Default
+neutron::server::placement::project_name: service
+neutron::server::placement::region_name: tb8
+neutron::server::placement::user_domain_name: Default
+neutron::server::placement::username: nova
+neutron::server::qos_notification_drivers: ovn-qos
+neutron::server::router_distributed: 'True'
+neutron::server::router_scheduler_driver: neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler
+neutron::server::rpc_workers: '1'
+neutron::service_plugins:
+- qos
+- ovn-router-flavors
+- trunk
+- segments
+- port_forwarding
+- log
+- placement
+neutron::vlan_transparent: false
+nova::api::allow_resize_to_same_host: true
+nova::api::api_bind_address: '%{hiera(''fqdn_internal_api'')}'
+nova::api::enable_proxy_headers_parsing: true
+nova::api::enabled: true
+nova::api::instance_name_template: instance-%08x
+nova::api::max_limit: 1000
+nova::api::osapi_compute_workers: 12
+nova::api::service_name: httpd
+nova::api_database_connection: mysql+pymysql://nova_api:p4Uk7GHjh7GEaG9Ztd6kkZWtX@[2001:268:70fd:1000::a000]/nova_api?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+nova::cache::backend: dogpile.cache.memcached
+nova::cache::enabled: true
+nova::cache::tls_enabled: false
+nova::cinder_catalog_info: volumev3:cinderv3:internalURL
+nova::compute::sync_power_state_interval: 600
+nova::conductor::workers: 12
+nova::cron::archive_deleted_rows::age: 90
+nova::cron::archive_deleted_rows::all_cells: true
+nova::cron::archive_deleted_rows::destination: /var/log/nova/nova-rowsflush.log
+nova::cron::archive_deleted_rows::hour: '0'
+nova::cron::archive_deleted_rows::max_rows: '1000'
+nova::cron::archive_deleted_rows::maxdelay: '3600'
+nova::cron::archive_deleted_rows::minute: '1'
+nova::cron::archive_deleted_rows::month: '*'
+nova::cron::archive_deleted_rows::monthday: '*'
+nova::cron::archive_deleted_rows::purge: false
+nova::cron::archive_deleted_rows::until_complete: true
+nova::cron::archive_deleted_rows::user: nova
+nova::cron::archive_deleted_rows::weekday: '*'
+nova::cron::purge_shadow_tables::age: 14
+nova::cron::purge_shadow_tables::all_cells: true
+nova::cron::purge_shadow_tables::destination: /var/log/nova/nova-rowspurge.log
+nova::cron::purge_shadow_tables::hour: '5'
+nova::cron::purge_shadow_tables::maxdelay: '3600'
+nova::cron::purge_shadow_tables::minute: '0'
+nova::cron::purge_shadow_tables::month: '*'
+nova::cron::purge_shadow_tables::monthday: '*'
+nova::cron::purge_shadow_tables::user: nova
+nova::cron::purge_shadow_tables::verbose: false
+nova::cron::purge_shadow_tables::weekday: '*'
+nova::cross_az_attach: false
+nova::database_connection: mysql+pymysql://nova:p4Uk7GHjh7GEaG9Ztd6kkZWtX@[2001:268:70fd:1000::a000]/nova?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+nova::db::database_db_max_retries: -1
+nova::db::database_max_retries: -1
+nova::dhcp_domain: ''
+nova::glance::valid_interfaces: internal
+nova::host: '%{hiera(''fqdn_canonical'')}'
+nova::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+nova::keystone::authtoken::interface: internal
+nova::keystone::authtoken::memcache_use_advanced_pool: true
+nova::keystone::authtoken::password: p4Uk7GHjh7GEaG9Ztd6kkZWtX
+nova::keystone::authtoken::project_domain_name: Default
+nova::keystone::authtoken::project_name: service
+nova::keystone::authtoken::region_name: tb8
+nova::keystone::authtoken::user_domain_name: Default
+nova::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+nova::keystone::service_user::auth_url: http://[2001:268:70fd:1000::a000]:5000
+nova::keystone::service_user::password: p4Uk7GHjh7GEaG9Ztd6kkZWtX
+nova::keystone::service_user::project_name: service
+nova::keystone::service_user::region_name: tb8
+nova::keystone::service_user::send_service_user_token: true
+nova::logging::debug: true
+nova::metadata::local_metadata_per_cell: false
+nova::metadata::neutron_metadata_proxy_shared_secret: B7P6oq3tpam4ZA15HaoaQxyPa
+nova::my_ip: '%{hiera(''internal_api'')}'
+nova::network::neutron::auth_type: v3password
+nova::network::neutron::auth_url: http://[2001:268:70fd:1000::a000]:5000/v3
+nova::network::neutron::default_floating_pool: public
+nova::network::neutron::ovs_bridge: br-int
+nova::network::neutron::password: jYtadEvcg4aqZArGgDc2kyGVT
+nova::network::neutron::project_name: service
+nova::network::neutron::region_name: tb8
+nova::network::neutron::username: neutron
+nova::network::neutron::valid_interfaces: internal
+nova::notification_driver:
+- messagingv2
+nova::notification_format: unversioned
+nova::notify_on_state_change: vm_and_task_state
+nova::os_region_name: tb8
+nova::ovsdb_connection: ''
+nova::placement::auth_url: http://[2001:268:70fd:1000::a000]:5000
+nova::placement::password: rGKqRZoUn6drq9aT2PdrX4e4Y
+nova::placement::project_name: service
+nova::placement::region_name: tb8
+nova::placement::valid_interfaces: internal
+nova::policy::enforce_new_defaults: false
+nova::policy::enforce_scope: false
+nova::policy::policies:
+  nova-admin_api:
+    key: admin_api
+    value: role:admin
+  nova-admin_or_owner:
+    key: admin_or_owner
+    value: is_admin:True or project_id:%(project_id)s
+  nova-compute_aggregates_images:
+    key: compute:aggregates:images
+    value: rule:admin_api
+  nova-compute_server_topology_host_index:
+    key: compute:server:topology:host:index
+    value: rule:admin_api
+  nova-compute_server_topology_index:
+    key: compute:server:topology:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-compute_servers_create_requested_destination:
+    key: compute:servers:create:requested_destination
+    value: rule:admin_api
+  nova-compute_servers_resize_cross_cell:
+    key: compute:servers:resize:cross_cell
+    value: '!'
+  nova-context_is_admin:
+    key: context_is_admin
+    value: role:admin
+  nova-network_attach_external_network:
+    key: network:attach_external_network
+    value: rule:admin_api or (role:reader and project_id:%(project_id)s)
+  nova-os_compute_api_extensions:
+    key: os_compute_api:extensions
+    value: '@'
+  nova-os_compute_api_ips_index:
+    key: os_compute_api:ips:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_ips_show:
+    key: os_compute_api:ips:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_limits:
+    key: os_compute_api:limits
+    value: '@'
+  nova-os_compute_api_limits_other_project:
+    key: os_compute_api:limits:other_project
+    value: rule:admin_api
+  nova-os_compute_api_os-admin-actions_inject_network_info:
+    key: os_compute_api:os-admin-actions:inject_network_info
+    value: rule:admin_api
+  nova-os_compute_api_os-admin-actions_reset_state:
+    key: os_compute_api:os-admin-actions:reset_state
+    value: rule:admin_api
+  nova-os_compute_api_os-admin-password:
+    key: os_compute_api:os-admin-password
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-aggregates_add_host:
+    key: os_compute_api:os-aggregates:add_host
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_create:
+    key: os_compute_api:os-aggregates:create
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_delete:
+    key: os_compute_api:os-aggregates:delete
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_index:
+    key: os_compute_api:os-aggregates:index
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_remove_host:
+    key: os_compute_api:os-aggregates:remove_host
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_set_metadata:
+    key: os_compute_api:os-aggregates:set_metadata
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_show:
+    key: os_compute_api:os-aggregates:show
+    value: rule:admin_api
+  nova-os_compute_api_os-aggregates_update:
+    key: os_compute_api:os-aggregates:update
+    value: rule:admin_api
+  nova-os_compute_api_os-assisted-volume-snapshots_create:
+    key: os_compute_api:os-assisted-volume-snapshots:create
+    value: rule:admin_api
+  nova-os_compute_api_os-assisted-volume-snapshots_delete:
+    key: os_compute_api:os-assisted-volume-snapshots:delete
+    value: rule:admin_api
+  nova-os_compute_api_os-attach-interfaces:
+    key: os_compute_api:os-attach-interfaces
+    value: rule:os_compute_api:os-attach-interfaces:list
+  nova-os_compute_api_os-attach-interfaces_create:
+    key: os_compute_api:os-attach-interfaces:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-attach-interfaces_delete:
+    key: os_compute_api:os-attach-interfaces:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-attach-interfaces_list:
+    key: os_compute_api:os-attach-interfaces:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-attach-interfaces_show:
+    key: os_compute_api:os-attach-interfaces:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-availability-zone_detail:
+    key: os_compute_api:os-availability-zone:detail
+    value: rule:admin_api
+  nova-os_compute_api_os-availability-zone_list:
+    key: os_compute_api:os-availability-zone:list
+    value: '@'
+  nova-os_compute_api_os-baremetal-nodes:
+    key: os_compute_api:os-baremetal-nodes
+    value: rule:os_compute_api:os-baremetal-nodes:list
+  nova-os_compute_api_os-baremetal-nodes_list:
+    key: os_compute_api:os-baremetal-nodes:list
+    value: rule:admin_api
+  nova-os_compute_api_os-baremetal-nodes_show:
+    key: os_compute_api:os-baremetal-nodes:show
+    value: rule:admin_api
+  nova-os_compute_api_os-console-auth-tokens:
+    key: os_compute_api:os-console-auth-tokens
+    value: rule:admin_api
+  nova-os_compute_api_os-console-output:
+    key: os_compute_api:os-console-output
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-create-backup:
+    key: os_compute_api:os-create-backup
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-deferred-delete:
+    key: os_compute_api:os-deferred-delete
+    value: rule:os_compute_api:os-deferred-delete:restore
+  nova-os_compute_api_os-deferred-delete_force:
+    key: os_compute_api:os-deferred-delete:force
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-deferred-delete_restore:
+    key: os_compute_api:os-deferred-delete:restore
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-evacuate:
+    key: os_compute_api:os-evacuate
+    value: rule:admin_api
+  nova-os_compute_api_os-extended-server-attributes:
+    key: os_compute_api:os-extended-server-attributes
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-flavor-access:
+    key: os_compute_api:os-flavor-access
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-access_add_tenant_access:
+    key: os_compute_api:os-flavor-access:add_tenant_access
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-access_remove_tenant_access:
+    key: os_compute_api:os-flavor-access:remove_tenant_access
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-extra-specs_create:
+    key: os_compute_api:os-flavor-extra-specs:create
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-extra-specs_delete:
+    key: os_compute_api:os-flavor-extra-specs:delete
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-extra-specs_index:
+    key: os_compute_api:os-flavor-extra-specs:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-flavor-extra-specs_show:
+    key: os_compute_api:os-flavor-extra-specs:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-flavor-extra-specs_update:
+    key: os_compute_api:os-flavor-extra-specs:update
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-manage_create:
+    key: os_compute_api:os-flavor-manage:create
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-manage_delete:
+    key: os_compute_api:os-flavor-manage:delete
+    value: rule:admin_api
+  nova-os_compute_api_os-flavor-manage_update:
+    key: os_compute_api:os-flavor-manage:update
+    value: rule:admin_api
+  nova-os_compute_api_os-floating-ip-pools:
+    key: os_compute_api:os-floating-ip-pools
+    value: '@'
+  nova-os_compute_api_os-floating-ips:
+    key: os_compute_api:os-floating-ips
+    value: rule:os_compute_api:os-floating-ips:add
+  nova-os_compute_api_os-floating-ips_add:
+    key: os_compute_api:os-floating-ips:add
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-floating-ips_create:
+    key: os_compute_api:os-floating-ips:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-floating-ips_delete:
+    key: os_compute_api:os-floating-ips:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-floating-ips_list:
+    key: os_compute_api:os-floating-ips:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-floating-ips_remove:
+    key: os_compute_api:os-floating-ips:remove
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-floating-ips_show:
+    key: os_compute_api:os-floating-ips:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-hosts:
+    key: os_compute_api:os-hosts
+    value: rule:os_compute_api:os-hosts:list
+  nova-os_compute_api_os-hosts_list:
+    key: os_compute_api:os-hosts:list
+    value: rule:admin_api
+  nova-os_compute_api_os-hosts_reboot:
+    key: os_compute_api:os-hosts:reboot
+    value: rule:admin_api
+  nova-os_compute_api_os-hosts_show:
+    key: os_compute_api:os-hosts:show
+    value: rule:admin_api
+  nova-os_compute_api_os-hosts_shutdown:
+    key: os_compute_api:os-hosts:shutdown
+    value: rule:admin_api
+  nova-os_compute_api_os-hosts_start:
+    key: os_compute_api:os-hosts:start
+    value: rule:admin_api
+  nova-os_compute_api_os-hosts_update:
+    key: os_compute_api:os-hosts:update
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors:
+    key: os_compute_api:os-hypervisors
+    value: rule:os_compute_api:os-hypervisors:list
+  nova-os_compute_api_os-hypervisors_list:
+    key: os_compute_api:os-hypervisors:list
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors_list-detail:
+    key: os_compute_api:os-hypervisors:list-detail
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors_search:
+    key: os_compute_api:os-hypervisors:search
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors_servers:
+    key: os_compute_api:os-hypervisors:servers
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors_show:
+    key: os_compute_api:os-hypervisors:show
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors_statistics:
+    key: os_compute_api:os-hypervisors:statistics
+    value: rule:admin_api
+  nova-os_compute_api_os-hypervisors_uptime:
+    key: os_compute_api:os-hypervisors:uptime
+    value: rule:admin_api
+  nova-os_compute_api_os-instance-actions:
+    key: os_compute_api:os-instance-actions
+    value: rule:os_compute_api:os-instance-actions:list
+  nova-os_compute_api_os-instance-actions_events:
+    key: os_compute_api:os-instance-actions:events
+    value: rule:admin_api
+  nova-os_compute_api_os-instance-actions_events_details:
+    key: os_compute_api:os-instance-actions:events:details
+    value: rule:admin_api
+  nova-os_compute_api_os-instance-actions_list:
+    key: os_compute_api:os-instance-actions:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-instance-actions_show:
+    key: os_compute_api:os-instance-actions:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-instance-usage-audit-log:
+    key: os_compute_api:os-instance-usage-audit-log
+    value: rule:os_compute_api:os-instance-usage-audit-log:list
+  nova-os_compute_api_os-instance-usage-audit-log_list:
+    key: os_compute_api:os-instance-usage-audit-log:list
+    value: rule:admin_api
+  nova-os_compute_api_os-instance-usage-audit-log_show:
+    key: os_compute_api:os-instance-usage-audit-log:show
+    value: rule:admin_api
+  nova-os_compute_api_os-keypairs_create:
+    key: os_compute_api:os-keypairs:create
+    value: rule:admin_api or user_id:%(user_id)s
+  nova-os_compute_api_os-keypairs_delete:
+    key: os_compute_api:os-keypairs:delete
+    value: rule:admin_api or user_id:%(user_id)s
+  nova-os_compute_api_os-keypairs_index:
+    key: os_compute_api:os-keypairs:index
+    value: rule:admin_api or user_id:%(user_id)s
+  nova-os_compute_api_os-keypairs_show:
+    key: os_compute_api:os-keypairs:show
+    value: rule:admin_api or user_id:%(user_id)s
+  nova-os_compute_api_os-lock-server_lock:
+    key: os_compute_api:os-lock-server:lock
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-lock-server_unlock:
+    key: os_compute_api:os-lock-server:unlock
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-lock-server_unlock_unlock_override:
+    key: os_compute_api:os-lock-server:unlock:unlock_override
+    value: rule:admin_api
+  nova-os_compute_api_os-migrate-server_migrate:
+    key: os_compute_api:os-migrate-server:migrate
+    value: rule:admin_api
+  nova-os_compute_api_os-migrate-server_migrate_live:
+    key: os_compute_api:os-migrate-server:migrate_live
+    value: rule:admin_api
+  nova-os_compute_api_os-migrations_index:
+    key: os_compute_api:os-migrations:index
+    value: rule:admin_api
+  nova-os_compute_api_os-multinic:
+    key: os_compute_api:os-multinic
+    value: rule:os_compute_api:os-multinic:add
+  nova-os_compute_api_os-multinic_add:
+    key: os_compute_api:os-multinic:add
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-multinic_remove:
+    key: os_compute_api:os-multinic:remove
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-networks_list:
+    key: os_compute_api:os-networks:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-networks_show:
+    key: os_compute_api:os-networks:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-networks_view:
+    key: os_compute_api:os-networks:view
+    value: rule:os_compute_api:os-networks:list
+  nova-os_compute_api_os-pause-server_pause:
+    key: os_compute_api:os-pause-server:pause
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-pause-server_unpause:
+    key: os_compute_api:os-pause-server:unpause
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-quota-class-sets_show:
+    key: os_compute_api:os-quota-class-sets:show
+    value: rule:admin_api
+  nova-os_compute_api_os-quota-class-sets_update:
+    key: os_compute_api:os-quota-class-sets:update
+    value: rule:admin_api
+  nova-os_compute_api_os-quota-sets_defaults:
+    key: os_compute_api:os-quota-sets:defaults
+    value: '@'
+  nova-os_compute_api_os-quota-sets_delete:
+    key: os_compute_api:os-quota-sets:delete
+    value: rule:admin_api
+  nova-os_compute_api_os-quota-sets_detail:
+    key: os_compute_api:os-quota-sets:detail
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-quota-sets_show:
+    key: os_compute_api:os-quota-sets:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-quota-sets_update:
+    key: os_compute_api:os-quota-sets:update
+    value: rule:admin_api
+  nova-os_compute_api_os-remote-consoles:
+    key: os_compute_api:os-remote-consoles
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-rescue:
+    key: os_compute_api:os-rescue
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups:
+    key: os_compute_api:os-security-groups
+    value: rule:os_compute_api:os-security-groups:get
+  nova-os_compute_api_os-security-groups_add:
+    key: os_compute_api:os-security-groups:add
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups_create:
+    key: os_compute_api:os-security-groups:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups_delete:
+    key: os_compute_api:os-security-groups:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups_get:
+    key: os_compute_api:os-security-groups:get
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-security-groups_list:
+    key: os_compute_api:os-security-groups:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-security-groups_remove:
+    key: os_compute_api:os-security-groups:remove
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups_rule_create:
+    key: os_compute_api:os-security-groups:rule:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups_rule_delete:
+    key: os_compute_api:os-security-groups:rule:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-security-groups_show:
+    key: os_compute_api:os-security-groups:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-security-groups_update:
+    key: os_compute_api:os-security-groups:update
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-server-diagnostics:
+    key: os_compute_api:os-server-diagnostics
+    value: rule:admin_api
+  nova-os_compute_api_os-server-external-events_create:
+    key: os_compute_api:os-server-external-events:create
+    value: rule:admin_api
+  nova-os_compute_api_os-server-groups_create:
+    key: os_compute_api:os-server-groups:create
+    value: rule:project_member_api
+  nova-os_compute_api_os-server-groups_delete:
+    key: os_compute_api:os-server-groups:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-server-groups_index:
+    key: os_compute_api:os-server-groups:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-server-groups_index_all_projects:
+    key: os_compute_api:os-server-groups:index:all_projects
+    value: rule:admin_api
+  nova-os_compute_api_os-server-groups_show:
+    key: os_compute_api:os-server-groups:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-server-password:
+    key: os_compute_api:os-server-password
+    value: rule:os_compute_api:os-server-password:show
+  nova-os_compute_api_os-server-password_clear:
+    key: os_compute_api:os-server-password:clear
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-server-password_show:
+    key: os_compute_api:os-server-password:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-server-tags_delete:
+    key: os_compute_api:os-server-tags:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-server-tags_delete_all:
+    key: os_compute_api:os-server-tags:delete_all
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-server-tags_index:
+    key: os_compute_api:os-server-tags:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-server-tags_show:
+    key: os_compute_api:os-server-tags:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-server-tags_update:
+    key: os_compute_api:os-server-tags:update
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-server-tags_update_all:
+    key: os_compute_api:os-server-tags:update_all
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-services:
+    key: os_compute_api:os-services
+    value: rule:os_compute_api:os-services:list
+  nova-os_compute_api_os-services_delete:
+    key: os_compute_api:os-services:delete
+    value: rule:admin_api
+  nova-os_compute_api_os-services_list:
+    key: os_compute_api:os-services:list
+    value: rule:admin_api
+  nova-os_compute_api_os-services_update:
+    key: os_compute_api:os-services:update
+    value: rule:admin_api
+  nova-os_compute_api_os-shelve_shelve:
+    key: os_compute_api:os-shelve:shelve
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-shelve_shelve_offload:
+    key: os_compute_api:os-shelve:shelve_offload
+    value: rule:admin_api
+  nova-os_compute_api_os-shelve_unshelve:
+    key: os_compute_api:os-shelve:unshelve
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-simple-tenant-usage_list:
+    key: os_compute_api:os-simple-tenant-usage:list
+    value: rule:admin_api
+  nova-os_compute_api_os-simple-tenant-usage_show:
+    key: os_compute_api:os-simple-tenant-usage:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-suspend-server_resume:
+    key: os_compute_api:os-suspend-server:resume
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-suspend-server_suspend:
+    key: os_compute_api:os-suspend-server:suspend
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-tenant-networks:
+    key: os_compute_api:os-tenant-networks
+    value: rule:os_compute_api:os-tenant-networks:list
+  nova-os_compute_api_os-tenant-networks_list:
+    key: os_compute_api:os-tenant-networks:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-tenant-networks_show:
+    key: os_compute_api:os-tenant-networks:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-unrescue:
+    key: os_compute_api:os-unrescue
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-used-limits:
+    key: os_compute_api:os-used-limits
+    value: rule:os_compute_api:limits:other_project
+  nova-os_compute_api_os-volumes:
+    key: os_compute_api:os-volumes
+    value: rule:os_compute_api:os-volumes:list
+  nova-os_compute_api_os-volumes-attachments_create:
+    key: os_compute_api:os-volumes-attachments:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes-attachments_delete:
+    key: os_compute_api:os-volumes-attachments:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes-attachments_index:
+    key: os_compute_api:os-volumes-attachments:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes-attachments_show:
+    key: os_compute_api:os-volumes-attachments:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes-attachments_swap:
+    key: os_compute_api:os-volumes-attachments:swap
+    value: rule:admin_api
+  nova-os_compute_api_os-volumes-attachments_update:
+    key: os_compute_api:os-volumes-attachments:update
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes_create:
+    key: os_compute_api:os-volumes:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes_delete:
+    key: os_compute_api:os-volumes:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes_detail:
+    key: os_compute_api:os-volumes:detail
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes_list:
+    key: os_compute_api:os-volumes:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes_show:
+    key: os_compute_api:os-volumes:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes_snapshots_create:
+    key: os_compute_api:os-volumes:snapshots:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes_snapshots_delete:
+    key: os_compute_api:os-volumes:snapshots:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_os-volumes_snapshots_detail:
+    key: os_compute_api:os-volumes:snapshots:detail
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes_snapshots_list:
+    key: os_compute_api:os-volumes:snapshots:list
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_os-volumes_snapshots_show:
+    key: os_compute_api:os-volumes:snapshots:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_server-metadata_create:
+    key: os_compute_api:server-metadata:create
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_server-metadata_delete:
+    key: os_compute_api:server-metadata:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_server-metadata_index:
+    key: os_compute_api:server-metadata:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_server-metadata_show:
+    key: os_compute_api:server-metadata:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_server-metadata_update:
+    key: os_compute_api:server-metadata:update
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_server-metadata_update_all:
+    key: os_compute_api:server-metadata:update_all
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_allow_all_filters:
+    key: os_compute_api:servers:allow_all_filters
+    value: rule:admin_api
+  nova-os_compute_api_servers_confirm_resize:
+    key: os_compute_api:servers:confirm_resize
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_create:
+    key: os_compute_api:servers:create
+    value: rule:project_member_api
+  nova-os_compute_api_servers_create_attach_network:
+    key: os_compute_api:servers:create:attach_network
+    value: rule:project_member_api
+  nova-os_compute_api_servers_create_attach_volume:
+    key: os_compute_api:servers:create:attach_volume
+    value: rule:project_member_api
+  nova-os_compute_api_servers_create_forced_host:
+    key: os_compute_api:servers:create:forced_host
+    value: rule:admin_api
+  nova-os_compute_api_servers_create_image:
+    key: os_compute_api:servers:create_image
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_create_image_allow_volume_backed:
+    key: os_compute_api:servers:create_image:allow_volume_backed
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_create_trusted_certs:
+    key: os_compute_api:servers:create:trusted_certs
+    value: rule:project_member_api
+  nova-os_compute_api_servers_create_zero_disk_flavor:
+    key: os_compute_api:servers:create:zero_disk_flavor
+    value: rule:admin_api
+  nova-os_compute_api_servers_delete:
+    key: os_compute_api:servers:delete
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_detail:
+    key: os_compute_api:servers:detail
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_servers_detail_get_all_tenants:
+    key: os_compute_api:servers:detail:get_all_tenants
+    value: rule:admin_api
+  nova-os_compute_api_servers_index:
+    key: os_compute_api:servers:index
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_servers_index_get_all_tenants:
+    key: os_compute_api:servers:index:get_all_tenants
+    value: rule:admin_api
+  nova-os_compute_api_servers_migrations_delete:
+    key: os_compute_api:servers:migrations:delete
+    value: rule:admin_api
+  nova-os_compute_api_servers_migrations_force_complete:
+    key: os_compute_api:servers:migrations:force_complete
+    value: rule:admin_api
+  nova-os_compute_api_servers_migrations_index:
+    key: os_compute_api:servers:migrations:index
+    value: rule:admin_api
+  nova-os_compute_api_servers_migrations_show:
+    key: os_compute_api:servers:migrations:show
+    value: rule:admin_api
+  nova-os_compute_api_servers_reboot:
+    key: os_compute_api:servers:reboot
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_rebuild:
+    key: os_compute_api:servers:rebuild
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_rebuild_trusted_certs:
+    key: os_compute_api:servers:rebuild:trusted_certs
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_resize:
+    key: os_compute_api:servers:resize
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_revert_resize:
+    key: os_compute_api:servers:revert_resize
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_show:
+    key: os_compute_api:servers:show
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_servers_show_host_status:
+    key: os_compute_api:servers:show:host_status
+    value: rule:admin_api or rule:project_reader_api
+  nova-os_compute_api_servers_show_host_status_unknown-only:
+    key: os_compute_api:servers:show:host_status:unknown-only
+    value: rule:admin_api
+  nova-os_compute_api_servers_start:
+    key: os_compute_api:servers:start
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_stop:
+    key: os_compute_api:servers:stop
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_trigger_crash_dump:
+    key: os_compute_api:servers:trigger_crash_dump
+    value: rule:admin_api or rule:project_member_api
+  nova-os_compute_api_servers_update:
+    key: os_compute_api:servers:update
+    value: rule:admin_api or rule:project_member_api
+  nova-project_admin_api:
+    key: project_admin_api
+    value: role:admin and project_id:%(project_id)s
+  nova-project_member_api:
+    key: project_member_api
+    value: role:member and project_id:%(project_id)s
+  nova-project_reader_api:
+    key: project_reader_api
+    value: role:reader and project_id:%(project_id)s
+  nova-rule_admin_or_owner:
+    key: rule:admin_or_owner
+    value: rule:project_member_api
+  nova-system_admin_api:
+    key: system_admin_api
+    value: role:admin and system_scope:all
+  nova-system_admin_or_owner:
+    key: system_admin_or_owner
+    value: rule:system_admin_api or rule:project_member_api
+  nova-system_or_project_reader:
+    key: system_or_project_reader
+    value: rule:system_reader_api or rule:project_reader_api
+  nova-system_reader_api:
+    key: system_reader_api
+    value: role:reader and system_scope:all
+nova::purge_config: false
+nova::rabbit_heartbeat_in_pthread: false
+nova::rabbit_heartbeat_timeout_threshold: 60
+nova::rabbit_use_ssl: 'False'
+nova::scheduler::discover_hosts_in_cells_interval: -1
+nova::scheduler::enable_isolated_aggregate_filtering: false
+nova::scheduler::filter::scheduler_available_filters:
+- nova.scheduler.filters.all_filters
+- trait_based_filter_collection.all_filters
+nova::scheduler::filter::scheduler_enabled_filters:
+- AggregateInstanceExtraSpecsFilter
+- AvailabilityZoneFilter
+- ComputeCapabilitiesFilter
+- ComputeFilter
+- NUMATopologyFilter
+- ImagePropertiesFilter
+- PciPassthroughFilter
+- ServerGroupAntiAffinityFilter
+- ServerGroupAffinityFilter
+- SameHostFilter
+- DifferentHostFilter
+- ServerTraitFilter
+- SameEphemeralBackendFilter
+- ExtraAntiAffinityTopoloyFilter
+nova::scheduler::filter::scheduler_host_subset_size: 1
+nova::scheduler::filter::scheduler_max_attempts: 3
+nova::scheduler::filter::shuffle_best_same_weighed_hosts: false
+nova::scheduler::limit_tenants_to_placement_aggregate: false
+nova::scheduler::placement_aggregate_required_for_tenants: false
+nova::scheduler::query_placement_for_availability_zone: false
+nova::scheduler::query_placement_for_image_type_support: true
+nova::scheduler::query_placement_for_routed_network_aggregates: false
+nova::scheduler::workers: 12
+nova::vncproxy::common::vncproxy_host: tb8.mship3.kddi.info
+nova::vncproxy::common::vncproxy_port: '6080'
+nova::vncproxy::common::vncproxy_protocol: http
+nova::vncproxy::enabled: true
+nova::vncproxy::host: '%{hiera(''internal_api'')}'
+nova::wsgi::apache_api::bind_host: '%{hiera(''internal_api'')}'
+nova::wsgi::apache_api::servername: '%{hiera(''fqdn_internal_api'')}'
+nova::wsgi::apache_api::ssl: false
+nova::wsgi::apache_api::workers: 12
+nova::wsgi::apache_metadata::api_port: '8775'
+nova::wsgi::apache_metadata::bind_host: '%{hiera(''internal_api'')}'
+nova::wsgi::apache_metadata::servername: '%{hiera(''fqdn_internal_api'')}'
+nova::wsgi::apache_metadata::ssl: false
+nova::wsgi::apache_metadata::workers: 12
+nova_enable_db_archive: true
+nova_enable_db_purge: true
+nova_is_additional_cell: false
+octavia::api::default_listener_tls_versions:
+- TLSv1.2
+- TLSv1.3
+octavia::api::default_pool_tls_versions:
+- TLSv1.2
+- TLSv1.3
+octavia::api::enable_proxy_headers_parsing: true
+octavia::api::healthcheck_enabled: true
+octavia::api::host: '%{hiera(''internal_api'')}'
+octavia::api::provider_drivers: 'amphora: The Octavia Amphora driver.,octavia: Deprecated
+  alias of the Octavia Amphora driver.,ovn: Octavia OVN driver.'
+octavia::api::service_name: httpd
+octavia::api::tls_cipher_prohibit_list: []
+octavia::certificates::ca_certificate: /etc/octavia/certs/ca_01.pem
+octavia::certificates::ca_private_key: /etc/octavia/certs/private/cakey.pem
+octavia::certificates::ca_private_key_passphrase: xWoDsdwtBmV8EfStdNYEV2nLO
+octavia::certificates::client_cert: /etc/octavia/certs/client.pem
+octavia::certificates::endpoint_type: internalURL
+octavia::certificates::server_certs_key_passphrase: WPyMNoWya7Ip4oH3gCPntCkvaqtPfLtJ
+octavia::cinder::endpoint_type: internalURL
+octavia::controller::administrative_log_facility: 1
+octavia::controller::amp_boot_network_list: []
+octavia::controller::amp_flavor_id: '65'
+octavia::controller::amp_image_tag: amphora-image
+octavia::controller::amp_ssh_key_name: octavia-ssh-key
+octavia::controller::build_active_retries: 120
+octavia::controller::connection_logging: true
+octavia::controller::connection_max_retries: 120
+octavia::controller::disable_local_log_storage: false
+octavia::controller::enable_ssh_access: true
+octavia::controller::forward_all_logs: false
+octavia::controller::loadbalancer_topology: ACTIVE_STANDBY
+octavia::controller::port_detach_timeout: 300
+octavia::controller::timeout_client_data: 50000
+octavia::controller::timeout_member_connect: 5000
+octavia::controller::timeout_member_data: 50000
+octavia::controller::timeout_tcp_inspect: 0
+octavia::controller::user_log_facility: 0
+octavia::db::database_connection: mysql+pymysql://octavia:T0PX9nQEKMO2mIaDUoSygx2xp@[2001:268:70fd:1000::a000]/octavia?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+octavia::driver_agent::enabled_provider_agents: ovn
+octavia::glance::endpoint_type: internalURL
+octavia::health_manager::heartbeat_key: yCY0gPbyWfiXIxXKHngBP3lot
+octavia::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+octavia::keystone::authtoken::interface: internal
+octavia::keystone::authtoken::memcache_use_advanced_pool: true
+octavia::keystone::authtoken::password: T0PX9nQEKMO2mIaDUoSygx2xp
+octavia::keystone::authtoken::project_domain_name: Default
+octavia::keystone::authtoken::project_name: service
+octavia::keystone::authtoken::region_name: tb8
+octavia::keystone::authtoken::user_domain_name: Default
+octavia::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+octavia::logging::debug: true
+octavia::neutron::endpoint_type: internalURL
+octavia::notification_driver:
+- messagingv2
+octavia::nova::enable_anti_affinity: true
+octavia::nova::endpoint_type: internalURL
+octavia::policy::policies:
+  octavia-load-balancer_admin:
+    key: load-balancer:admin
+    value: role:admin
+  octavia-load-balancer_read:
+    key: load-balancer:read
+    value: role:admin or rule:project-reader
+  octavia-load-balancer_read-global:
+    key: load-balancer:read-global
+    value: role:admin
+  octavia-load-balancer_read-quota:
+    key: load-balancer:read-quota
+    value: role:admin or rule:project-reader
+  octavia-load-balancer_read-quota-global:
+    key: load-balancer:read-quota-global
+    value: role:admin
+  octavia-load-balancer_write:
+    key: load-balancer:write
+    value: role:admin or rule:project-member
+  octavia-load-balancer_write-quota:
+    key: load-balancer:write-quota
+    value: role:admin
+octavia::purge_config: false
+octavia::rabbit_heartbeat_in_pthread: false
+octavia::service_auth::auth_type: password
+octavia::service_auth::auth_url: http://[2001:268:70fd:1000::a000]:5000/v3
+octavia::service_auth::password: T0PX9nQEKMO2mIaDUoSygx2xp
+octavia::service_auth::project_domain_name: Default
+octavia::service_auth::project_name: service
+octavia::service_auth::region_name: tb8
+octavia::service_auth::user_domain_name: Default
+octavia::service_auth::username: octavia
+octavia::worker::manage_nova_flavor: false
+octavia::wsgi::apache::bind_host: '%{hiera(''internal_api'')}'
+octavia::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+octavia::wsgi::apache::ssl: false
+ovn::northbound::port: 6641
+ovn::southbound::port: 6642
+pacemaker::corosync::cluster_name: tripleo_cluster
+pacemaker::corosync::manage_fw: false
+pacemaker::corosync::settle_tries: 360
+pacemaker::resource::bundle::deep_compare: true
+pacemaker::resource::ip::deep_compare: true
+pacemaker::resource::ocf::deep_compare: true
+pacemaker::resource_defaults::defaults:
+  resource-stickiness:
+    value: INFINITY
+placement::db::database_connection: mysql+pymysql://placement:rGKqRZoUn6drq9aT2PdrX4e4Y@[2001:268:70fd:1000::a000]/placement?read_default_file=/etc/my.cnf.d/tripleo.cnf&read_default_group=tripleo
+placement::keystone::authtoken::auth_url: http://[2001:268:70fd:1000::a000]:5000
+placement::keystone::authtoken::interface: internal
+placement::keystone::authtoken::memcache_use_advanced_pool: true
+placement::keystone::authtoken::password: rGKqRZoUn6drq9aT2PdrX4e4Y
+placement::keystone::authtoken::project_name: service
+placement::keystone::authtoken::region_name: tb8
+placement::keystone::authtoken::www_authenticate_uri: http://tb8.mship3.kddi.info:5000
+placement::logging::debug: true
+placement::policy::enforce_new_defaults: false
+placement::policy::enforce_scope: false
+placement::policy::policies:
+  placement-placement_allocation_candidates_list:
+    key: placement:allocation_candidates:list
+    value: rule:admin_api
+  placement-placement_allocations_delete:
+    key: placement:allocations:delete
+    value: rule:admin_api
+  placement-placement_allocations_list:
+    key: placement:allocations:list
+    value: rule:admin_api
+  placement-placement_allocations_manage:
+    key: placement:allocations:manage
+    value: rule:admin_api
+  placement-placement_allocations_update:
+    key: placement:allocations:update
+    value: rule:admin_api
+  placement-placement_reshaper_reshape:
+    key: placement:reshaper:reshape
+    value: rule:admin_api
+  placement-placement_resource_classes_create:
+    key: placement:resource_classes:create
+    value: rule:admin_api
+  placement-placement_resource_classes_delete:
+    key: placement:resource_classes:delete
+    value: rule:admin_api
+  placement-placement_resource_classes_list:
+    key: placement:resource_classes:list
+    value: rule:admin_api
+  placement-placement_resource_classes_show:
+    key: placement:resource_classes:show
+    value: rule:admin_api
+  placement-placement_resource_classes_update:
+    key: placement:resource_classes:update
+    value: rule:admin_api
+  placement-placement_resource_providers_aggregates_list:
+    key: placement:resource_providers:aggregates:list
+    value: rule:admin_api
+  placement-placement_resource_providers_aggregates_update:
+    key: placement:resource_providers:aggregates:update
+    value: rule:admin_api
+  placement-placement_resource_providers_allocations_list:
+    key: placement:resource_providers:allocations:list
+    value: rule:admin_api
+  placement-placement_resource_providers_create:
+    key: placement:resource_providers:create
+    value: rule:admin_api
+  placement-placement_resource_providers_delete:
+    key: placement:resource_providers:delete
+    value: rule:admin_api
+  placement-placement_resource_providers_inventories_create:
+    key: placement:resource_providers:inventories:create
+    value: rule:admin_api
+  placement-placement_resource_providers_inventories_delete:
+    key: placement:resource_providers:inventories:delete
+    value: rule:admin_api
+  placement-placement_resource_providers_inventories_list:
+    key: placement:resource_providers:inventories:list
+    value: rule:admin_api
+  placement-placement_resource_providers_inventories_show:
+    key: placement:resource_providers:inventories:show
+    value: rule:admin_api
+  placement-placement_resource_providers_inventories_update:
+    key: placement:resource_providers:inventories:update
+    value: rule:admin_api
+  placement-placement_resource_providers_list:
+    key: placement:resource_providers:list
+    value: rule:admin_api
+  placement-placement_resource_providers_show:
+    key: placement:resource_providers:show
+    value: rule:admin_api
+  placement-placement_resource_providers_traits_delete:
+    key: placement:resource_providers:traits:delete
+    value: rule:admin_api
+  placement-placement_resource_providers_traits_list:
+    key: placement:resource_providers:traits:list
+    value: rule:admin_api
+  placement-placement_resource_providers_traits_update:
+    key: placement:resource_providers:traits:update
+    value: rule:admin_api
+  placement-placement_resource_providers_update:
+    key: placement:resource_providers:update
+    value: rule:admin_api
+  placement-placement_resource_providers_usages:
+    key: placement:resource_providers:usages
+    value: rule:admin_api
+  placement-placement_traits_delete:
+    key: placement:traits:delete
+    value: rule:admin_api
+  placement-placement_traits_list:
+    key: placement:traits:list
+    value: rule:admin_api
+  placement-placement_traits_show:
+    key: placement:traits:show
+    value: rule:admin_api
+  placement-placement_traits_update:
+    key: placement:traits:update
+    value: rule:admin_api
+  placement-placement_usages:
+    key: placement:usages
+    value: rule:admin_api or rule:project_reader_api
+placement::wsgi::apache::api_port: '8778'
+placement::wsgi::apache::bind_host: '%{hiera(''internal_api'')}'
+placement::wsgi::apache::servername: '%{hiera(''fqdn_internal_api'')}'
+placement::wsgi::apache::ssl: false
+placement::wsgi::apache::workers: 12
+rabbit_ipv6: true
+rabbitmq::admin_enable: false
+rabbitmq::collect_statistics_interval: 30000
+rabbitmq::config_additional_variables:
+  lager: '[{crash_log_count, 0}, { crash_log_date, ""}, { crash_log_size, 0 }]'
+rabbitmq::config_management_variables:
+  rates_mode: none
+rabbitmq::default_pass: AkBDiuW9tDcMZadZGD2gItrjI
+rabbitmq::default_user: guest
+rabbitmq::delete_guest_user: false
+rabbitmq::erlang_cookie: GSUYEzXG1DTwWzP1ZBMv
+rabbitmq::file_limit: 65536
+rabbitmq::interface: '%{hiera(''internal_api'')}'
+rabbitmq::loopback_users: []
+rabbitmq::management_enable: true
+rabbitmq::management_ip_address: 127.0.0.1
+rabbitmq::management_port: 15672
+rabbitmq::nr_ha_queues: 0
+rabbitmq::port: 5672
+rabbitmq::repos_ensure: false
+rabbitmq::service_manage: false
+rabbitmq::ssl: false
+rabbitmq::ssl_cacert: /etc/ipa/ca.crt
+rabbitmq::ssl_depth: 1
+rabbitmq::ssl_erl_dist: false
+rabbitmq::ssl_interface: '%{hiera(''internal_api'')}'
+rabbitmq::ssl_management_cacert: /etc/ipa/ca.crt
+rabbitmq::ssl_only: false
+rabbitmq::ssl_port: 5672
+rabbitmq::tcp_backlog: 4096
+rabbitmq::tcp_keepalive: true
+rabbitmq::use_config_file_for_plugins: true
+rabbitmq::wipe_db_on_cookie_change: true
+rabbitmq_config_variables:
+  cluster_partition_handling: ignore
+  queue_master_locator: <<"min-masters">>
+rabbitmq_environment:
+  LANG: en_US.UTF-8
+  LC_ALL: en_US.UTF-8
+  NODE_IP_ADDRESS: ''
+  NODE_PORT: ''
+  RABBITMQ_CTL_DIST_PORT_MAX: '25683'
+  RABBITMQ_CTL_DIST_PORT_MIN: '25673'
+  RABBITMQ_NODENAME: rabbit@%{hiera('fqdn_internal_api')}
+  RABBITMQ_USE_LONGNAME: 'true'
+  export ERL_EPMD_ADDRESS: '%{hiera(''rabbitmq::interface'')}'
+rabbitmq_kernel_variables:
+  inet_dist_listen_max: '25672'
+  inet_dist_listen_min: '25672'
+  net_ticktime: 15
+redis::bind: '%{hiera(''internal_api'')}'
+redis::daemonize: false
+redis::managed_by_cluster_manager: true
+redis::masterauth: wsdmn8tXD4hKbpA44CqypAjqC
+redis::notify_service: false
+redis::port: 6379
+redis::requirepass: wsdmn8tXD4hKbpA44CqypAjqC
+redis::sentinel::master_name: '%{hiera(''redis_short_bootstrap_node_name'')}'
+redis::sentinel::notification_script: /usr/local/bin/redis-notifications.sh
+redis::sentinel::redis_host: '%{hiera(''redis_bootstrap_node_ip'')}'
+redis::sentinel::sentinel_bind: '%{hiera(''internal_api'')}'
+redis::sentinel_auth_pass: wsdmn8tXD4hKbpA44CqypAjqC
+redis::service_manage: false
+redis::ulimit: 10240
+redis_ipv6: true
+snmp::agentaddress:
+- udp:161
+- udp6:[::1]:161
+snmp::snmpd_options: -LS0-5d
+tripleo::fencing::config:
+  devices:
+  - agent: fence_ipmilan
+    host_mac: b8:3f:d2:34:12:ba
+    params:
+      ipaddr: kyntst1-109s-1-01-19-svdc13i.lab.kyanos.kddi.info
+      lanplus: true
+      login: nfviaas_admin_sa
+      passwd: nFV1aaS2@23!
+      pcmk_host_list: tb8-ctrl-p3i-a1s1-0001p
+  - agent: fence_ipmilan
+    host_mac: b8:3f:d2:37:62:1e
+    params:
+      ipaddr: kyntst1-109s-1-05-17-svdc13i.lab.kyanos.kddi.info
+      lanplus: true
+      login: nfviaas_admin_sa
+      passwd: nFV1aaS2@23!
+      pcmk_host_list: tb8-ctrl-p3i-a1s2-0002p
+  - agent: fence_ipmilan
+    host_mac: b8:3f:d2:2b:05:a8
+    params:
+      ipaddr: kyntst1-109s-1-18-17-svdc13i.lab.kyanos.kddi.info
+      lanplus: true
+      login: nfviaas_admin_sa
+      passwd: nFV1aaS2@23!
+      pcmk_host_list: tb8-ctrl-p3i-a1s3-0003p
+tripleo::fencing::deep_compare: true
+tripleo::firewall::manage_firewall: false
+tripleo::firewall::purge_firewall_rules: false
+tripleo::haproxy::crl_file: null
+tripleo::haproxy::haproxy_log_address: /dev/log
+tripleo::haproxy::haproxy_log_facility: local0
+tripleo::haproxy::haproxy_service_manage: false
+tripleo::haproxy::haproxy_stats: true
+tripleo::haproxy::haproxy_stats_bind_address: '%{hiera(''ctlplane'')}'
+tripleo::haproxy::haproxy_stats_password: 27xPUMcndf4GGEDvDwuABcG9M
+tripleo::haproxy::haproxy_stats_user: admin
+tripleo::haproxy::mysql_clustercheck: true
+tripleo::haproxy::redis_password: wsdmn8tXD4hKbpA44CqypAjqC
+tripleo::pacemaker::force_nic: lo
+tripleo::packages::enable_install: true
+tripleo::profile::base::ceilometer::agent::notification::event_pipeline_publishers:
+- gnocchi://?archive_policy=high
+- gnocchi://
+- panko://
+- notifier://
+- notifier://?topic=alarm.all
+tripleo::profile::base::ceilometer::agent::notification::notifier_enabled: false
+tripleo::profile::base::ceilometer::agent::notification::notifier_event_params:
+  driver: amqp
+  topic: event
+tripleo::profile::base::ceilometer::agent::notification::notifier_events_enabled: false
+tripleo::profile::base::ceilometer::agent::notification::notifier_params:
+  driver: amqp
+  topic: metering
+tripleo::profile::base::ceilometer::agent::notification::pipeline_publishers:
+- gnocchi://
+tripleo::profile::base::cinder::cinder_enable_db_purge: true
+tripleo::profile::base::cinder::volume::cinder_enable_iscsi_backend: false
+tripleo::profile::base::cinder::volume::cinder_enable_nfs_backend: false
+tripleo::profile::base::cinder::volume::cinder_enable_rbd_backend: true
+tripleo::profile::base::cinder::volume::cinder_volume_cluster: ''
+tripleo::profile::base::cinder::volume::iscsi::cinder_iscsi_address: '%{hiera(''ctlplane'')}'
+tripleo::profile::base::cinder::volume::iscsi::cinder_iscsi_helper: lioadm
+tripleo::profile::base::cinder::volume::iscsi::cinder_iscsi_protocol: iscsi
+tripleo::profile::base::cinder::volume::nfs::cinder_nas_secure_file_operations: 'False'
+tripleo::profile::base::cinder::volume::nfs::cinder_nas_secure_file_permissions: 'False'
+tripleo::profile::base::cinder::volume::nfs::cinder_nfs_mount_options: context=system_u:object_r:container_file_t:s0
+tripleo::profile::base::cinder::volume::nfs::cinder_nfs_servers: []
+tripleo::profile::base::cinder::volume::nfs::cinder_nfs_snapshot_support: false
+tripleo::profile::base::cinder::volume::rbd::backend_name:
+- tripleo_ceph
+tripleo::profile::base::cinder::volume::rbd::cinder_rbd_ceph_conf: /etc/ceph/ceph.conf
+tripleo::profile::base::cinder::volume::rbd::cinder_rbd_extra_pools: []
+tripleo::profile::base::cinder::volume::rbd::cinder_rbd_flatten_volume_from_snapshot: false
+tripleo::profile::base::cinder::volume::rbd::cinder_rbd_pool_name: Multi_zone
+tripleo::profile::base::cinder::volume::rbd::cinder_rbd_secret_uuid: 4e4d87cc-7c8a-11ee-b7fe-8b23b0dc773d
+tripleo::profile::base::cinder::volume::rbd::cinder_rbd_user_name: openstack
+tripleo::profile::base::cinder::volume::rbd::multi_config: {}
+tripleo::profile::base::database::mysql::bind_address: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::base::database::mysql::client::enable_ssl: false
+tripleo::profile::base::database::mysql::client::mysql_client_bind_address: '%{hiera(''internal_api'')}'
+tripleo::profile::base::database::mysql::client::ssl_ca: /etc/ipa/ca.crt
+tripleo::profile::base::database::mysql::client_bind_address: '%{hiera(''internal_api'')}'
+tripleo::profile::base::database::mysql::generate_dropin_file_limit: true
+tripleo::profile::base::database::redis::tls_proxy_bind_ip: '%{hiera(''internal_api'')}'
+tripleo::profile::base::database::redis::tls_proxy_fqdn: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::base::database::redis::tls_proxy_port: 6379
+tripleo::profile::base::glance::api::glance_backend_id: default_backend
+tripleo::profile::base::glance::api::glance_store_description: Default glance store
+  backend.
+tripleo::profile::base::glance::api::multistore_config: {}
+tripleo::profile::base::glance::api::tls_proxy_bind_ip: '%{hiera(''internal_api'')}'
+tripleo::profile::base::glance::api::tls_proxy_fqdn: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::base::glance::api::tls_proxy_port: 9292
+tripleo::profile::base::glance::backend::rbd::glance_rbd_ceph_conf_path: /var/lib/tripleo-config/ceph
+tripleo::profile::base::gnocchi::api::gnocchi_backend: rbd
+tripleo::profile::base::gnocchi::api::gnocchi_rbd_ceph_conf_path: /var/lib/tripleo-config/ceph
+tripleo::profile::base::gnocchi::api::incoming_storage_driver: redis
+tripleo::profile::base::haproxy::certificates_specs: {}
+tripleo::profile::base::heat::manage_db_purge: true
+tripleo::profile::base::iscsid::chap_algs: SHA3-256,SHA256,SHA1,MD5
+tripleo::profile::base::keystone::extra_notification_topics: []
+tripleo::profile::base::logging::logrotate::dateext: true
+tripleo::profile::base::logging::logrotate::dateformat: -%Y%m%d%H
+tripleo::profile::base::logging::logrotate::dateyesterday: false
+tripleo::profile::base::logging::logrotate::maxsize: 50M
+tripleo::profile::base::logging::logrotate::purge_after_days: '30'
+tripleo::profile::base::logging::logrotate::rotate: '744'
+tripleo::profile::base::logging::logrotate::rotation: daily
+tripleo::profile::base::lvm::enable_udev: false
+tripleo::profile::base::memcached::enable_internal_memcached_tls: false
+tripleo::profile::base::neutron::server::l3_ha_override: 'True'
+tripleo::profile::base::neutron::server::tls_proxy_bind_ip: '%{hiera(''internal_api'')}'
+tripleo::profile::base::neutron::server::tls_proxy_fqdn: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::base::neutron::server::tls_proxy_port: '9696'
+tripleo::profile::base::octavia::enable_driver_agent: true
+tripleo::profile::base::octavia::provider::ovn::protocol: tcp
+tripleo::profile::base::pacemaker::pcsd_bind_addr: '%{hiera(''internal_api'')}'
+tripleo::profile::base::pacemaker::remote_authkey: UEMHfu2r81VerGIzIWcMdZs2ORsrhA8UctvKXxopP9Hhrxzn45ErUDQqUazMdIclohB6TTtaPGkEbPdMuRugvblS2M7SMwAJW7Mew1CI8q24Johy1hRehBQxxiYpz8ujLXDUzmKnHbVRMK2oZN24KoGps1UzSu7La0D6xIubYP9mB2Xj6x9RpuazOgfiJK2fcMU3AbUnQhcUy4MRIVprlzcgIxEtw06fnQx8KB8cneaPh6ue1jHu719aE0qyhikNMfA9K1LoKSHpFOJDRnam8D3DQvlyxwFF1wRFsVbK0uYJC9ILBp8VFZRjY2MeZ87rzCX1hcoe1v8Ba3NHADmUaBtiMLqWrKHN2vTeX35kxLyBUBgV1aOiK8kZNpt8YkMHdLQcs2t4kUDyUhiM83GtaTwfcaSvRMzN7ik9anyXG6triI1EBXMktopA7P8sIWxQLcWmkVtGTlqjTn2pfw3ZdGVW5z9BqMjOmib3yys9PH2Z7VFjovgSAJsmyNf5tagC5TNuRLA3mM8JvpVHAEWnHbLQb0MK1OeyBYHHy39WHlRYqxzEUPFXKW8hNWPGwmjACeR2qNetQ3tgZ6C8E1nW1DSVYiOr7jOC3Vdranj96qQBgQn85vUJjbnaNcfBg4X0h1aPyJQvxinQuabJWKIVnvjLOslmIR0IU68YVd3f0saTtR241SbE4a6yeXe3JX51xOPwpptaEuooJBnCUgSGt6gRbi7IZfxK1S5qvW0qBtdaRWx3hEnpHsxIFq5WrqUY7YPU5luY7OaeY7FxCH1GNtn9EY1KMI7B8HR3vTijHqj1NNfvRR7GC6I0qYViCn0cvZotdDa60xMOPAzbZRx0s15W53OdSPNsBulBxsfVUrzUCL1HFkA2tzWQmcX0TrIJXt48Aun2liEsQQz08xGovXtm3z232I5dwb6Q3BN6J4Swjo4KfKeoHVEBjhWE8uIDLrlhHnIogNUDGRadzmE2B3HEXFAnu3KXAqxqe5Ah3vwNrrhuUb6XruiVrr63ysXhCZwnAJfJwrSspuV5oRpmGG6GGcbUICkRmNxe3XK1kvgp4aSKBCSPLTqSUwbbSHFvtdfMR0wUpEW5W0kyfFJUHBZb34WwjyDu9Y03PIZr7hrfuSeO7lNQoISBTRlGQrE3TTowKUcOL6ThDUtsrDOiyIFoOzkuoTtcG8Yc297fge0UYq8gLxFcMjK1pxuTEqhFgSGdP2kxQFaHAyaDeV5Zhw5Lk9KmjdKFt41RKR6uLFa78pIkoNqRe4qPES2PqjCryxlL9u2BX2LHBvVeK0lbqdSUr8ZkGlKGwwEFD7fUu2YGIAcZRBcGSiv3v82ua8t0xOpscHtKlV8tTmVuwjPhE5gscsi6vxFHol7oqBoRep8PFQeeohArjwecqhRvTBhkiu6qy1rCHMwgsCfhULf7p75EZy9h7iA48Q3aWye6ssoxmkIwqYAkkuwoFux92FuCMmLRf0yPsPNGlAWciY25zD41aIKgwHKCXn7GugGQgoKsoA6LVETw45QB4ZdM0XdiOHVmBRSrkli4PDCnlOWgMLGR1fSLO6JzZnvto6OMFj0vaPhdExGXSj19OwOmobxKIAR6YVjBYCb9ecJz5MuBvT75xk0sc66GSCXVyhkKVOcuXJ0tYrFuk35WwOZhYws6VYviVVU2fsB7Lzla2bW1ghcmKy53SFUoE1PpNp6DWQyX8L7kiokUlMNcTXESmibVdFIh1sZ5fwnAOuneIIkcGLQSbGFfa9y1nR5X9YoZRaGxKPg3OCGa3j9voVFuaGcLpf7t7jdp1MkyN8jgKQuDeMtPS0Qsy9PuaMoGvOhsyqTI0sYHZwddlYrghWDL9osPFhuJH1X5mtSPOYWYLZ077PiqsILFjP03Wg48hag7XeZ6SRtddeQ6ClxhevsjK9p3HbRMHi5ceJyyOTRPgRcXDFnVvFpelhnOocTZScKROCrETzmgNAtJWKxEKkJ8sg0fVCYimaa4MZHCS9vfQ104VoD9Dq1jyR32z4ouXaImqQcGNtlBYlJWH2sQTWpAyDZp6SmUUqH43OjIo01ySi52P0Zdk8cE674wKBFCin3bOcJM7T2a8nOfoVqbxxXA5c9RbuUKrlGDYEtPbgB60HZwXxaO3bQJJE9pQROlPn3ksidxlq5pVnwFeDWfKZGeEJggWF1uYICIPqwS8jZ6WpwvnRC7rrZme1k6X8kCgI7Jq2PqbpFnMgVR0rpcqTrDJaoGbhGxQCkmaoMGtp2MTxVLyR9QHn5TbD7dieXEWJww9iv4Dk2gVrIzP1sIqgXG0xR6zDiFsbUELo7TILFkEIQa2V6ZDKYq8SHDfBi1fR4xHVevhsX9agnnfMbdnBcrHcRKiM8BXXb2T0KGtgoekIStnVUBaRU0CKhSKnvLwPaRgLID2oyuMY2k4AEhc6ailaPjzC1GqBZgkWCUg2kRFwUfmjSlQ9DWY0FYq06m5FSxJUtQvGLADtArrv7qRc0AJRpIoj8IB2Rsj8ZCFXaotRdM7UCjtlEI04djfPLdqmmWpk4atFE0XC8nTnPd3A3o5PhnS1saE5ywxYIJjdgdYSGupcwuzLiJV6NZZK6p8aM4ftG3Opn4qapKFwk5li1l6R7VaLN8EX5xAdaPqT3wt0g8OMNXwEWbRVkImqVPSyqe5EULT2ZRHzME3dPwOzx3kWC37cpjvS4eORpth9xNTxhTQSj5znrvAbatGcaxMfPqH8SULcTwEk8Z69mb24PF3kwhHXEP96tg5m1DhQ3MN2YokQltnUJDClxTvT9W2WJNXlorqXxfEiVx0dVv94fmYRw4kD9rZghZ6xhwezNwDNlzPcjqYwSXVYFVeBZTKm8frASgcq19GDbLlA8UpAYDN3QvDSfLK7rf5nXZj81iOHNEnXdPK4skFEnptt15dgSpM9XR39skDfLj29WkkiADOAiQCv06oQTiSTbzmP4WuRqkkW4jrmUL8YWiLmJ9QoFhl1kacRbmgRQEQDMjbuBb4hMYULfFgInumtWRMHLxKpra6ImBCy5rURCAXvYBdLb4Z9MqEPIDUb8fvTfSL1qK7rHODjZq52eWDuukQ5RF3SYHIseeUubgjEA9d32om8lHYfwFksP2HmsPitCRlGVOGX97j84pHrq35JwFyS5XPTZJIG8xeTJPrTVXNirRiM23ViG6JMLP8Deoc6JC7EyJHlxDo5WCHdNZaWqVFCddxMNlrrXNGVF3heu7kwvKgze75Nm0mUAEzxuj8VFvSpthfWmCp6mZkrD7NyuOlzSlRL1EbNpMG7jhuAQQAbqgXBNQfbQhNguuUGbJpG9njX0ykguSsc7XikXpHKFZG7dfwmJnP8oiIV7BQBU9BTey7POmrretAh94qeFQg3Ut8L7qhu010I3yG4WSMKeNIOpj4pES46o9R4mpai8cNkT8Ou76KGXrlkhjnuViB9F7BgYJkygGFnZcGRuskD6kTNUxX7skA11LlS3Jk8XCiSqOgN74gD2uytFPi9xdmYDkTJXkLr2UkYtVGX6xFgt13kGWz845vKu87Q5RmK0tcszB0pH4IdriVe2Yxx9ubuI5fk95SrZEQhebulE33gW42d97dIZhmKOPT0AnQVBAsrT1u5oBMx3c01jGm00BK65Wc70nlPF2oaOI1moJIQIyXXtzAygw7mPqXOGSi86ih1aoeOeu3EBLcGqk50b7irTMpdcyA4DbpqMhvQErYVlmvAH3wAsiqTNdBuLVNgGWZIxICov0oeOyrPOeMekQDVURGZ5lOuFbqHyoE4IbDb1rflpUgYQdxFTq8MAbOFCClvNYTrRxPbs8JcPX3vk7F7MvnX0raVvP2YfoQfKOwfTms4ssB5idQayxJ2y2o6ExsUDbcPSGfiqIEohSDpKl9JTkNqNpsrWHYVu3NsZMQKKYlVi5jS5NEn2t6ehA0n7HdVUouEl3SjZRy9fICYejxNJBFdYNqQuxkaKlmMjeDQGH5KHCCt7f1aZV9Uher3JVNlyVqzcrQIPCi0hxlUri55EghEHgg6Ns4i6ovK2T1VB39uyaGYqrpNp5s5K3PbhZDv7gCxOlsX8QwTTT3KZWbZrIAEC2DTNH
+tripleo::profile::base::pacemaker::resource_op_defaults:
+  bundle:
+    name: timeout
+    value: 120s
+tripleo::profile::base::rabbitmq::additional_erl_args: '''+sbwt none +sbwtdcpu none
+  +sbwtdio none'''
+tripleo::profile::base::rabbitmq::enable_internal_tls: false
+tripleo::profile::base::rabbitmq::fips_mode: false
+tripleo::profile::base::snmp::snmpd_password: eB2uNC14I618IbNlF50uNf0m
+tripleo::profile::base::snmp::snmpd_user: ro_snmp_user
+tripleo::profile::pacemaker::cinder::backup_bundle::ceph_conf_path: /var/lib/tripleo-config/ceph
+tripleo::profile::pacemaker::cinder::backup_bundle::cinder_backup_docker_image: cluster.common.tag/cinder-backup:pcmklatest
+tripleo::profile::pacemaker::cinder::backup_bundle::container_backend: podman
+tripleo::profile::pacemaker::cinder::backup_bundle::docker_environment:
+  KOLLA_CONFIG_STRATEGY: COPY_ALWAYS
+tripleo::profile::pacemaker::cinder::backup_bundle::docker_volumes:
+- /etc/hosts:/etc/hosts:ro
+- /etc/localtime:/etc/localtime:ro
+- /etc/pki/ca-trust/extracted:/etc/pki/ca-trust/extracted:ro
+- /etc/pki/ca-trust/source/anchors:/etc/pki/ca-trust/source/anchors:ro
+- /etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro
+- /etc/pki/tls/certs/ca-bundle.trust.crt:/etc/pki/tls/certs/ca-bundle.trust.crt:ro
+- /etc/pki/tls/cert.pem:/etc/pki/tls/cert.pem:ro
+- /dev/log:/dev/log
+- /etc/puppet:/etc/puppet:ro
+- /var/lib/config-data/puppet-generated/cinder:/var/lib/kolla/config_files/src:ro
+- /var/log/containers/cinder:/var/log/cinder:z
+- /var/lib/kolla/config_files/cinder_backup.json:/var/lib/kolla/config_files/config.json:ro
+- /var/lib/config-data/puppet-generated/iscsid/etc/iscsi:/var/lib/kolla/config_files/src-iscsid:ro
+- /var/lib/tripleo-config/ceph:/var/lib/kolla/config_files/src-ceph:z
+- /dev:/dev
+- /run:/run
+- /sys:/sys
+- /lib/modules:/lib/modules:ro
+- /var/lib/cinder:/var/lib/cinder:z
+- /var/lib/iscsi:/var/lib/iscsi:z
+tripleo::profile::pacemaker::cinder::volume_bundle::ceph_conf_path: /var/lib/tripleo-config/ceph
+tripleo::profile::pacemaker::cinder::volume_bundle::cinder_volume_docker_image: cluster.common.tag/cinder-volume:pcmklatest
+tripleo::profile::pacemaker::cinder::volume_bundle::container_backend: podman
+tripleo::profile::pacemaker::cinder::volume_bundle::docker_environment:
+  KOLLA_CONFIG_STRATEGY: COPY_ALWAYS
+tripleo::profile::pacemaker::cinder::volume_bundle::docker_volumes:
+- /etc/hosts:/etc/hosts:ro
+- /etc/localtime:/etc/localtime:ro
+- /etc/pki/ca-trust/extracted:/etc/pki/ca-trust/extracted:ro
+- /etc/pki/ca-trust/source/anchors:/etc/pki/ca-trust/source/anchors:ro
+- /etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro
+- /etc/pki/tls/certs/ca-bundle.trust.crt:/etc/pki/tls/certs/ca-bundle.trust.crt:ro
+- /etc/pki/tls/cert.pem:/etc/pki/tls/cert.pem:ro
+- /dev/log:/dev/log
+- /etc/puppet:/etc/puppet:ro
+- /var/lib/config-data/puppet-generated/cinder:/var/lib/kolla/config_files/src:ro
+- /var/log/containers/cinder:/var/log/cinder:z
+- /var/lib/kolla/config_files/cinder_volume.json:/var/lib/kolla/config_files/config.json:ro
+- /var/lib/config-data/puppet-generated/iscsid/etc/iscsi:/var/lib/kolla/config_files/src-iscsid:ro
+- /var/lib/tripleo-config/ceph:/var/lib/kolla/config_files/src-ceph:z
+- /lib/modules:/lib/modules:ro
+- /dev:/dev
+- /run:/run
+- /sys:/sys
+- /var/lib/cinder:/var/lib/cinder:z
+- /var/lib/iscsi:/var/lib/iscsi:z
+tripleo::profile::pacemaker::clustercheck::bind_address: '%{hiera(''internal_api'')}'
+tripleo::profile::pacemaker::database::mysql::bind_address: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::pacemaker::database::mysql::ca_file: /etc/ipa/ca.crt
+tripleo::profile::pacemaker::database::mysql::gmcast_listen_addr: '%{hiera(''internal_api'')}'
+tripleo::profile::pacemaker::database::mysql_bundle::bind_address: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::pacemaker::database::mysql_bundle::container_backend: podman
+tripleo::profile::pacemaker::database::mysql_bundle::control_port: 3123
+tripleo::profile::pacemaker::database::mysql_bundle::force_ocf: true
+tripleo::profile::pacemaker::database::mysql_bundle::gcomm_cipher: AES128-SHA256
+tripleo::profile::pacemaker::database::mysql_bundle::mariabackup_password: 2epV3oBz6D1zPVYjIGt0vnAaW
+tripleo::profile::pacemaker::database::mysql_bundle::mariabackup_user: mariabackup
+tripleo::profile::pacemaker::database::mysql_bundle::mysql_docker_image: cluster.common.tag/mariadb:pcmklatest
+tripleo::profile::pacemaker::database::mysql_bundle::sst_method: rsync
+tripleo::profile::pacemaker::database::redis::tls_proxy_bind_ip: '%{hiera(''internal_api'')}'
+tripleo::profile::pacemaker::database::redis::tls_proxy_fqdn: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::pacemaker::database::redis::tls_proxy_port: 6379
+tripleo::profile::pacemaker::database::redis_bundle::container_backend: podman
+tripleo::profile::pacemaker::database::redis_bundle::control_port: 3124
+tripleo::profile::pacemaker::database::redis_bundle::force_ocf: true
+tripleo::profile::pacemaker::database::redis_bundle::redis_docker_image: cluster.common.tag/redis:pcmklatest
+tripleo::profile::pacemaker::database::redis_bundle::tls_proxy_bind_ip: '%{hiera(''internal_api'')}'
+tripleo::profile::pacemaker::database::redis_bundle::tls_proxy_fqdn: '%{hiera(''fqdn_internal_api'')}'
+tripleo::profile::pacemaker::database::redis_bundle::tls_proxy_port: 6379
+tripleo::profile::pacemaker::haproxy_bundle::container_backend: podman
+tripleo::profile::pacemaker::haproxy_bundle::haproxy_docker_image: cluster.common.tag/haproxy:pcmklatest
+tripleo::profile::pacemaker::haproxy_bundle::internal_certs_directory: /etc/pki/tls/certs/haproxy
+tripleo::profile::pacemaker::haproxy_bundle::internal_keys_directory: /etc/pki/tls/private/haproxy
+tripleo::profile::pacemaker::haproxy_bundle::tls_mapping: []
+tripleo::profile::pacemaker::haproxy_bundle::tls_mapping_init_bundle: []
+tripleo::profile::pacemaker::rabbitmq_bundle::container_backend: podman
+tripleo::profile::pacemaker::rabbitmq_bundle::control_port: 3122
+tripleo::profile::pacemaker::rabbitmq_bundle::force_ocf: true
+tripleo::profile::pacemaker::rabbitmq_bundle::rabbitmq_docker_image: cluster.common.tag/rabbitmq:pcmklatest
+tripleo::stunnel::foreground: 'yes'
+tripleo::stunnel::manage_service: false
+tripleo::trusted_cas::ca_map: {}
