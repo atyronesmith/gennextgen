@@ -14,8 +14,6 @@ func ProcessConfigSettings(cdl *ConfigDownload) error {
 		if err != nil {
 			return err
 		}
-		csm := make(map[string][]TripleoRoleConfigSetting)
-		cdl.Roles[roleIndex].ConfigSettings = csm
 
 		for k, v := range cfgSet {
 			path := strings.Split(k, "::")
@@ -28,7 +26,7 @@ func ProcessConfigSettings(cdl *ConfigDownload) error {
 			if len(path) > 1 {
 				cs.Section = path[1]
 			}
-			csm[settingKey] = append(csm[settingKey], cs)
+			cdl.Roles[roleIndex].ConfigSettings[settingKey] = append(cdl.Roles[roleIndex].ConfigSettings[settingKey], cs)
 		}
 	}
 

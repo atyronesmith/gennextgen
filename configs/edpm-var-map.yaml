@@ -1,0 +1,3875 @@
+edpm_bond_interface_ovs_options: bond_interface_ovs_options
+# Type: str
+# Description: Binding options to be rendered in a template
+# Required: false
+# Default: bond_mode=active-backup
+# File: config-download/overcloud/group_vars/@role
+# Example: 
+
+edpm_bootstrap_command: ""
+# Type: str
+# Description: Shell command that is executed before any packages are installed by the role.
+# Can be used to register systems using any arbitrary registration command(s).
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_bootstrap_command_done_file: ""
+# Type: path
+# Description: The path of the file that will be used as a marker when the edpm_bootstrap_command
+# has been executed on the node.
+# Required: false
+# Default: /.bootstrap_command_done
+# File: 
+# Example: 
+
+edpm_bootstrap_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_bootstrap_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_bootstrap_fips_fms_status: ""
+# Type: list
+# Description: Map between `fips-mode-setup --is-enabled` exit status
+# and messages, as defined in man page fips-mode-setup(8)
+# Required: false
+# Default: [map[exit_code:0 message:FIPS is enabled] map[exit_code:1 message:FIPS setup is inconsistent] map[exit_code:2 message:FIPS is disabled]]
+# File: 
+# Example: 
+
+edpm_bootstrap_fips_mode: ""
+# Type: str
+# Description: edpm_bootstrap_fips_mode is used to check fips status or enable/disable it
+# can take on the following values:
+# enabled: Enable FIPS
+# disabled: Disable FIPS
+# check: Check the FIPS status (this is the default)
+# Required: false
+# Default: check
+# File: 
+# Example: 
+
+edpm_bootstrap_legacy_network_packages: ""
+# Type: list
+# Description: List of packages that are required for legacy networking to function.
+# NOTE: We are using 'network' service provided by 'network-scripts' (initscripts)
+#       which deprecated in recent releases but os-net-config doesn't support yet
+#       NetworkManager. Until it happens, we need to ensure that network is started
+#       at boot, as it'll take care of restarting the network interfaces managed by
+#       OVS. Note that OVS unit service is already configure to start before
+#       network.service.
+# Required: false
+# Default: [openstack-network-scripts]
+# File: 
+# Example: 
+
+edpm_bootstrap_network_resolvconf_update: ""
+# Type: bool
+# Description: Control resolv.conf management by NetworkManager
+# false = disable NetworkManager resolv.conf update (default)
+# true = enable NetworkManager resolv.conf update
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_bootstrap_network_service: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: NetworkManager
+# File: 
+# Example: 
+
+edpm_bootstrap_packages_bootstrap: ""
+# Type: list
+# Description: List of packages that are requred to bootstrap EDPM.
+# Required: false
+# Default: [driverctl lvm2 crudini jq nftables openstack-selinux os-net-config python3-libselinux python3-pyyaml rsync tmpwatch sysstat iproute-tc ksmtuned systemd-container crypto-policies-scripts grubby]
+# File: 
+# Example: 
+
+edpm_bootstrap_reboot_dir: ""
+# Type: path
+# Description: Path of the reboot_required folder used by `edpm_reboot` role
+# Required: false
+# Default: /var/lib/openstack/reboot_required
+# File: 
+# Example: 
+
+edpm_bootstrap_release_version_package: ""
+# Type: list
+# Description: 
+# Required: false
+# Default: [rhosp-release]
+# File: 
+# Example: 
+
+edpm_bootstrap_selinux_mode: ""
+# Type: str
+# Description: String for SELinux state. One of: disabled, enforcing, permissive
+# Required: false
+# Default: enforcing
+# File: 
+# Example: 
+
+edpm_bootstrap_swap_partition_enabled: ""
+# Type: bool
+# Description: Enable swap partition instead of swap file.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_bootstrap_swap_partition_label: ""
+# Type: str
+# Description: Partition label used to search swap partition on disk.
+# Required: false
+# Default: swap1
+# File: 
+# Example: 
+
+edpm_bootstrap_swap_path: ""
+# Type: path
+# Description: Swap file location.
+# Required: false
+# Default: /swap
+# File: 
+# Example: 
+
+edpm_bootstrap_swap_size_megabytes: ""
+# Type: int
+# Description: Swap file size (in Megabytes).
+# Required: false
+# Default: 1024
+# File: 
+# Example: 
+
+edpm_buildah_packages: ""
+# Type: list
+# Description: Name of buildah package to be installed.
+# Required: false
+# Default: [buildah]
+# File: 
+# Example: 
+
+edpm_ceph_client_files_config_home: ""
+# Type: str
+# Description: Destination of ceph files on the remote machine.
+# Required: false
+# Default: {{ edpm_ceph_client_config_home | default('/var/lib/openstack/config/ceph') }}
+# File: 
+# Example: 
+
+edpm_ceph_client_files_source: ""
+# Type: str
+# Description: Location of the ceph files on `localhost`
+# Required: false
+# Default: /etc/ceph
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_configure_firewall: ""
+# Type: bool
+# Description: Whether or not firewall ports should be opened to allow access to Ceph services hosted on the node being configured. No firewall configurations are made when `false`.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_enabled_services: ""
+# Type: list
+# Description: List of names matching each `name` in the `edpm_ceph_hci_pre_firewall_services` which should have their firewall ports opened. By default only the Ceph RBD (block) service is configured with it's supporting services. If EDPM nodes will host a Ceph cluster with more than just block service, then extend this list. If this list is empty, then no firewall ports for Ceph will be opened.
+# Required: false
+# Default: [ceph_mon ceph_mgr ceph_osd]
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_firewall_services: ""
+# Type: list
+# Description: List of dictionaries describing each Ceph service name (`name`), firewall rule order number (`num`), ranges based on the different ranges defined above (for all variables above matching `edpm_ceph_hci_pre_*_ranges`), and destination port list (`dport`). If the `dport` list contains an interval, e.g. `mix:max`, then all ports between (and including) `min` and `max` will be opened.
+# Required: false
+# Default: [map[dport:[6789 3300] name:ceph_mon num:110 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[6800:7300] name:ceph_osd num:111 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[6800:7300] name:ceph_mgr num:113 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[6800:7300] name:ceph_mds num:112 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[2049] name:ceph_nfs num:120 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[8080 13808] name:ceph_rgw num:122 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[8080] name:ceph_rgw_frontend num:100 ranges:{{ edpm_ceph_hci_pre_rgw_frontend_ranges | list }}] map[dport:[13808] name:ceph_ssl_rgw_frontend num:100 ranges:{{ edpm_ceph_hci_pre_rgw_frontend_ranges | list }}] map[dport:[6800:7300] name:ceph_rbdmirror num:114 ranges:{{ edpm_ceph_hci_pre_rbd_mirror_ranges | list }}] map[dport:[3100 9100 9090 9092 9093 9094 9100 9283] name:ceph_grafana num:123 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[3100] name:ceph_grafana_frontend num:100 ranges:{{ edpm_ceph_hci_pre_grafana_frontend_ranges | list }}] map[dport:[9092] name:ceph_prometheus num:100 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}] map[dport:[9093] name:ceph_alertmanager num:100 ranges:{{ edpm_ceph_hci_pre_storage_ranges | list }}]]
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_firewall_yaml_file: ""
+# Type: str
+# Description: The absolute path to a YAML file on the EDPM node which will be created by the role. The file will be parsed by the edpm_nftables role which creates the actual firewall rule.
+# Required: false
+# Default: /var/lib/edpm-config/firewall/ceph-networks.yaml
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_grafana_frontend_ranges: ""
+# Type: list
+# Description: List of IP address ranges in CIDR notation which can access the frontend Ceph Grafana firewall ports to be opened. If the list is empty, the firewall rule will not specify a source address.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_rbd_mirror_ranges: ""
+# Type: list
+# Description: List of IP address ranges in CIDR notation which can access the frontend Ceph RBD mirror firewall ports to be opened. If the list is empty, the firewall rule will not specify a source address.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_rgw_frontend_ranges: ""
+# Type: list
+# Description: List of IP address ranges in CIDR notation which can access the frontend Ceph RGW firewall ports to be opened. If the list is empty, the firewall rule will not specify a source address.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_ceph_hci_pre_storage_ranges: ""
+# Type: list
+# Description: List of IP address ranges in CIDR notation which can access the Ceph services on the Ceph `public_network` and `cluster_network`. When the firewall ports are opened, if the list is non-empty, then when the firewall rule is created, it will specify the source addresses. If the list is empty, then the firewall rule will not specify a source address.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_container_cli: container_cli
+# Type: str
+# Description: Set the container command line entry-point
+# Required: false
+# Default: {{ container_cli | default('podman') }}
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/upgrade_steps_playbook.yaml
+# Example: podman
+
+edpm_container_default_network_backend: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: netavark
+# File: 
+# Example: 
+
+edpm_container_default_pids_limit: container_default_pids_limit
+# Type: int
+# Description: 
+# Required: false
+# Default: 4096
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: 4096
+
+edpm_container_default_runtime: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: crun
+# File: 
+# Example: 
+
+edpm_container_events_logger_mechanism: container_events_logger_mechanism
+# Type: str
+# Description: 
+# Required: false
+# Default: journald
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: journald
+
+edpm_container_manage_clean_orphans: tripleo_container_manage_clean_orphans
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: false
+
+edpm_container_manage_cli: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: podman
+# File: 
+# Example: 
+
+edpm_container_manage_concurrency: tripleo_container_manage_concurrency
+# Type: int
+# Description: 
+# Required: false
+# Default: 1
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/common_deploy_steps_tasks.yaml
+# Example: 5
+
+edpm_container_manage_config: tripleo_container_manage_config
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/lib/edpm-config/
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: /var/lib/tripleo-config/container-startup-config/step_0
+
+edpm_container_manage_config_id: tripleo_container_manage_config_id
+# Type: str
+# Description: 
+# Required: false
+# Default: edpm
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: frr
+
+edpm_container_manage_config_overrides: ""
+# Type: dict
+# Description: 
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_container_manage_config_patterns: tripleo_container_manage_config_patterns
+# Type: str
+# Description: 
+# Required: false
+# Default: *.json
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: frr.json
+
+edpm_container_manage_healthcheck_disabled: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_container_manage_hide_sensitive_logs: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: {{ hide_sensitive_logs | default(true) }}
+# File: 
+# Example: 
+
+edpm_container_manage_log_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/log/containers/stdouts
+# File: 
+# Example: 
+
+edpm_container_manage_systemd_teardown: tripleo_container_manage_systemd_teardown
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/host-container-puppet-tasks.yaml
+# Example: false
+
+edpm_container_manage_update_config_hash: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_container_registry_insecure_registries: container_registry_insecure_registries
+# Type: list
+# Description: 
+# Required: false
+# Default: []
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/upgrade_tasks_step1.yaml
+# Example: - '[2001:268:2158:ffe0::100]:5000'
+
+edpm_container_registry_login: container_registry_login
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: false
+
+edpm_container_registry_logins: container_registry_logins
+# Type: dict
+# Description: 
+# Required: false
+# Default: map[]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: {}
+
+edpm_container_standalone_common_volumes: ""
+# Type: list
+# Description: List of volumes in a mount point format.
+# Required: false
+# Default: [/etc/hosts:/etc/hosts:ro /etc/localtime:/etc/localtime:ro /etc/pki/ca-trust/extracted:/etc/pki/ca-trust/extracted:ro /etc/pki/ca-trust/source/anchors:/etc/pki/ca-trust/source/anchors:ro /etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro /etc/pki/tls/certs/ca-bundle.trust.crt:/etc/pki/tls/certs/ca-bundle.trust.crt:ro /etc/pki/tls/cert.pem:/etc/pki/tls/cert.pem:ro /dev/log:/dev/log]
+# File: 
+# Example: 
+
+edpm_container_standalone_container_defs: ""
+# Type: dict
+# Description: Parsed container definitions.
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_container_standalone_container_startup_config_dir: ""
+# Type: path
+# Description: Path to configuration directory.
+# Required: false
+# Default: /var/lib/edpm-config/container-startup-config
+# File: 
+# Example: 
+
+edpm_container_standalone_internal_tls_volumes: ""
+# Type: list
+# Description: List of TLS volumes in a mount point format.
+# Required: false
+# Default: [/etc/pki/tls/certs/httpd:/etc/pki/tls/certs/httpd:ro /etc/pki/tls/private/httpd:/etc/pki/tls/private/httpd:ro]
+# File: 
+# Example: 
+
+edpm_container_standalone_kolla_config_dir: ""
+# Type: path
+# Description: Path to Kolla configuration directory.
+# Required: false
+# Default: /var/lib/kolla/config_files
+# File: 
+# Example: 
+
+edpm_container_standalone_kolla_config_files: ""
+# Type: dict
+# Description: Parsed configuration file contents.
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_container_standalone_service: ""
+# Type: str
+# Description: Name of container standalone service
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_container_standalone_volumes: ""
+# Type: list
+# Description: List of volumes formed by concatenation of several other volume list variables.
+# Presence of TLS related mount points is conditioned on `edpm_enable_internal_tls`
+# Required: false
+# Default: {{ edpm_enable_internal_tls | ternary( edpm_container_standalone_common_volumes + edpm_container_standalone_internal_tls_volumes + [edpm_internal_tls_ca_file ~ ':' ~ edpm_internal_tls_ca_file ~ ':ro'], edpm_container_standalone_common_volumes) }}
+# File: 
+# Example: 
+
+edpm_containers_to_rm: tripleo_containers_to_rm
+# Type: list
+# Description: List of containers to delete
+# Required: false
+# Default: {{ containers_to_rm | default([]) }}
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/Controller-TypeC1.3i-p3i-AZa3-01/upgrade_tasks_step1.yaml
+# Example: - redis_init_bundle
+
+edpm_ddp_module: ""
+# Type: str
+# Description: DDP module name.
+# Required: false
+# Default: ice
+# File: 
+# Example: 
+
+edpm_ddp_package: ddp_package
+# Type: str
+# Description: Required DDP package.
+# Required: false
+# Default: ddp
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ddp
+
+edpm_ddp_package_path: ""
+# Type: str
+# Description: DDP package path.
+# Required: false
+# Default: /lib/firmware/intel/ice
+# File: 
+# Example: 
+
+edpm_debug: debug
+# Type: bool
+# Description: Sets `__OS_DEBUG` environment variable for the `edpm_nova_compute` role.
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/upgrade_steps_playbook.yaml
+# Example: False
+
+edpm_deploy_identifier: deploy_identifier
+# Type: str
+# Description: Sets `EDPM_DEPLOY_IDENTIFIER` environment variable.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/upgrade_steps_playbook.yaml
+# Example: 1709216782
+
+edpm_derive_pci_device_spec_conf_file: ""
+# Type: str
+# Description: Generated file with derived device_spec config
+# Required: false
+# Default: 20-sriov-device-spec.conf
+# File: 
+# Example: 
+
+edpm_derive_pci_device_spec_physmap_file: ""
+# Type: str
+# Description: Optional string phys_dev_mapping
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_derive_sriov_device_spec_list: ""
+# Type: list
+# Description: Sriov device spec list.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_download_cache_container_images: ""
+# Type: bool
+# Description: Enable caching of container images
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_download_cache_packages: ""
+# Type: bool
+# Description: Enable caching of packages
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_download_role_install_requirements: ""
+# Type: bool
+# Description: Download and install role dependencies
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_enable_chassis_extport: ""
+# Type: bool
+# Description: Mark Chassis as eligible for scheduling OVN's external ports
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_enable_chassis_gw: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_enable_hw_offload: enable_hw_offload
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: false
+
+edpm_enable_internal_tls: enable_internal_tls
+# Type: bool
+# Description: Enable internal TLS
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/global_vars.yaml
+# Example: false
+
+edpm_frr_bfd: tripleo_frr_bfd
+# Type: bool
+# Description: Configures the detection multiplier to determine packet loss.
+# The remote transmission interval will be multiplied by this
+# value to determine the connection loss detection timer.
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: false
+
+edpm_frr_bfd_detect_multiplier: ""
+# Type: int
+# Description: Configures the detection multiplier to determine packet loss.
+# The remote transmission interval will be multiplied by this
+# value to determine the connection loss detection timer.
+# Required: false
+# Default: 10
+# File: 
+# Example: 
+
+edpm_frr_bfd_receive_interval: ""
+# Type: int
+# Description: Configures the minimum interval that this system is capable of receiving control packets. (milliseconds)
+# Required: false
+# Default: 500
+# File: 
+# Example: 
+
+edpm_frr_bfd_transmit_interval: ""
+# Type: int
+# Description: The minimum transmission interval (less jitter) that this system wants to use to send BFD control packets. (milliseconds)
+# Required: false
+# Default: 500
+# File: 
+# Example: 
+
+edpm_frr_bgp: tripleo_frr_bgp
+# Type: bool
+# Description: Enable bgpd daemon.
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: true
+
+edpm_frr_bgp_asn: tripleo_frr_bgp_asn
+# Type: int
+# Description: Default BGP ASN. Verify that it is correct for your use case.
+# Required: false
+# Default: 64999
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: 4201036707
+
+edpm_frr_bgp_expose_only_host: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_frr_bgp_ipv4: tripleo_frr_bgp_ipv4
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: false
+
+edpm_frr_bgp_ipv4_allowas_in: tripleo_frr_bgp_ipv4_allowas_in
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: false
+
+edpm_frr_bgp_ipv4_src_network: tripleo_frr_bgp_ipv4_src_network
+# Type: str
+# Description: 
+# Required: false
+# Default: ctlplane
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: ctlplane
+
+edpm_frr_bgp_ipv6: tripleo_frr_bgp_ipv6
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: true
+
+edpm_frr_bgp_ipv6_allowas_in: tripleo_frr_bgp_ipv6_allowas_in
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: false
+
+edpm_frr_bgp_ipv6_src_network: tripleo_frr_bgp_ipv6_src_network
+# Type: str
+# Description: 
+# Required: false
+# Default: ctlplane
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: internal_api
+
+edpm_frr_bgp_l2vpn: tripleo_frr_bgp_l2vpn
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: false
+
+edpm_frr_bgp_l2vpn_ebgp_multihop: tripleo_frr_bgp_l2vpn_ebgp_multihop
+# Type: int
+# Description: 
+# Required: false
+# Default: 0
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: 0
+
+edpm_frr_bgp_l2vpn_peers: tripleo_frr_bgp_l2vpn_peers
+# Type: list
+# Description: List of VPN peer IPv4 addresses.
+# Required: false
+# Default: [192.168.0.1 192.168.0.2]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: []
+
+edpm_frr_bgp_l2vpn_peers_scope: tripleo_frr_bgp_l2vpn_peers_scope
+# Type: str
+# Description: 
+# Required: false
+# Default: external
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: external
+
+edpm_frr_bgp_l2vpn_uplink_activate: tripleo_frr_bgp_l2vpn_uplink_activate
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: true
+
+edpm_frr_bgp_learning_routes: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_frr_bgp_neighbor_password: ""
+# Type: str
+# Description: BGP RFCs only cover md5 auth for now, so setting this
+# won't work on a FIPS-enabled environment
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_frr_bgp_neighbor_ttl_security_hops: tripleo_frr_bgp_neighbor_ttl_security_hops
+# Type: int
+# Description: Security feature for limiting potential DOS attacks.
+# The amount is subtracted from packet TTL.
+# Required: false
+# Default: 1
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: 0
+
+edpm_frr_bgp_peers: ""
+# Type: list
+# Description: List of IPs or hostnames FRR should peer with
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_frr_bgp_uplinks: tripleo_frr_bgp_uplinks
+# Type: list
+# Description: 
+# Required: false
+# Default: [nic1]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: - nic1
+
+edpm_frr_bgp_uplinks_scope: tripleo_frr_bgp_uplinks_scope
+# Type: str
+# Description: 
+# Required: false
+# Default: internal
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: external
+
+edpm_frr_conf_custom_globals: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_frr_conf_custom_ipv4: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_frr_conf_custom_ipv6: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_frr_conf_custom_router_bgp: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_frr_config_basedir: tripleo_frr_config_basedir
+# Type: path
+# Description: Path to FRR configuration directory.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/frr
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: /var/lib/config-data/ansible-generated/frr
+
+edpm_frr_defaults: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: traditional
+# File: 
+# Example: 
+
+edpm_frr_hostname: ""
+# Type: str
+# Description: Dynamically retrieved from ansible facts.
+# Required: false
+# Default: {{ ansible_facts['hostname'] }}
+# File: 
+# Example: 
+
+edpm_frr_image: ""
+# Type: str
+# Description: URL to openstack-frr container image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-frr:current-podified
+# File: 
+# Example: 
+
+edpm_frr_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_frr_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_frr_log_level: tripleo_frr_log_level
+# Type: str
+# Description: Log level settings.
+# Required: false
+# Default: informational
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: informational
+
+edpm_frr_log_timestamp_precision: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 3
+# File: 
+# Example: 
+
+edpm_frr_version: ""
+# Type: float
+# Description: 
+# Required: false
+# Default: 7
+# File: 
+# Example: 
+
+edpm_frr_volumes: ""
+# Type: list
+# Description: List of FRR volumes in a mountpoint form.
+# Required: false
+# Default: [/etc/hosts:/etc/hosts:ro /etc/localtime:/etc/localtime:ro /dev/log:/dev/log:rw /etc/pki/ca-trust/extracted:/etc/pki/ca-trust/extracted:ro /etc/pki/ca-trust/source/anchors:/etc/pki/ca-trust/source/anchors:ro /etc/pki/tls/certs/ca-bundle.crt:/etc/pki/tls/certs/ca-bundle.crt:ro /etc/pki/tls/certs/ca-bundle.trust.crt:/etc/pki/tls/certs/ca-bundle.trust.crt:ro /etc/pki/tls/cert.pem:/etc/pki/tls/cert.pem:ro /var/lib/kolla/config_files/frr.json:/var/lib/kolla/config_files/config.json:ro /var/lib/config-data/ansible-generated/frr:/var/lib/kolla/config_files/src:ro /var/log/containers/frr:/var/log/frr:z /run/frr:/run/frr:shared,z]
+# File: 
+# Example: 
+
+edpm_frr_watchfrr: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_frr_watchfrr_options: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_frr_zebra: tripleo_frr_zebra
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
+# Example: true
+
+edpm_frr_zebra_nht_resolve_via_default: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_internal_tls_ca_file: ""
+# Type: path
+# Description: Path to TLS certificate.
+# Required: false
+# Default: /etc/ipa/ca.crt
+# File: 
+# Example: 
+
+edpm_iscsid_chap_algs: ""
+# Type: str
+# Description: List of allowed CHAP algorithms.
+# Required: false
+# Default: SHA3-256,SHA256,SHA1,MD5
+# File: 
+# Example: 
+
+edpm_iscsid_config_volume: ""
+# Type: path
+# Description: Path to iscsid config directory.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/iscsid
+# File: 
+# Example: 
+
+edpm_iscsid_debug: ""
+# Type: bool
+# Description: Produce additional text messages describing role operation.
+# Set to false by default using following template:
+# {{ (ansible_verbosity | int) >= 2 | bool }}
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_iscsid_image: ""
+# Type: str
+# Description: URL of the iscsid container image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-iscsid:current-podified
+# File: 
+# Example: 
+
+edpm_iscsid_image_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_iscsid_image_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_iscsid_volumes: ""
+# Type: list
+# Description: List of iscsid volume mounts with permissions.
+# Required: false
+# Default: [/var/lib/kolla/config_files/iscsid.json:/var/lib/kolla/config_files/config.json:ro /dev:/dev /run:/run /sys:/sys /lib/modules:/lib/modules:ro /etc/iscsi:/etc/iscsi:z /etc/target:/etc/target:z /var/lib/iscsi:/var/lib/iscsi:z]
+# File: 
+# Example: 
+
+edpm_kernel_args: tripleo_kernel_args
+# Type: str
+# Description: Grub kernel args.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
+# Example: iommu=pt intel_iommu=on
+
+edpm_kernel_defer_reboot: tripleo_kernel_defer_reboot
+# Type: bool
+# Description: Do not reboot, even if it is required for changes to take effect.
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: false
+
+edpm_kernel_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_kernel_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_kernel_enable_ksm: ""
+# Type: bool
+# Description: Enable/Disable KSM (disabling it unloads all shared PageKSM!)
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_kernel_extra_modules: ""
+# Type: dict
+# Description: Additional kernel modules to load
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_kernel_extra_packages: ""
+# Type: list
+# Description: Additional packages to install before handling kernel modules.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_kernel_hugepages: tripleo_kernel_hugepages
+# Type: dict
+# Description: Hugepages configuration dictionary.
+# Required: false
+# Default: map[]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: {}
+
+edpm_kernel_hugepages_remove: tripleo_kernel_hugepages_remove
+# Type: bool
+# Description: Remove hugepages setting from kernel args.
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: false
+
+edpm_kernel_sysctl_extra_settings: ""
+# Type: dict
+# Description: Additional sysctl settings.
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_libvirt_ceph_path: ""
+# Type: str
+# Description: The path to the ceph config files.
+# Required: false
+# Default: /var/lib/openstack/config/ceph
+# File: 
+# Example: 
+
+edpm_libvirt_image_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_libvirt_image_download_retries: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_libvirt_old_tripleo_compute_sevices: ""
+# Type: list
+# Description: List of tripleo libvirt services to stop during EDPM adoption
+# Required: false
+# Default: [tripleo_nova_libvirt.target tripleo_nova_virtlogd_wrapper.service tripleo_nova_virtnodedevd.service tripleo_nova_virtproxyd.service tripleo_nova_virtqemud.service tripleo_nova_virtsecretd.service tripleo_nova_virtstoraged.service]
+# File: 
+# Example: 
+
+edpm_libvirt_packages: ""
+# Type: list
+# Description: The list of packages to install for libvirt.
+# Required: false
+# Default: [libvirt {{edpm_libvirt_range}} libvirt-admin {{edpm_libvirt_range}} libvirt-client {{edpm_libvirt_range}} libvirt-daemon {{edpm_libvirt_range}} qemu-kvm qemu-img libguestfs libseccomp swtpm swtpm-tools edk2-ovmf ceph-common]
+# File: 
+# Example: 
+
+edpm_libvirt_range: ""
+# Type: str
+# Description: The version range for libvirt package.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_libvirt_services: libvirt_services
+# Type: list
+# Description: The list of libvirt services to run.
+# Required: false
+# Default: [virtlogd virtnodedevd virtproxyd virtqemud virtsecretd]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: false
+
+edpm_libvirt_tls_certs_enabled: ""
+# Type: bool
+# Description: Boolean to specify whether TLS certs are enabled.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_logrotate_crond_compress: ""
+# Type: bool
+# Description: Configures the logrotate compress parameter.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_logrotate_crond_config_dir: ""
+# Type: path
+# Description: Path to the crond config directory.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/crond
+# File: 
+# Example: 
+
+edpm_logrotate_crond_config_use_ansible: ""
+# Type: bool
+# Description: Should the logrotate crond be configured by the role?
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_logrotate_crond_copytruncate: ""
+# Type: bool
+# Description: Configures the logrotate copytruncate parameter.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_logrotate_crond_cronie_package: ""
+# Type: str
+# Description: Name of the package installed by the role
+# Required: false
+# Default: cronie
+# File: 
+# Example: 
+
+edpm_logrotate_crond_dateext: ""
+# Type: str
+# Description: Configures the dateext parameter.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_logrotate_crond_dateformat: ""
+# Type: str
+# Description: Configures the dateformat parameter used with dateext parameter.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_logrotate_crond_dateyesterday: ""
+# Type: str
+# Description: Configures the dateyesterday parameter used with dateext parameter.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_logrotate_crond_delaycompress: ""
+# Type: bool
+# Description: Configures the logrotate delaycompress parameter.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_logrotate_crond_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_logrotate_crond_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_logrotate_crond_image: ""
+# Type: str
+# Description: URL of the cron image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-cron:current-podified
+# File: 
+# Example: 
+
+edpm_logrotate_crond_maxsize: ""
+# Type: str
+# Description: Configures the logrotate maxsize parameter.
+# Required: false
+# Default: 10M
+# File: 
+# Example: 
+
+edpm_logrotate_crond_minsize: ""
+# Type: int
+# Description: Configures the logrotate minsize parameter.
+# Required: false
+# Default: 1
+# File: 
+# Example: 
+
+edpm_logrotate_crond_notifempty: ""
+# Type: bool
+# Description: Configures the logrotate notifempty parameter.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_logrotate_crond_podman_pid: ""
+# Type: str
+# Description: Pid namespace for podman container. Only change for testing.
+# Required: false
+# Default: host
+# File: 
+# Example: 
+
+edpm_logrotate_crond_purge_after_days: ""
+# Type: int
+# Description: Enforces life time (days) of rotated and compressed files. Overrides the rotation and rotate settings.
+# Required: false
+# Default: 14
+# File: 
+# Example: 
+
+edpm_logrotate_crond_rotate: ""
+# Type: int
+# Description: Configures the logrotate rotate parameter.
+# Required: false
+# Default: 14
+# File: 
+# Example: 
+
+edpm_logrotate_crond_rotation: ""
+# Type: str
+# Description: Configures the logrotate rotation interval.
+# Required: false
+# Default: daily
+# File: 
+# Example: 
+
+edpm_logrotate_crond_volumes: ""
+# Type: list
+# Description: List of crond volumes in a mount point form. The `ansible-generated` volume location is based on value of the `edpm_logrotate_crond_config_dir` variable.
+# Required: false
+# Default: [/var/lib/kolla/config_files/logrotate_crond.json:/var/lib/kolla/config_files/config.json:ro /var/lib/config-data/ansible-generated/crond:/var/lib/kolla/config_files/src:ro /var/log/containers:/var/log/containers:z]
+# File: 
+# Example: 
+
+edpm_multipathd_command: ""
+# Type: str
+# Description: The command to start the multipathd daemon.
+# Required: false
+# Default: /usr/sbin/multipathd -d
+# File: 
+# Example: 
+
+edpm_multipathd_custom_config_dir: ""
+# Type: str
+# Description: Directory used by the ansibleee-runner pod to install a custom multipath.conf file.
+# Required: false
+# Default: /runner/multipath
+# File: 
+# Example: 
+
+edpm_multipathd_custom_config_file: ""
+# Type: str
+# Description: Fully qualified path of a local multipath.conf file to be installed on the overcloud nodes. By default, a minimal multipath.conf file will be installed. NOTE - Other TripleO multipath parameters will override any corresponding value in the local custom config file. For example, if MultipathdEnableUserFriendlyNames is False, the files on the overcloud nodes will be updated match, even if the setting is enabled in the local custom file.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_multipathd_enable: ""
+# Type: bool
+# Description: Whether to enable the multipath daemon.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_multipathd_find_multipaths: ""
+# Type: bool
+# Description: Whether to automatically create a multipath device for each path.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_multipathd_image: ""
+# Type: str
+# Description: URL of the multipathd image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-multipathd:current-podified
+# File: 
+# Example: 
+
+edpm_multipathd_image_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_multipathd_image_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_multipathd_recheck_wwid: ""
+# Type: bool
+# Description: Whether to recheck the path WWID when a failed path is restored.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_multipathd_restart_sentinel: ""
+# Type: str
+# Description: Path to the sentinel file that is used to signal when the multipath daemon needs to be restarted.
+# Required: false
+# Default: /etc/multipath/.multipath_restart_required
+# File: 
+# Example: 
+
+edpm_multipathd_skip_kpartx: ""
+# Type: bool
+# Description: Whether to skip automatically creating partitions on the device.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_multipathd_user_friendly_names: ""
+# Type: bool
+# Description: Whether to enable assigning a user friendly name to each path.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_multipathd_volumes: ""
+# Type: list
+# Description: List of volumes in a mount point format.
+# Required: false
+# Default: [/var/lib/kolla/config_files/multipathd.json:/var/lib/kolla/config_files/config.json:ro /dev:/dev /run/udev:/run/udev /sys:/sys /lib/modules:/lib/modules:ro /etc/iscsi:/etc/iscsi:ro /var/lib/iscsi:/var/lib/iscsi:z /etc/multipath:/etc/multipath:z /etc/multipath.conf:/etc/multipath.conf:ro]
+# File: 
+# Example: 
+
+edpm_network_config_async_poll: ""
+# Type: int
+# Description: How often will the edpm_os_net_config module be polled.
+# Required: false
+# Default: 3
+# File: 
+# Example: 
+
+edpm_network_config_async_timeout: ""
+# Type: int
+# Description: Time before edpm_os_net_config call times out.
+# Required: false
+# Default: 300
+# File: 
+# Example: 
+
+edpm_network_config_debug: ""
+# Type: bool
+# Description: Debugging output enabled
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_network_config_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_network_config_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_network_config_hide_sensitive_logs: tripleo_network_config_hide_sensitive_logs
+# Type: bool
+# Description: Hide logs of potentially sensitive nature.
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/deploy_steps_network_deployments_playbook.yaml
+# Example: false
+
+edpm_network_config_manage_service: ""
+# Type: bool
+# Description: Enable the network service or not
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_network_config_nmstate: ""
+# Type: bool
+# Description: If enabled, use nmstate and network manager for network configuration.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_network_config_os_net_config_mappings: tripleo_network_config_os_net_config_mappings
+# Type: dict
+# Description: Per node and/or per node group configuration map. Used by the edpm_os_net_config_mappings module.
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_network_config_safe_defaults: ""
+# Type: bool
+# Description: If enabled, safe defaults (DHCP for all interfaces) will be applied in case of failing while applying the provided net config.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_network_config_systemrole_nmstate_dependencies: ""
+# Type: list
+# Description: Packages needed by nmstate (via system-role)
+# Required: false
+# Default: [NetworkManager-ovs]
+# File: 
+# Example: 
+
+edpm_network_config_template: tripleo_network_config_template
+# Type: str
+# Description: Which settings template should be rendered.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_network_config_tool: ""
+# Type: str
+# Description: Which network config tool should be used. The `nmstate` will call `systemroles.network`.
+# Required: false
+# Default: os-net-config
+# File: 
+# Example: 
+
+edpm_network_config_update: ""
+# Type: bool
+# Description: Apply NetworkConfig or not
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_DEFAULT_debug: ""
+# Type: bool
+# Description: Enable or disable DEBUG mode in the Neutron DHCP agent
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_DEFAULT_rpc_response_timeout: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_DEFAULT_transport_url: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_AGENT_report_interval: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 300
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_AGENT_root_helper: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_bulk_reload_interval: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 0
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dhcp_broadcast_reply: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dhcp_driver: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: neutron.agent.linux.dhcp.Dnsmasq
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dnsmasq_base_log_dir: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dnsmasq_dns_servers: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dnsmasq_enable_addr6_list: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dnsmasq_lease_max: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 16777216
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_dnsmasq_local_resolv: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_enable_isolated_metadata: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_enable_metadata_network: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_force_metadata: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/lib/neutron
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_num_sync_threads: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 4
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_resync_interval: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_resync_throttle: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 1
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_DEFAULT_state_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/lib/neutron
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_config_dir: ""
+# Type: str
+# Description: The path to the directory containing Neutron DHCP agent config
+# files.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/neutron-dhcp-agent
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_config_src: ""
+# Type: str
+# Description: The path to the directory containing source of the Neutron DHCP
+# agent configs.
+# Required: false
+# Default: /var/lib/openstack/configs/neutron-dhcp
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_agent_lib_dir: ""
+# Type: str
+# Description: The path to the directory containing files required by the Neutron DHCP
+# agent, like e.g. sidecar container wrappers.
+# Required: false
+# Default: /var/lib/neutron
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_common_volumes: ""
+# Type: list
+# Description: List of volumes in a mount point form.
+# Required: false
+# Default: [/run/netns:/run/netns:shared {{ edpm_neutron_dhcp_agent_config_dir }}:/etc/neutron.conf.d:z {{ edpm_neutron_dhcp_agent_lib_dir }}:/var/lib/neutron:shared,z /var/lib/kolla/config_files/neutron_dhcp_agent.json:/var/lib/kolla/config_files/config.json:ro /var/log/containers/neutron:/var/log/neutron:z /run/openvswitch:/run/openvswitch:shared,z {{ edpm_neutron_dhcp_agent_lib_dir }}/dhcp_agent_haproxy_wrapper:/usr/local/bin/haproxy:ro {{ edpm_neutron_dhcp_agent_lib_dir }}/dhcp_agent_dnsmasq_wrapper:/usr/local/bin/dnsmasq:ro {{ edpm_neutron_dhcp_agent_lib_dir }}/kill_scripts:/etc/neutron/kill_scripts:ro]
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_image: ""
+# Type: str
+# Description: Neutron DHCP agent container image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-neutron-dhcp-agent:current-podified
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_oslo_concurrency_lock_patch: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: $state_path/lock
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_oslo_messaging_rabbit_heartbeat_timeout_threshold: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_oslo_middleware_enable_proxy_headers_parsing: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_daemon_timeout: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 600
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_exec_dirs: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /sbin,/usr/sbin,/bin,/usr/bin,/usr/local/bin,/usr/local/sbin,/etc/neutron/kill_scripts
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_filters_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /usr/share/neutron/rootwrap
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_rlimit_nofile: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 1024
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_syslog_log_facility: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: syslog
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_syslog_log_level: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: ERROR
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_rootwrap_DEFAULT_use_syslog: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_sidecar_debug: ""
+# Type: bool
+# Description: Enable or disable DEBUG mode in the sidecar wrappers scripts
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_sidecar_dnsmasq_image_name: ""
+# Type: str
+# Description: Image used to spawn dnsmasq sidecar containers.
+# Required: false
+# Default: {{ edpm_neutron_dhcp_image }}
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_sidecar_haproxy_image_name: ""
+# Type: str
+# Description: Image used to spawn haproxy sidecar containers.
+# Required: false
+# Default: {{ edpm_neutron_dhcp_image }}
+# File: 
+# Example: 
+
+edpm_neutron_dhcp_tls_enabled: ""
+# Type: bool
+# Description: Should TLS cacerts be configured for neutron dhcp
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_DEFAULT_debug: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: True
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_DEFAULT_metadata_proxy_shared_secret: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_DEFAULT_metadata_workers: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 2
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_DEFAULT_nova_metadata_host: ""
+# Type: str
+# Description: Nova Metadata host to forward metadata requests to.
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_DEFAULT_nova_metadata_protocol: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: http
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_DEFAULT_state_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/lib/neutron
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_agent_report_interval: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 300
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_agent_root_helper: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_config_dir: ""
+# Type: str
+# Description: The directory that contains configuration files for Neutron OVN Metadata Agent.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/neutron-ovn-metadata-agent
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_image: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-neutron-metadata-agent-ovn:current-podified
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_lib_dir: ""
+# Type: str
+# Description: The path to the directory containing files required by the Neutron OVN metadata
+# agent, like e.g. sidecar container wrappers.
+# Required: false
+# Default: /var/lib/neutron
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_log_dir: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/log/neutron
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_oslo_concurrency_lock_patch: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: $state_path/lock
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_ovn_ovn_sb_connection: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_ovn_ovsdb_probe_interval: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 60000
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_ovs_ovsdb_connection: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: tcp:127.0.0.1:6640
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_ovs_ovsdb_connection_timeout: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 180
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_daemon_timeout: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 600
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_exec_dirs: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /sbin,/usr/sbin,/bin,/usr/bin,/usr/local/bin,/usr/local/sbin,/etc/neutron/kill_scripts
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_filters_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /usr/share/neutron/rootwrap
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_rlimit_nofile: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 1024
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_syslog_log_facility: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: syslog
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_syslog_log_level: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: ERROR
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_rootwrap_DEFAULT_use_syslog: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: False
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_sidecar_debug: ""
+# Type: bool
+# Description: Enable or disable DEBUG mode in the sidecar wrappers scripts
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_sidecar_haproxy_image_name: ""
+# Type: str
+# Description: Image used to spawn haproxy sidecar containers.
+# Required: false
+# Default: {{ edpm_neutron_metadata_agent_image }}
+# File: 
+# Example: 
+
+edpm_neutron_metadata_agent_tls_enabled: ""
+# Type: bool
+# Description: Enable TLS for ovnsb connection
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_metadata_common_volumes: ""
+# Type: list
+# Description: 
+# Required: false
+# Default: [/run/openvswitch:/run/openvswitch:z {{ edpm_neutron_metadata_agent_config_dir }}:/etc/neutron.conf.d:z /run/netns:/run/netns:shared /var/log/containers/neutron:/var/log/neutron:z /var/lib/kolla/config_files/ovn_metadata_agent.json:/var/lib/kolla/config_files/config.json:ro {{ edpm_neutron_metadata_agent_lib_dir }}:/var/lib/neutron:shared,z {{ edpm_neutron_metadata_agent_lib_dir }}/ovn_metadata_haproxy_wrapper:/usr/local/bin/haproxy:ro {{ edpm_neutron_metadata_agent_lib_dir }}/kill_scripts:/etc/neutron/kill_scripts:ro]
+# File: 
+# Example: 
+
+edpm_neutron_metadata_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_metadata_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_metadata_tls_volumes: ""
+# Type: list
+# Description: 
+# Required: false
+# Default: [/var/lib/openstack/certs/neutron_metadata_agent/ca.crt:/etc/pki/tls/certs/ovndbca.crt:ro,z /var/lib/openstack/certs/neutron_metadata_agent/tls.crt:/etc/pki/tls/certs/ovndb.crt:ro,z /var/lib/openstack/certs/neutron_metadata_agent/tls.key:/etc/pki/tls/private/ovndb.key:ro,Z /var/lib/openstack/cacerts/neutron_metadata_agent/tls-ca-bundle.pem:/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem:ro,z]
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_DEFAULT_debug: ""
+# Type: str
+# Description: Enable debug mode
+# Required: false
+# Default: True
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_agent_root_helper: ""
+# Type: str
+# Description: Neutron OVN agent root_helper command
+# Required: false
+# Default: sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_config_dir: ""
+# Type: str
+# Description: The directory that contains configuration files for Neutron OVN Agent.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/neutron-ovn-agent
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_config_src: ""
+# Type: str
+# Description: The path to the directory containing source of the Neutron OVN
+# agent configs.
+# Required: false
+# Default: /var/lib/openstack/configs/neutron-ovn
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_image: ""
+# Type: str
+# Description: The container image to use to deploy Neutron OVN agent
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-neutron-ovn-agent:current-podified
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_log_dir: ""
+# Type: str
+# Description: Log directory to be used by Neutron OVN agent
+# Required: false
+# Default: /var/log/neutron
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_ovn_ovn_nb_connection: ""
+# Type: str
+# Description: The connection string for the OVN_Northbound OVSDB
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_ovn_ovn_sb_connection: ""
+# Type: str
+# Description: The connection string for the OVN_Southbound OVSDB
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_ovn_ovsdb_connection_timeout: ""
+# Type: str
+# Description: Timeout in seconds for the OVSDB connection transaction
+# Required: false
+# Default: 180
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_ovn_ovsdb_probe_interval: ""
+# Type: str
+# Description: The probe interval for the OVSDB session in milliseconds
+# Required: false
+# Default: 60000
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_ovs_ovsdb_connection: ""
+# Type: str
+# Description: The connection string for the OVSDB backend
+# Required: false
+# Default: tcp:127.0.0.1:6640
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_ovs_ovsdb_connection_timeout: ""
+# Type: str
+# Description: Timeout in seconds for the OVSDB connection transaction
+# Required: false
+# Default: 180
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_daemon_timeout: ""
+# Type: str
+# Description: Rootwrap daemon exits after this seconds of inactivity
+# Required: false
+# Default: 600
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_exec_dirs: ""
+# Type: str
+# Description: List of directories to search executables in
+# Required: false
+# Default: /sbin,/usr/sbin,/bin,/usr/bin,/usr/local/bin,/usr/local/sbin
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_filters_path: ""
+# Type: str
+# Description: List of directories to load filter definitions from
+# Required: false
+# Default: /usr/share/neutron/rootwrap
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_rlimit_nofile: ""
+# Type: str
+# Description: Rootwrap daemon limits itself to that many file descriptors
+# Required: false
+# Default: 1024
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_syslog_log_facility: ""
+# Type: str
+# Description: Which syslog facility to use
+# Required: false
+# Default: syslog
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_syslog_log_level: ""
+# Type: str
+# Description: Type of messages to log
+# Required: false
+# Default: ERROR
+# File: 
+# Example: 
+
+edpm_neutron_ovn_agent_rootwrap_DEFAULT_use_syslog: ""
+# Type: str
+# Description: Enable logging to syslog
+# Required: false
+# Default: False
+# File: 
+# Example: 
+
+edpm_neutron_ovn_common_volumes: ""
+# Type: list
+# Description: Volume mounts for Neutron OVN agent
+# Required: false
+# Default: [/run/openvswitch:/run/openvswitch:z {{ edpm_neutron_ovn_agent_config_dir }}:/etc/neutron.conf.d:z /var/log/containers/neutron:/var/log/neutron:z /var/lib/kolla/config_files/ovn_agent.json:/var/lib/kolla/config_files/config.json:ro]
+# File: 
+# Example: 
+
+edpm_neutron_ovn_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_ovn_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_ovn_tls_enabled: ""
+# Type: bool
+# Description: Should TLS certs and cacerts be configured for neutron ovn agent
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_sriov_DEFAULT_debug: ""
+# Type: bool
+# Description: Enable or disable DEBUG mode in the Neutron agent
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_sriov_DEFAULT_rpc_response_timeout: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_neutron_sriov_DEFAULT_transport_url: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_AGENT_extensions: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: qos
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_AGENT_polling_interval: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 2
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_AGENT_report_interval: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 30
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_AGENT_root_helper: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_DEFAULT_state_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /var/lib/neutron
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_DRIVER_vnic_type_prohibit_list: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_NIC_exclude_devices: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: neutron::agents::ml2::sriov::physical_device_mapping
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: config-download/overcloud/@role/config_settings.yaml
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_NIC_resource_provider_bandwidths: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_NIC_resource_provider_default_hypervisor: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_NIC_resource_provider_hypervisors: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_SRIOV_NIC_resource_provider_inventory_defaults: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: allocation_ratio:1.0,min_unit:1,step_size:1,reserved:0
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_config_dir: ""
+# Type: str
+# Description: The path to the directory containing Neutron SRIOV NIC agent config
+# files.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/neutron-sriov-agent
+# File: 
+# Example: 
+
+edpm_neutron_sriov_agent_config_src: ""
+# Type: str
+# Description: The path to the directory containing source of the Neutron SRIOV NIC
+# agent configs.
+# Required: false
+# Default: /var/lib/openstack/configs/neutron-sriov
+# File: 
+# Example: 
+
+edpm_neutron_sriov_common_volumes: ""
+# Type: list
+# Description: List of volumes in a mount point form.
+# Required: false
+# Default: [/lib/modules:/lib/modules:ro /dev:/dev {{ edpm_neutron_sriov_agent_config_dir }}:/etc/neutron.conf.d:z /var/lib/neutron:/var/lib/neutron:shared,z /var/lib/kolla/config_files/neutron_sriov_agent.json:/var/lib/kolla/config_files/config.json:ro /var/log/containers/neutron:/var/log/neutron:z]
+# File: 
+# Example: 
+
+edpm_neutron_sriov_image: ""
+# Type: str
+# Description: Neutron SRIOV NIC agent container image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-neutron-sriov-agent:current-podified
+# File: 
+# Example: 
+
+edpm_neutron_sriov_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_sriov_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_neutron_sriov_oslo_concurrency_lock_patch: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: $state_path/lock
+# File: 
+# Example: 
+
+edpm_neutron_sriov_oslo_messaging_rabbit_heartbeat_timeout_threshold: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_neutron_sriov_oslo_middleware_enable_proxy_headers_parsing: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_daemon_timeout: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 600
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_exec_dirs: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /sbin,/usr/sbin,/bin,/usr/bin,/usr/local/bin,/usr/local/sbin,/etc/neutron/kill_scripts
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_filters_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /usr/share/neutron/rootwrap
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_rlimit_nofile: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 1024
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_syslog_log_facility: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: syslog
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_syslog_log_level: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: ERROR
+# File: 
+# Example: 
+
+edpm_neutron_sriov_rootwrap_DEFAULT_use_syslog: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_neutron_sriov_tls_enabled: ""
+# Type: bool
+# Description: Should TLS cacerts be configured for neutron sriov
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_nftables_default_chains_prefix: ""
+# Type: str
+# Description: Default NFT chain prefix
+# Required: false
+# Default: EDPM
+# File: 
+# Example: 
+
+edpm_nftables_src: ""
+# Type: path
+# Description: Location of the snippets directory.
+# Required: false
+# Default: /var/lib/edpm-config/firewall
+# File: 
+# Example: 
+
+edpm_nodes_validation_hide_sensitive_logs: ""
+# Type: bool
+# Description: Hide potentially sensitive log messages.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_nodes_validation_ping_test_gateway_ips: ""
+# Type: list
+# Description: List of gateway IP addresses to verify using ping.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_nodes_validation_ping_test_ips: ""
+# Type: list
+# Description: List of controller IP addresses to ping.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_nodes_validation_validate_controllers_icmp: validate_controllers_icmp
+# Type: bool
+# Description: Attempt to reach controllers with ping.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_nodes_validation_validate_fqdn: ""
+# Type: bool
+# Description: Verify if hostname matches FQDN from /etc/hosts
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_nodes_validation_validate_gateway_icmp: ""
+# Type: bool
+# Description: Attempt to reach gateway with ping.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_nova_compute_config_dir: ""
+# Type: path
+# Description: This should be synced with edpm_nova_compute role
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/nova_libvirt
+# File: 
+# Example: 
+
+edpm_nova_compute_image: ""
+# Type: str
+# Description: The container image to use for the nova compute container.
+# This image is used to create the nova compute container
+# on the compute node and generaly will be set via the container
+# bundle by the dataplane operator.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-nova-compute:current-podified
+# File: 
+# Example: 
+
+edpm_nova_config_dest: ""
+# Type: str
+# Description: The path to the directory where the nova config files
+# will be rendered on the compute node.
+# Required: false
+# Default: /var/lib/openstack/config/nova
+# File: 
+# Example: 
+
+edpm_nova_config_src: ""
+# Type: str
+# Description: The path to the directory containing the nova config files
+# in the ansibleEE container. This is the directory
+# where all configmaps containing nova config files are mounted.
+# Required: false
+# Default: /var/lib/openstack/config
+# File: 
+# Example: 
+
+edpm_nova_image_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_nova_image_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_nova_libvirt_qemu_group: ""
+# Type: str
+# Description: The vhost user socket directory group name.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_nova_live_migration_native_tls: ""
+# Type: bool
+# Description: Boolean to specify whether live migration NBD TLS is enabled.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_nova_live_migration_tls: ""
+# Type: bool
+# Description: Boolean to specify whether live migration TLS is enabled.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_nova_old_tripleo_compute_sevices: ""
+# Type: list
+# Description: List of tripleo nova services to stop during EDPM adoption
+# Required: false
+# Default: [tripleo_nova_compute.service tripleo_nova_migration_target.service tripleo_nova_api_cron.service tripleo_nova_api.service tripleo_nova_conductor.service tripleo_nova_metadata.service tripleo_nova_scheduler.service tripleo_nova_vnc_proxy.service]
+# File: 
+# Example: 
+
+edpm_ovn_availability_zones: ""
+# Type: list
+# Description: Availability zones for the chassis
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_address_scopes: ""
+# Type: str
+# Description: Allows to filter on the address scope.
+# Only networks with the same address scope on the provider and internal interface are announced.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_bgp_as: ""
+# Type: int
+# Description: BGP Autonomous System number
+# Required: false
+# Default: 64999
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_bgp_nic: ""
+# Type: str
+# Description: The name of the interface used within the VRF to expose the IPs and/or Networks.
+# Required: false
+# Default: bgp-nic
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_bgp_router_id: ""
+# Type: str
+# Description: Router ID to be used by the Agent when running in BGP mode and configuring the VRF route leaking.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_bgp_vrf: ""
+# Type: str
+# Description: The name of the VRF to be used to expose the IPs and/or Networks through BGP.
+# Required: false
+# Default: bgp-vrf
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_bgp_vrf_table_id: ""
+# Type: int
+# Description: The Routing Table ID that the VRF should use. If it does not exist, this table will be created.
+# Required: false
+# Default: 10
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_ca_cert: ""
+# Type: path
+# Description: Location of IPA certificate.
+# Required: false
+# Default: /etc/ipa/ca.crt
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_certificate: ""
+# Type: path
+# Description: Location of TLS certificate used by BGP agent.
+# Required: false
+# Default: /etc/pki/tls/certs/ovn_bgp_agent.crt
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_clear_vrf_routes_on_startup: ""
+# Type: bool
+# Description: Clear VRF routes on startup.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_common_volumes: ""
+# Type: list
+# Description: List of mounted volumes with optional permissions.
+# Required: false
+# Default: [/etc/hosts:/etc/hosts:ro /etc/localtime:/etc/localtime:ro /dev/log:/dev/log /etc/iproute2:/etc/iproute2 /var/lib/kolla/config_files/ovn_bgp_agent.json:/var/lib/kolla/config_files/config.json:ro /var/lib/config-data/ansible-generated/ovn-bgp-agent:/var/lib/kolla/config_files/src:ro /run/frr:/run/frr:shared,z /run/openvswitch:/run/openvswitch:shared,z]
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_config_basedir: ""
+# Type: path
+# Description: Location of BGP agent configuration base directory.
+# Required: false
+# Default: /var/lib/config-data/ansible-generated/ovn-bgp-agent
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_debug: ""
+# Type: bool
+# Description: Start the agent in a debug mode?
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_driver: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: ovn_bgp_driver
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_enable: ""
+# Type: bool
+# Description: Enable the bgp agent or not?
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_evpn_local_ip: ""
+# Type: str
+# Description: IP address of local EVPN VXLAN (tunnel) endpoint. This option can be used instead of the edpm_ovn_bgp_agent_evpn_nic.
+# If none specified, it will take the one from the loopback device.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_evpn_nic: ""
+# Type: str
+# Description: NIC with the IP address to use for the local EVPN VXLAN (tunnel) endpoint.
+# This option can be used instead of the edpm_ovn_bgp_agent_evpn_local_ip.
+# If none specified, it will take the one from the loopback device.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_evpn_udp_dstport: ""
+# Type: str
+# Description: The UDP port used for EVPN VXLAN communication. Originally set to '4789'
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_expose_ipv6_gua_tenant_networks: ""
+# Type: bool
+# Description: Exposing tenant networks with IPv6 addresses.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_expose_tenant_networks: ""
+# Type: bool
+# Description: Exposing tenant networks.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_image: ""
+# Type: str
+# Description: OVN BGP agent image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-ovn-bgp-agent:current-podified
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_internal_tls_enable: ""
+# Type: bool
+# Description: Enable internal TLS.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_ovs_manager: ""
+# Type: str
+# Description: OVSDB connection method.
+# Required: false
+# Default: ptcp:6640:127.0.0.1
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_ovsdb_connection: ""
+# Type: str
+# Description: Connection to the OVS database, including port and protocol.
+# Required: false
+# Default: tcp:127.0.0.1:6640
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_private_key: ""
+# Type: path
+# Description: Location of private TLS key. Keep it safe.
+# Required: false
+# Default: /etc/pki/tls/private/ovn_bgp_agent.key
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_reconcile_interval: ""
+# Type: int
+# Description: Reconciliation interval in seconds
+# Required: false
+# Default: 300
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_root_helper: ""
+# Type: str
+# Description: Root helper for BGP agent.
+# Required: false
+# Default: sudo ovn-bgp-agent-rootwrap /etc/ovn-bgp-agent/rootwrap.conf
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_root_helper_daemon: ""
+# Type: str
+# Description: Root helper for BGP agent as a daemon.
+# Required: false
+# Default: sudo ovn-bgp-agent-rootwrap-daemon /etc/ovn-bgp-agent/rootwrap.conf
+# File: 
+# Example: 
+
+edpm_ovn_bgp_agent_tls_volumes: ""
+# Type: list
+# Description: list of mounted TLS certificate volumes
+# Required: false
+# Default: [/var/lib/openstack/certs/ovn-bgp-agent/ca.crt:/etc/pki/tls/certs/ovndbca.crt:ro,z /var/lib/openstack/certs/ovn-bgp-agent/tls.crt:/etc/pki/tls/certs/ovndb.crt:ro,z /var/lib/openstack/certs/ovn-bgp-agent/tls.key:/etc/pki/tls/private/ovndb.key:ro,Z /var/lib/openstack/cacerts/ovn-bgp-agent/tls-ca-bundle.pem:/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem:ro,z]
+# File: 
+# Example: 
+
+edpm_ovn_bridge: ovn_bridge
+# Type: str
+# Description: Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-bridge`.
+# Required: false
+# Default: br-int
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: br-int
+
+edpm_ovn_bridge_mappings: ovn_bridge_mappings
+# Type: list
+# Description: 
+# Required: false
+# Default: [datacentre:br-ex]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/config_settings.yaml
+# Example: - ovs_dpdk3:br-vnf1
+
+edpm_ovn_controller_agent_image: ""
+# Type: str
+# Description: URL of the controller agent image.
+# Required: false
+# Default: quay.io/podified-antelope-centos9/openstack-ovn-controller:current-podified
+# File: 
+# Example: 
+
+edpm_ovn_controller_common_volumes: ""
+# Type: list
+# Description: List of volumes in a mount point form.
+# Required: false
+# Default: [/lib/modules:/lib/modules:ro /run:/run /var/lib/openvswitch/ovn:/run/ovn:shared,z /var/log/containers/openvswitch:/var/log/openvswitch:z /var/log/containers/openvswitch:/var/log/ovn:z /var/lib/kolla/config_files/ovn_controller.json:/var/lib/kolla/config_files/config.json:ro]
+# File: 
+# Example: 
+
+edpm_ovn_controller_tls_volumes: ""
+# Type: list
+# Description: List of TLS volumes in a mount point form.
+# Required: false
+# Default: [/var/lib/openstack/certs/ovn/ca.crt:/etc/pki/tls/certs/ovndbca.crt:ro,z /var/lib/openstack/certs/ovn/tls.crt:/etc/pki/tls/certs/ovndb.crt:ro,z /var/lib/openstack/certs/ovn/tls.key:/etc/pki/tls/private/ovndb.key:ro,Z /var/lib/openstack/cacerts/ovn/tls-ca-bundle.pem:/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem:ro,z]
+# File: 
+# Example: 
+
+edpm_ovn_datapath_type: ""
+# Type: str
+# Description: OVN bridge datapath type
+# Required: false
+# Default: netdev
+# File: 
+# Example: 
+
+edpm_ovn_dbs: ovn_dbs
+# Type: list
+# Description: 
+# Required: false
+# Default: []
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/tripleo-ansible-inventory.yaml
+# Example: children:
+
+edpm_ovn_encap_ip: ovn_encap_ip
+# Type: str
+# Description: Defaults to value of the host variable `tenant_ip`. Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-encap-ip`.
+# Required: false
+# Default: {{ tenant_ip }}
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: '%{hiera(''tenant'')}'
+
+edpm_ovn_encap_type: ovn_encap_type
+# Type: str
+# Description: Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-encap-type`.
+# Required: false
+# Default: geneve
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: geneve
+
+edpm_ovn_images_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_ovn_images_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_ovn_multi_rhel: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_ovn_ofctrl_wait_before_clear: ovn_ofctrl_wait_before_clear
+# Type: int
+# Description: Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-ofctrl-wait-before-clear`.
+# Required: false
+# Default: 8000
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: 8000
+
+edpm_ovn_ovs_other_config: ""
+# Type: dict
+# Description: Openvswitch other_config
+# Required: false
+# Default: map[]
+# File: 
+# Example: 
+
+edpm_ovn_remote_probe_interval: ovn_remote_probe_interval
+# Type: int
+# Description: Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-remote-probe-interval`.
+# Required: false
+# Default: 60000
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: 60000
+
+edpm_ovn_sb_server_port: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 6642
+# File: 
+# Example: 
+
+edpm_ovn_tls_enabled: ""
+# Type: bool
+# Description: Should OVN use tls for default protocol? If set to false, the OVN will default to tcp.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_ovs_download_retries: ""
+# Type: int
+# Description: 
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_ovs_dpdk_emc_insertion_probablity: tripleo_ovs_dpdk_emc_insertion_probablity
+# Type: str
+# Description:  (Optional) EMC insertion inverse probability. Its a string with a number of flows (out of which 
+#  1 flow will cached). Having 100, results in caching 1 in 100 flows. Having 0, disables EMC cache.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_enable_tso: tripleo_ovs_dpdk_enable_tso
+# Type: bool
+# Description: (Optional) Enable TSO support in OVS DPDK datapath.
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: false
+
+edpm_ovs_dpdk_extra: ""
+# Type: str
+# Description: (Optional) Extra parameter to be passed on to DPDK for initialization.
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovs_dpdk_handler_cores: tripleo_ovs_dpdk_handler_cores
+# Type: str
+# Description: Optional) Number of cores to be used for handler threads. Its a string with a number, specifying 
+#  the count of logical cores to be used as handler threads.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_lcore_list: tripleo_ovs_dpdk_lcore_list
+# Type: str
+# Description: (Optional) List of lcores for DPDK. Its a comma-separated string of logical cores.
+#   All ovs-vswitchd threads will be pinned to the first core declared in the mask.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_memory_channels: tripleo_ovs_dpdk_memory_channels
+# Type: int
+# Description: (Optional) Number of memory channels in the memory architecture. 
+# Required: false
+# Default: 4
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
+# Example: 4
+
+edpm_ovs_dpdk_pmd_auto_lb: tripleo_ovs_dpdk_pmd_auto_lb
+# Type: bool
+# Description: OvS DPDK PMD auto load balance enable or not
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: false
+
+edpm_ovs_dpdk_pmd_core_list: tripleo_ovs_dpdk_pmd_core_list
+# Type: str
+# Description: (Mandatory) List of PMD Cores for DPDK. Its a comma-separated 
+#  string of logical cores. These core should be part of isolcpus kernel parameter 
+#  and be excluded from NovaComputeCpuDedicatedSet and from NovaComputeCpuSharedSet.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
+# Example: 4-7,68-71
+
+edpm_ovs_dpdk_pmd_improvement_threshold: tripleo_ovs_dpdk_pmd_improvement_threshold
+# Type: str
+# Description: OvS DPDK PMD improvement threshold
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_pmd_load_threshold: tripleo_ovs_dpdk_pmd_load_threshold
+# Type: str
+# Description: OvS DPDK PMD load threshold
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_pmd_rebal_interval: tripleo_ovs_dpdk_pmd_rebal_interval
+# Type: str
+# Description: (Optional) PMD auto load balancing interval, in range 0 to 20,000. Its a string with a number, 
+#  specifies the minimum time (in minutes) between 2 consecutive PMD Auto Load Balancing iterations. The 
+#  defaul value is 1 min.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_pmd_sleep_max: ""
+# Type: str
+# Description: PMD maximum sleep time
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovs_dpdk_revalidator_cores: tripleo_ovs_dpdk_revalidator_cores
+# Type: str
+# Description: (Optional) Number of cores to he used for revalidator threads. Its a string with a number, 
+#  specifying the count of logical cores to be used as revalidator threads.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_ovs_dpdk_shared_mem_pool: ""
+# Type: str
+# Description: OvS DPDK shared memory pool
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovs_dpdk_socket_memory: tripleo_ovs_dpdk_socket_memory
+# Type: str
+# Description: (Mandatory) Memory in MB to be allocated on each NUMA node for DPDK. 
+#  Its a comma-separated string of memory in MB.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
+# Example: 8192,8192
+
+edpm_ovs_dpdk_vhost_postcopy_ovs_options: ""
+# Type: str
+# Description: OvS DPDK vhost postcopy ovs options
+# Required: false
+# Default: 
+# File: 
+# Example: 
+
+edpm_ovs_dpdk_vhost_postcopy_support: tripleo_ovs_dpdk_vhost_postcopy_support
+# Type: bool
+# Description: OvS DPDK vhost postcopy support enable or not
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
+# Example: true
+
+edpm_ovs_image_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_ovs_packages: ""
+# Type: list
+# Description: The list of packages to install for ovs.
+# Required: false
+# Default: [openvswitch]
+# File: 
+# Example: 
+
+edpm_ovs_services: ""
+# Type: list
+# Description: The list of ovs services to run.
+# Required: false
+# Default: [openvswitch]
+# File: 
+# Example: 
+
+edpm_podman_buildah_login: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_podman_default_network_config: ""
+# Type: dict
+# Description: This is the default network configuration except the range has been moved from 10.88.0.0/16 to 10.255.255.0/24 to try and prevent a conflict in an existing cloud
+# Required: false
+# Default: map[cniVersion:0.4.0 name:podman plugins:[map[bridge:cni-podman0 hairpinMode:true ipMasq:true ipam:map[ranges:[map[gateway:10.255.255.1 subnet:10.255.255.0/24]] routes:[map[dst:0.0.0.0/0]] type:host-local] isGateway:true type:bridge] map[capabilities:map[portMappings:true] type:portmap] map[type:firewall] map[type:tuning]]]
+# File: 
+# Example: 
+
+edpm_podman_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_podman_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_podman_enable_socket: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_podman_hide_sensitive_logs: ""
+# Type: bool
+# Description: Defaults to true unless the "hide_sensitive_logs" variable is set. If it is it takes a precedence.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_podman_kube_registry_url: ""
+# Type: str
+# Description: The kubernetes registry URL that will be used for login when edpm_podman_login_kube_registry is true.
+# Required: false
+# Default: default-route-openshift-image-registry.apps-crc.testing
+# File: 
+# Example: 
+
+edpm_podman_kube_sa_path: ""
+# Type: str
+# Description: The path to the serviceaccount directory on the ansible controller node.
+# Required: false
+# Default: /run/secrets/kubernetes.io/serviceaccount
+# File: 
+# Example: 
+
+edpm_podman_login_kube_registry: ""
+# Type: bool
+# Description: Enable or disable logging into a kubernetes registry using service account credentials on the ansible controller node.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_podman_packages: ""
+# Type: list
+# Description: Name of podman package to be installed
+# Required: false
+# Default: [podman]
+# File: 
+# Example: 
+
+edpm_podman_purge_packages: ""
+# Type: list
+# Description: 
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_podman_registries: ""
+# Type: list
+# Description: edpm_podman_registries requires a list of dictionaries
+# Example:
+#   # edpm_podman_registries:
+#   #   - prefix: quay.io
+#   #     insecure: false
+#   #     location: quay.io
+#   #     mirrors:
+#   #       - location: 192.168.0.1:8787
+#   #         insecure: true
+#   #   - prefix: registry.redhat.io
+#   #     insecure: false
+#   #     location: registry.redhat.io
+#   #     mirrors:
+#   #       - location: 192.168.0.2:8787
+#   #         insecure: false
+#   #   - prefix: registry.fedoraproject.org
+#   #     blocked: true
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_podman_service_unit_description: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: Podman API service for EDPM purposes
+# File: 
+# Example: 
+
+edpm_podman_service_unit_name: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: edpm_podman.service
+# File: 
+# Example: 
+
+edpm_podman_socket_path: ""
+# Type: path
+# Description: 
+# Required: false
+# Default: /var/lib/edpm-podman/podman.sock
+# File: 
+# Example: 
+
+edpm_podman_systemd_drop_in_dependencies: ""
+# Type: bool
+# Description: Tell the edpm_container_manage to inject additional ordering dependencies for the systemd scopes associated to podman containers.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_podman_unqualified_search_registries: ""
+# Type: list
+# Description: List of package registries
+# Required: false
+# Default: [registry.redhat.io registry.access.redhat.com registry.fedoraproject.org registry.centos.org quay.io]
+# File: 
+# Example: 
+
+edpm_pre_adoption_validation_hostname_enabled: ""
+# Type: bool
+# Description: Whether the hostname checks are executed.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_pre_adoption_validation_kernel_args_enabled: ""
+# Type: bool
+# Description: Whether the kernel argument checks are executed.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_pre_adoption_validation_old_neutron_config: ""
+# Type: str
+# Description: The path of the pre-adoption version of the neutron.conf file on the node
+# Required: false
+# Default: /var/lib/config-data/puppet-generated/neutron/etc/neutron/nova.conf
+# File: 
+# Example: 
+
+edpm_pre_adoption_validation_old_nova_config: ""
+# Type: str
+# Description: The path of the pre-adoption version of the nova.conf file on the node
+# Required: false
+# Default: /var/lib/config-data/puppet-generated/nova_libvirt/etc/nova/nova.conf
+# File: 
+# Example: 
+
+edpm_pre_adoption_validation_tuned_enabled: ""
+# Type: bool
+# Description: Whether the tuned profile checks are executed.
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+edpm_reboot_force_reboot: ""
+# Type: bool
+# Description: Force reboot of the node. Automated reboot for nodes is by defulat defered as it can impact running vms.
+# Only on initial run when nova related files are not yet created reboot is not defered.
+# When edpm_reboot_force_reboot is set to true, reboot is allowed and will be perfomed if required.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_reboot_nova_compute_config_dir: ""
+# Type: path
+# Description: This should be synced with edpm_nova_compute role
+# Required: false
+# Default: /var/lib/openstack/config/nova
+# File: 
+# Example: 
+
+edpm_reboot_post_reboot_delay: ""
+# Type: int
+# Description: Reboot delay in seconds
+# Required: false
+# Default: 60
+# File: 
+# Example: 
+
+edpm_reboot_timeout_reboot: ""
+# Type: int
+# Description: Reboot timeout in seconds
+# Required: false
+# Default: 3600
+# File: 
+# Example: 
+
+edpm_rebuild_initramfs_command: ""
+# Type: str
+# Description: Rebuild initramfs command.
+# Required: false
+# Default: dracut -f
+# File: 
+# Example: 
+
+edpm_sshd_allowed_ranges: ""
+# Type: list
+# Description: List of address ranges to allow ssh connection from.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_sshd_banner_enabled: tripleo_sshd_banner_enabled
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: true
+
+edpm_sshd_banner_text: tripleo_sshd_banner_text
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: ''
+
+edpm_sshd_configure_firewall: ""
+# Type: bool
+# Description: Should the firewall be configured.
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_sshd_download_delay: ""
+# Type: int
+# Description: The seconds between retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_sshd_download_retries: ""
+# Type: int
+# Description: The number of retries for failed download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_sshd_firewall_port: ""
+# Type: int
+# Description: Since we can override the port using the edpm_sshd_server_options, we'd rather ensure we can set the appropriate value here as well.
+# Required: false
+# Default: 22
+# File: 
+# Example: 
+
+edpm_sshd_gssapi_authentication: ""
+# Type: bool
+# Description: Enable gssapi authentication?
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+edpm_sshd_message_of_the_day: tripleo_sshd_message_of_the_day
+# Type: str
+# Description: 
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: ''
+
+edpm_sshd_motd_enabled: tripleo_sshd_motd_enabled
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: true
+
+edpm_sshd_password_authentication: tripleo_sshd_password_authentication
+# Type: bool
+# Description: Enable password authentication?
+# Required: false
+# Default: false
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: 'yes'
+
+edpm_sshd_server_options: tripleo_sshd_server_options
+# Type: dict
+# Description: Dictionary of settings for sshd server. Including location of key files, location of authorized key files, forwarding, accepted environment settings, usage of DNS, PAM and GSSAPI.
+# Required: false
+# Default: map[AcceptEnv:[LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT LC_IDENTIFICATION LC_ALL LANGUAGE XMODIFIERS] AuthorizedKeysFile:.ssh/authorized_keys ChallengeResponseAuthentication:no GSSAPIAuthentication:no GSSAPICleanupCredentials:no HostKey:[/etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_ed25519_key] Subsystem:sftp /usr/libexec/openssh/sftp-server SyslogFacility:AUTHPRIV UseDNS:no UsePAM:yes X11Forwarding:yes]
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/host_prep_tasks.yaml
+# Example: AcceptEnv:
+
+edpm_telemetry_cacerts: ""
+# Type: str
+# Description: The path in the compute node where the cacerts are stored
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_ceilometer_compute_image: ""
+# Type: str
+# Description: The name of the ceilometer compute podman image
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_ceilometer_ipmi_image: ""
+# Type: str
+# Description: The name of the ceilometer ipmi podman image
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_certs: ""
+# Type: str
+# Description: The path in the compute node where the certs are stored
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_config_dest: ""
+# Type: str
+# Description: The path in the compute node where the config files are copied to
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_config_src: ""
+# Type: str
+# Description: The path in the ansibleEE container where the config files are stored
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_logging_config_src: ""
+# Type: str
+# Description: The path in the ansibleEE contaner where the logging config files are stored
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_node_exporter_image: ""
+# Type: str
+# Description: The name of the node_exporter podman image
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_telemetry_rsyslog_config_dest: ""
+# Type: str
+# Description: The path in the compute node where the rsyslog config files are copied to
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+edpm_timezone: timezone
+# Type: str
+# Description: Timezone you want to set for resident clock service
+# Required: false
+# Default: UTC
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/tripleo-ansible-inventory.yaml
+# Example: children:
+
+edpm_tuned_custom_profile: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: Contents of a custom tuned.conf file.
+
+# File: 
+# Example: 
+
+edpm_tuned_download_delay: ""
+# Type: int
+# Description: Seconds between retries for download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_tuned_download_retries: ""
+# Type: int
+# Description: Number of retries for download tasks
+# Required: false
+# Default: 5
+# File: 
+# Example: 
+
+edpm_tuned_isolated_cores: tuned_isolated_cores
+# Type: str
+# Description: String consisting of comma separated core indices in a format accepted by /etc/tuned/realtime-variables.conf for example: 2,4-7 . Please note that the value may be rendered in a different .conf file, depending on your local setup.
+# Required: false
+# Default: 
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
+# Example: ''
+
+edpm_tuned_profile: tuned_profile
+# Type: str
+# Description: Name of the custom tuned profile. This string will be used for relevant /etc/ subdir and files.
+# Required: false
+# Default: throughput-performance
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
+# Example: throughput-performance
+
+edpm_tuned_system_packages: ""
+# Type: list
+# Description: Packages installed on the local system. Allows user to define this list otherwise it will uses the default list.
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+edpm_tuned_system_packages_default: ""
+# Type: list
+# Description: Default tuned packages to install.
+# Required: false
+# Default: [tuned tuned-profiles-cpu-partitioning]
+# File: 
+# Example: 
+
+edpm_users_extra_dirs: ""
+# Type: list
+# Description: The list of directories to create on the compute node for communication with host processes.
+# This shoudl only be used for directories that are required to be shared between containers and host processes.
+# Where the host directories are created solely for the purpose of sharing content between containers or
+# to persist data this should not be used.
+# Required: false
+# Default: [map[group:qemu mode:0755 owner:qemu path:/var/lib/vhost_sockets setype:virt_cache_t seuser:system_u]]
+# File: 
+# Example: 
+
+edpm_users_users: ""
+# Type: list
+# Description: The list of users and or groups to create on the compute node.
+# Required: false
+# Default: [map[comment:qemu user gid:107 name:qemu shell:/sbin/nologin uid:107] map[gid:42477 group_only:true name:hugetlbfs]]
+# File: 
+# Example: 
+
+growvols_args: ""
+# Type: str
+# Description: Arguments for the `growvols` utility.
+# Full documentation: https://docs.openstack.org/diskimage-builder/latest/elements/growvols/README.html
+# Required: false
+# Default: /=8GB /tmp=1GB /var/log=10GB /var/log/audit=2GB /home=1GB /var=100%
+
+# File: 
+# Example: 
+
+modules: modules
+# Type: list
+# Description: List of dictionaries describing modules, their desired state and parameters.
+# Params is assumed to be `null` and
+# state is assumed to be "present"; state can be either "present" or "absent".
+# Example:
+
+#  modules:
+#    - name: foo
+#      params: 'bar baz'
+#    - name: starwars
+#    - name: starwars
+#      state: absent
+# Required: false
+# Default: []
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/container_puppet_script.yaml
+# Example: /usr/share/openstack-puppet/modules \
+
+neutron_physical_bridge_name: neutron_physical_bridge_name
+# Type: str
+# Description: Name of the physical bridge
+# Required: false
+# Default: br-ex
+# File: 
+# Example: 
+
+neutron_public_interface_name: neutron_public_interface_name
+# Type: str
+# Description: Name of the public network interface
+# Required: false
+# Default: nic1
+# File: 
+# Example: 
+
+ovn_match_northd_version: ""
+# Type: bool
+# Description: Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-match-northd-version`
+# Required: false
+# Default: true
+# File: 
+# Example: 
+
+ovn_monitor_all: ovn_monitor_all
+# Type: bool
+# Description: Passed to the `edpm_ovn_ovs_external_ids` as value for the `ovn-monitor-all`.
+# Required: false
+# Default: true
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/config_settings.yaml
+# Example: true
+
+tenant_ip: tenant_ip
+# Type: str
+# Description: Local IP address
+# Required: false
+# Default: <nil>
+# File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/tripleo-ansible-inventory.yaml
+# Example: 2001:268:70fd:1a2d::c048
+
+test_deps_edpm_packages: ""
+# Type: list
+# Description: 
+# Required: false
+# Default: <nil>
+# File: 
+# Example: 
+
+test_deps_extra_packages: ""
+# Type: list
+# Description: 
+# Required: false
+# Default: []
+# File: 
+# Example: 
+
+test_deps_mirrors_file_path: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: /etc/ci/mirror_info.sh
+# File: 
+# Example: 
+
+test_deps_repo_version: ""
+# Type: str
+# Description: 
+# Required: false
+# Default: {{ ansible_facts['distribution'] | lower }}{{ ansible_facts['distribution_major_version'] }}-master
+# File: 
+# Example: 
+
+test_deps_setup_ceph: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+test_deps_setup_edpm: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: false
+# File: 
+# Example: 
+
+test_deps_setup_stream: ""
+# Type: bool
+# Description: 
+# Required: false
+# Default: true
+# File: 
+# Example: 

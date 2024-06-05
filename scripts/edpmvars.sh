@@ -50,7 +50,7 @@ match_edpm_vars() {
             echo "mapped"
             mapped=$((mapped+1))
         else
-            echo " []" >> "$TEMPFILE"
+            echo " \"\"" >> "$TEMPFILE"
             echo "none"
         fi
         

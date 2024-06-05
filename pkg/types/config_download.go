@@ -1,6 +1,7 @@
 package types
 
 import (
+	"embed"
 	"fmt"
 	"net/netip"
 	"os"
@@ -16,7 +17,7 @@ type ConfigDownload struct {
 	Networks        map[string]*OSPNetwork
 	EnabledServices map[string]*OSPService
 	Hosts           map[string]*TripleoHost
-	Roles           []TripleoRole
+	Roles           []*TripleoRole
 	PrimaryRoleName string
 	Passwords       map[string]string
 	ConfigSettings  ConfigSettings
@@ -47,17 +48,18 @@ type OSPServicePasswords struct {
 }
 
 type OSPNetwork struct {
-	Name       string             `json:"name"`
-	NameLower  string             `json:"name_lower"`
-	DnsDomain  string             `json:"domain,omitempty"`
-	CloudName  string             `json:"cloud_name,omitempty"`
-	Mtu        int                `json:"mtu"`
-	IpV6       bool               `json:"ipv6"`
-	Vip        netip.Addr         `json:"vip"`
-	Subnets    []OSPNetworkSubnet `json:"subnets,omitempty"`
-	PrefixLen  int                `json:"prefix_len"`
-	VlanId     int                `json:"vlan_id"`
-	HostRoutes []TripleoRoutes    `json:"host_routes"`
+	Name        string             `json:"name"`
+	NameLower   string             `json:"name_lower"`
+	DnsDomain   string             `json:"domain,omitempty"`
+	CloudName   string             `json:"cloud_name,omitempty"`
+	Mtu         int                `json:"mtu"`
+	IpV6        bool               `json:"ipv6"`
+	Vip         netip.Addr         `json:"vip"`
+	Subnets     []OSPNetworkSubnet `json:"subnets,omitempty"`
+	PrefixLen   int                `json:"prefix_len"`
+	VlanId      int                `json:"vlan_id"`
+	HostRoutes  []TripleoRoutes    `json:"host_routes"`
+	IsCtrlPlane bool               `json:"is_ctrl_plane"`
 }
 
 type OSPNetworkSubnet struct {
@@ -95,10 +97,11 @@ type TripleoHost struct {
 }
 
 type TripleoHostNetwork struct {
-	Name     string
-	IP       netip.Addr
-	Hostname string
-	Subnet   *OSPNetworkSubnet
+	Name        string
+	IP          netip.Addr
+	Hostname    string
+	BaseSubnet  *OSPNetworkSubnet
+	RoleNetwork *TripleoRoleNetwork
 }
 
 //   - tags: (list) list of tags used by other parts of the deployment process to
@@ -173,10 +176,18 @@ func NewConfigDownload() *ConfigDownload {
 		Hosts:           make(map[string]*TripleoHost),
 		Passwords:       make(map[string]string),
 		EnabledServices: make(map[string]*OSPService),
+		Roles:           make([]*TripleoRole, 0),
 	}
 }
 
-func (cdl *ConfigDownload) Process(mappingYaml string, serviceMap string) error {
+func NewTripleoRole() *TripleoRole {
+	return &TripleoRole{
+		Networks:       make(map[string]*TripleoRoleNetwork),
+		ConfigSettings: make(map[string][]TripleoRoleConfigSetting),
+	}
+}
+
+func (cdl *ConfigDownload) Process(configs embed.FS, serviceMap string) error {
 	//	var nncp types.NNCP
 	cfg := utils.GetConfig()
 
@@ -233,7 +244,7 @@ func (cdl *ConfigDownload) Process(mappingYaml string, serviceMap string) error 
 		return err
 	}
 
-	err = cdl.ProcessPasswords(mappingYaml, groupVars)
+	err = cdl.ProcessPasswords(configs, groupVars)
 	if err != nil {
 		return err
 	}
@@ -242,6 +253,11 @@ func (cdl *ConfigDownload) Process(mappingYaml string, serviceMap string) error 
 		return err
 	}
 	err = cdl.ProcessTripleoOvercloudEnvironment()
+	if err != nil {
+		return err
+	}
+
+	err = ProcessGetDeployStepsTasksStep0(cdl)
 	if err != nil {
 		return err
 	}
@@ -360,7 +376,7 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 			continue
 		}
 
-		var role TripleoRole
+		role := NewTripleoRole()
 
 		found := false
 		// Get the role networks
@@ -433,7 +449,7 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 				th := TripleoHost{}
 
 				// Set a pointer to the role to speed searches
-				th.TripleoRole = &role
+				th.TripleoRole = role
 
 				th.Networks = make(map[string]*TripleoHostNetwork)
 
@@ -444,6 +460,12 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 				if err := mapStringGetter(hostVarMap, "ansible_host", &th.AnsibleHost); err != nil {
 					return err
 				}
+
+				if drn, ok := hostVarMap.(map[string]interface{})["default_route_network"]; ok {
+					var drns []string
+					utils.MarshalArray(drn, &drns)
+				}
+
 				// TODO - this is a hack to work with GraphViz
 				// Rmove the hyphens from the name in the template
 				th.Name = strings.ReplaceAll(hostName, "-", "_")
@@ -451,8 +473,12 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 				th.Vars = hostVarMap.(map[string]interface{})
 				// Set host-specific network info
 				for netName := range role.Networks {
-					thn := TripleoHostNetwork{}
-					th.Networks[netName] = &TripleoHostNetwork{}
+					thn := &TripleoHostNetwork{}
+
+					thn.RoleNetwork = role.Networks[netName]
+
+					th.Networks[netName] = thn
+
 					thn.Name = netName
 
 					if err := mapStringGetter(hostVarMap, netName+"_ip", &thn.IP); err != nil {
@@ -466,14 +492,10 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 						// Set a pointer to the subnet the network is attached to
 						for snIndex, sn := range net.Subnets {
 							if sn.IpSubnet.Contains(thn.IP) {
-								thn.Subnet = &net.Subnets[snIndex]
-								found = true
-								goto found
+								thn.BaseSubnet = &net.Subnets[snIndex]
 							}
 							if sn.Ipv6Subnet.Contains(thn.IP) {
-								thn.Subnet = &net.Subnets[snIndex]
-								found = true
-								goto found
+								thn.BaseSubnet = &net.Subnets[snIndex]
 							}
 						}
 						if !found {
@@ -482,9 +504,8 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory(data map[string]interf
 					} else {
 						return fmt.Errorf("ProcessTripleoAnsibleInventory: Network %s not found in global_vars.yaml\n", netName)
 					}
-				found:
-					th.Networks[netName] = &thn
 				}
+
 				if drn, ok := hostVarMap.(map[string]interface{})["default_route_network"]; ok {
 					var drns []string
 					utils.MarshalArray(drn, &drns)
@@ -517,10 +538,15 @@ func (cdl *ConfigDownload) GetNetwork(name string) *OSPNetwork {
 	return nil
 }
 
-func (cdl *ConfigDownload) ProcessPasswords(mappingYaml string, globalVars map[string]interface{}) error {
+func (cdl *ConfigDownload) ProcessPasswords(configs embed.FS, globalVars map[string]interface{}) error {
 	mapping := make(map[string]PasswordMapping)
 
-	err := yaml.Unmarshal([]byte(mappingYaml), &mapping)
+	mappingYaml, err := configs.ReadFile("configs/password-var-map")
+	if err != nil {
+		return fmt.Errorf("unable to read template file: %s, %v", "configs/password-var-map", err)
+	}
+
+	err = yaml.Unmarshal([]byte(mappingYaml), &mapping)
 	if err != nil {
 		return nil
 	}
@@ -531,7 +557,9 @@ func (cdl *ConfigDownload) ProcessPasswords(mappingYaml string, globalVars map[s
 	}
 
 	for k, m := range mapping {
+		fmt.Printf("Processing %s, %+v\n", k, m)
 		addr := strings.Split(m.Address, ".")
+		fmt.Printf("Address: %v\n", addr)
 		var z interface{}
 		if m.Role != "" {
 			z = globalVars
@@ -667,7 +695,10 @@ func (cdl *ConfigDownload) ProcessTripleoOvercloudEnvironment() error {
 		return err
 	}
 
+	// Get the name of the control plane network
 	net := OSPNetwork{}
+
+	net.IsCtrlPlane = true
 
 	net.NameLower = environment.ParmaterDefaults.CtlplaneNetworkAttributes.Network.Name
 	net.DnsDomain = environment.ParmaterDefaults.CtlplaneNetworkAttributes.Network.DNSDomain

@@ -9,7 +9,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 )
 
-func GenSecrets(mappingYaml string, templateDir embed.FS, outDir string, cdl *types.ConfigDownload) error {
+func GenSecrets(templateDir embed.FS, outDir string, cdl *types.ConfigDownload) error {
 
 	parameterDefaults, err := utils.YamlToMap(utils.GetFullPath(utils.OVERCLOUD_PASSWORDS))
 	if err != nil {

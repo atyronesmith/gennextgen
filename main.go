@@ -13,8 +13,8 @@ import (
 	"github.com/atyronesmith/gennextgen/pkg/utils"
 )
 
-//go:embed configs/password-var-map.yaml
-var passwordMap string
+//go:embed configs/*
+var configs embed.FS
 
 //go:embed configs/service-var-map.yaml
 var serviceMap string
@@ -60,7 +60,7 @@ func main() {
 
 	configDownload := types.NewConfigDownload()
 
-	err = configDownload.Process(passwordMap, serviceMap)
+	err = configDownload.Process(configs, serviceMap)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		os.Exit(1)
@@ -71,20 +71,24 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := generate.GenSecrets(passwordMap, templates, *outDir, configDownload); err != nil {
+	if err := generate.GenSecrets(templates, *outDir, configDownload); err != nil {
 		fmt.Printf("%s\n", err)
 		os.Exit(1)
 	}
 
-	if err := generate.GenOpenStackControlPlane(templates, *outDir); err != nil {
-		fmt.Printf("%s\n", err)
-		os.Exit(1)
-	}
+	generate.CreateVADirs(*outDir, templates)
 
-	if err := generate.GenNNCP(*outDir, configDownload); err != nil {
-		fmt.Printf("%s\n", err)
-		os.Exit(1)
-	}
+	generate.GenEdpmNodesetValues(*outDir, configDownload)
+
+	// if err := generate.GenOpenStackControlPlane(templates, *outDir); err != nil {
+	// 	fmt.Printf("%s\n", err)
+	// 	os.Exit(1)
+	// }
+
+	// if err := generate.GenNNCP(*outDir, configDownload); err != nil {
+	// 	fmt.Printf("%s\n", err)
+	// 	os.Exit(1)
+	// }
 
 	err = generate.GenGraph(templates, *outDir, configDownload) // Generate the graph
 	if err != nil {
