@@ -104,7 +104,7 @@ func WriteByteData(buf []byte, dir string, fileName string) error {
 			return fmt.Errorf("unable to mkdir: %s", dir)
 		}
 	}
-	dFile, err := os.Create(dir + "/" + fileName)
+	dFile, err := os.Create(filepath.Join(dir, fileName))
 	if err != nil {
 		fmt.Printf("unable to create/open file: %s", fileName)
 	}

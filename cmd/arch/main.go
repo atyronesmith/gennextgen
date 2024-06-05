@@ -10,8 +10,14 @@ import (
 
 	t "github.com/atyronesmith/gennextgen/pkg/types"
 	"github.com/atyronesmith/gennextgen/pkg/utils"
+	v1 "k8s.io/api/core/v1"
+
+	v1beta1 "github.com/openstack-k8s-operators/dataplane-operator/api/v1beta1"
+	infranetworkv1 "github.com/openstack-k8s-operators/infra-operator/apis/network/v1beta1"
+	baremetalv1 "github.com/openstack-k8s-operators/openstack-baremetal-operator/api/v1beta1"
+
 	"gopkg.in/ini.v1"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func main() {
@@ -43,6 +49,8 @@ func main() {
 		findConfigMaps(flag.Arg(1))
 	case "process-kustomize":
 		processKustomize(flag.Arg(1))
+	case "gen-nodeset":
+		genOpenStackDataPlaneNodeSet("/tmp/osp")
 	default:
 		fmt.Printf("Unknown command: %s\n", cmd)
 		os.Exit(1)
@@ -206,4 +214,115 @@ func parseCustomServiceConfig(cfg string) error {
 		}
 	}
 	return nil
+}
+
+func genOpenStackDataPlaneNodeSet(outDir string) {
+	var vnn = v1beta1.OpenStackDataPlaneNodeSetSpec{}
+
+	vnn.BaremetalSetTemplate = baremetalv1.OpenStackBaremetalSetSpec{
+		CtlplaneInterface:     "eth0",
+		CloudUserName:         "cloud-admin",
+		ProvisioningInterface: "eth1",
+		BmhLabelSelector: map[string]string{
+			"app": "openstack",
+		},
+		PasswordSecret: &v1.SecretReference{
+			Name:      "baremetalset-passowrd-secret",
+			Namespace: "openstack",
+		},
+	}
+
+	vnn.NodeTemplate.Ansible = v1beta1.AnsibleOpts{
+		AnsibleUser: "cloud-admin",
+		AnsiblePort: 22,
+	}
+
+	dRoute := true
+	vnn.NodeTemplate.Networks = []infranetworkv1.IPSetNetwork{
+		{
+			Name:         "ctlplane",
+			DefaultRoute: &dRoute,
+			SubnetName:   "ctlplane",
+		},
+		{
+			Name:       "internalapi",
+			SubnetName: "subnet1",
+		},
+		{
+			Name:       "storage",
+			SubnetName: "subnet1",
+		},
+		{
+			Name:       "tenant",
+			SubnetName: "subnet1",
+		},
+	}
+	vnn.Nodes = make(map[string]v1beta1.NodeSection)
+	vnn.Nodes["edpm-compute-0"] = v1beta1.NodeSection{
+		HostName: "compute-0",
+		Networks: []infranetworkv1.IPSetNetwork{
+			{
+				Name:       "ctlplane",
+				SubnetName: "ctlplane",
+			},
+			{
+				Name:       "internalapi",
+				SubnetName: "subnet1",
+			},
+		},
+	}
+
+	// serviceMap := map[string]string{
+	// 	"ceph_client":        "ceph_client",
+	// 	"ovn_metadata":       "neutron-metadata",
+	// 	"neutron_ovn_dpdk":   "configure-ovs-dpdk",
+	// 	"ca_certs":           "install-certs",
+	// 	"ovn_controller":     "ovn",
+	// 	"nova_libvirt":       "libvirt",
+	// 	"nova_libvirt_guest": "", // No mapping
+	// 	"nova_compute":       "nova",
+	// 	"iscsid":             "nova",
+	// }
+
+	// edpm_nova contains
+	// - NovaComputeImage
+	// - EdpmIscsiImage
+
+	// install_os contains
+	// - epdm_podman
+	// - edpm_sshd
+	// - dataplane_chrony / timesync
+	// - edpm_logrotate
+
+	vnn.Services = []string{
+		"bootstrap",
+		"download-cache",
+		"reboot-os",
+		"configure-ovs-dpdk",
+		"configure-network",
+		"validate-network",
+		"install-os",
+		"configure-os",
+		"ssh-known-hosts",
+		"run-os",
+		"install-certs",
+		"ovn",
+		"neutron-ovn",
+		"neutron-metadata",
+		"neutron-sriov",
+		"libvirt",
+		"nova-custom-ovsdpdksriov",
+		"telemetry",
+	}
+
+	yaml, err := utils.StructToYamlK8s(vnn)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	err = utils.WriteByteData(yaml, outDir, "openstack-dataplane-nodeset-spec.yaml")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
