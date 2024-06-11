@@ -1,6 +1,7 @@
 package types
 
 import (
+	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -16,17 +17,11 @@ func ProcessConfigSettings(cdl *ConfigDownload) error {
 		}
 
 		for k, v := range cfgSet {
-			path := strings.Split(k, "::")
-			settingKey := path[len(path)-1]
-			cs := TripleoRoleConfigSetting{
-				Service: path[0],
-				Path:    k,
-				Value:   v,
+			varName := strings.ReplaceAll(k, "::", ".")
+			if _, ok := cdl.Roles[roleIndex].ConfigSettings[varName]; ok {
+				return fmt.Errorf("ProcessConfigSettings: <%s> already exists for role %s", varName, role.Name)
 			}
-			if len(path) > 1 {
-				cs.Section = path[1]
-			}
-			cdl.Roles[roleIndex].ConfigSettings[settingKey] = append(cdl.Roles[roleIndex].ConfigSettings[settingKey], cs)
+			cdl.Roles[roleIndex].ConfigSettings[varName] = v
 		}
 	}
 

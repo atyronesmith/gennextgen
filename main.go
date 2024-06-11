@@ -60,7 +60,13 @@ func main() {
 
 	configDownload := types.NewConfigDownload()
 
-	err = configDownload.Process(configs, serviceMap)
+	err = configDownload.Process(*outDir, configs, serviceMap)
+	if err != nil {
+		fmt.Printf("%s\n", err)
+		os.Exit(1)
+	}
+
+	err = types.InitEDPMVarMap(configs)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		os.Exit(1)
@@ -78,7 +84,7 @@ func main() {
 
 	generate.CreateVADirs(*outDir, templates)
 
-	generate.GenEdpmNodesetValues(*outDir, configDownload)
+	generate.GenEdpmNodesetValues(*outDir, configs, configDownload)
 
 	// if err := generate.GenOpenStackControlPlane(templates, *outDir); err != nil {
 	// 	fmt.Printf("%s\n", err)
@@ -90,10 +96,10 @@ func main() {
 	// 	os.Exit(1)
 	// }
 
-	err = generate.GenGraph(templates, *outDir, configDownload) // Generate the graph
-	if err != nil {
-		fmt.Printf("%s\n", err)
-		os.Exit(1)
-	}
+	// err = generate.GenGraph(templates, *outDir, configDownload) // Generate the graph
+	// if err != nil {
+	// 	fmt.Printf("%s\n", err)
+	// 	os.Exit(1)
+	// }
 
 }

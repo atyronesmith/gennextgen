@@ -255,6 +255,7 @@ nova::compute::cpu_dedicated_set:
   type: string
   path: nova.compute.cpu_dedicated_set
   target: edpm-nodeset-values.data.nova.compute.conf.compute.cpu_dedicated_set
+  tripleo: NovaComputeCpuDedicatedSet
 #   (optional) Mask of host CPUs that can be used for ``VCPU`` resources and
 #   offloaded emulator threads.
 nova::compute::cpu_shared_set:

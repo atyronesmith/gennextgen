@@ -1,12 +1,13 @@
 package types
 
 import (
+	"fmt"
 	"path/filepath"
 
 	"github.com/atyronesmith/gennextgen/pkg/utils"
 )
 
-type DeployStepsTasksStep0 []struct {
+type DeployStepsTasksStep []struct {
 	IncludeRole *IncludeRole           `yaml:"include_role,omitempty"`
 	Name        string                 `yaml:"name"`
 	Vars        map[string]interface{} `yaml:"vars,omitempty"`
@@ -25,11 +26,25 @@ type Block struct {
 	When     string                 `yaml:"when,omitempty"`
 }
 
-func ProcessGetDeployStepsTasksStep0(cdl *ConfigDownload) error {
-	for roleIndex, role := range cdl.Roles {
-		configPath := filepath.Join("config-download", "overcloud", role.Name, "deploy_steps_tasks_step0.yaml")
+func ProcessGetDeploySteps(cdl *ConfigDownload) error {
+	err := processGetDeployStepsTasksStep(cdl, "deploy_steps_tasks_step0.yaml")
+	if err != nil {
+		return err
+	}
 
-		dsts := DeployStepsTasksStep0{}
+	err = processGetDeployStepsTasksStep(cdl, "pre_deploy_step_tasks.yaml")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func processGetDeployStepsTasksStep(cdl *ConfigDownload, fileName string) error {
+	for roleIndex, role := range cdl.Roles {
+		configPath := filepath.Join("config-download", "overcloud", role.Name, fileName)
+
+		dsts := DeployStepsTasksStep{}
 
 		err := utils.YamlToStruct(utils.GetFullPath(configPath), &dsts)
 		if err != nil {
@@ -39,12 +54,11 @@ func ProcessGetDeployStepsTasksStep0(cdl *ConfigDownload) error {
 		for _, stepValue := range dsts {
 			if stepValue.IncludeRole != nil {
 				for k, v := range stepValue.Vars {
-					cs := TripleoRoleConfigSetting{
-						Service: stepValue.IncludeRole.Name,
-						Path:    k,
-						Value:   v,
+					if cdl.Roles[roleIndex].ConfigSettings[k] == nil {
+						cdl.Roles[roleIndex].ConfigSettings[k] = v
+					} else {
+						return fmt.Errorf("processGetDeployStepsTasksStep: %s already exists for role %s", k, role.Name)
 					}
-					cdl.Roles[roleIndex].ConfigSettings[k] = append(cdl.Roles[roleIndex].ConfigSettings[k], cs)
 				}
 			}
 		}

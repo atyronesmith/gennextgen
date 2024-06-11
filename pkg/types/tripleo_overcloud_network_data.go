@@ -5,41 +5,41 @@ import "github.com/atyronesmith/gennextgen/pkg/utils"
 type TripleoOvercloudNetworkData []TripleoOvercloudNetworkDataEntry
 
 type TripleoOvercloudNetworkDataEntry struct {
-	Name      string                                       `yaml:"name"`
-	NameLower string                                       `yaml:"name_lower"`
-	Vip       bool                                         `yaml:"vip"`
-	DNSDomain string                                       `yaml:"dns_domain,omitempty"`
-	MTU       int                                          `yaml:"mtu"`
-	Ipv6      bool                                         `yaml:"ipv6"`
-	Subnets   map[string]TripleoOvercloudNetworkDataSubnet `yaml:"subnets"`
-	Enabled   bool                                         `yaml:"enabled"`
+	Name      string                `yaml:"name"`
+	NameLower string                `yaml:"name_lower"`
+	Vip       bool                  `yaml:"vip"`
+	DNSDomain string                `yaml:"dns_domain,omitempty"`
+	MTU       int                   `yaml:"mtu"`
+	Ipv6      bool                  `yaml:"ipv6"`
+	Subnets   map[string]TONDSubnet `yaml:"subnets"`
+	Enabled   bool                  `yaml:"enabled"`
 }
 
-type TripleoOvercloudNetworkDataSubnet struct {
-	Enabled             bool             `yaml:"enabled"`
-	VLAN                int64            `yaml:"vlan"`
-	AllocationPools     []AllocationPool `yaml:"allocation_pools"`
-	GatewayIp           string           `yaml:"gateway_ip"`
-	GatewayIpV6         string           `yaml:"gateway_ipv6"`
-	Routes              []RoutesIpv6     `yaml:"routes,omitempty"`
-	IpSubnet            string           `yaml:"ip_subnet"`
-	Ipv6Subnet          string           `yaml:"ipv6_subnet"`
-	Ipv6AllocationPools []AllocationPool `yaml:"ipv6_allocation_pools"`
-	RoutesIpv6          []RoutesIpv6     `yaml:"routes_ipv6,omitempty"`
+type TONDSubnet struct {
+	Enabled             bool                 `yaml:"enabled"`
+	VLAN                int64                `yaml:"vlan"`
+	AllocationPools     []TONDAllocationPool `yaml:"allocation_pools"`
+	GatewayIp           string               `yaml:"gateway_ip"`
+	GatewayIpV6         string               `yaml:"gateway_ipv6"`
+	Routes              []TONDRoutesIpv6     `yaml:"routes,omitempty"`
+	IpSubnet            string               `yaml:"ip_subnet"`
+	Ipv6Subnet          string               `yaml:"ipv6_subnet"`
+	Ipv6AllocationPools []TONDAllocationPool `yaml:"ipv6_allocation_pools"`
+	RoutesIpv6          []TONDRoutesIpv6     `yaml:"routes_ipv6,omitempty"`
 }
 
-type AllocationPool struct {
+type TONDAllocationPool struct {
 	Start string `yaml:"start"`
 	End   string `yaml:"end"`
 }
 
-type RoutesIpv6 struct {
+type TONDRoutesIpv6 struct {
 	Default     bool   `yaml:"default"`
 	Destination string `yaml:"destination"`
 	NextHop     string `yaml:"nexthop"`
 }
 
-type InternalAPISubnet1 struct {
+type TONDInternalAPISubnet1 struct {
 	Ipv6Subnet          string        `yaml:"ipv6_subnet"`
 	Ipv6AllocationPools []interface{} `yaml:"ipv6_allocation_pools"`
 }

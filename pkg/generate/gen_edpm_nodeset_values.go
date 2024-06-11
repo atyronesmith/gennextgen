@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"embed"
 	"fmt"
 
 	"github.com/atyronesmith/gennextgen/pkg/types"
@@ -19,7 +20,7 @@ type EDPMNodesetConfigMap struct {
 	Data map[string]interface{} `yaml:"data"`
 }
 
-func GenEdpmNodesetValues(outDir string, cdl *types.ConfigDownload) error {
+func GenEdpmNodesetValues(outDir string, configs embed.FS, cdl *types.ConfigDownload) error {
 
 	for _, role := range cdl.Roles {
 		cfMap, err := genNodeset(role)
@@ -73,13 +74,33 @@ func genNodeset(tRole *types.TripleoRole) (EDPMNodesetConfigMap, error) {
 	ansible := make(map[string]interface{})
 	nodeset["ansible"] = ansible
 
+	ansibleVars := make(map[string]interface{})
+	ansible["ansibleVars"] = ansibleVars
+
+	mapEDPM(ansibleVars, tRole,
+		[]string{
+			"edpm_kernel_args",
+			"edpm_tuned_profile",
+			"edpm_tuned_isolated_cores",
+			"edpm_nova_libvirt_qemu_group",
+			"edpm_ovs_dpdk_pmd_core_list",
+			"edpm_ovs_dpdk_socket_memory",
+			"edpm_ovs_dpdk_memory_channels",
+			"edpm_ovs_dpdk_vhost_postcopy_support",
+			"edpm_ovn_bridge_mappings",
+			"edpm_network_config_hide_sensitive_logs",
+			"edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings",
+			"edpm_network_config_os_net_config_mappings",
+			"edpm_network_config_template",
+		})
+
 	nodeset["networks"] = []infranetworkv1.IPSetNetwork{}
 
 	for _, net := range tRole.Networks {
 		rNet := infranetworkv1.IPSetNetwork{}
 		for _, sn := range net.Subnets {
-			rNet.Name = infranetworkv1.NetNameStr(net.Name)
-			rNet.SubnetName = infranetworkv1.NetNameStr(sn.Name)
+			rNet.Name = infranetworkv1.NetNameStr(net.NameLower)
+			rNet.SubnetName = infranetworkv1.NetNameStr(sn)
 		}
 		nodeset["networks"] = append(nodeset["networks"].([]infranetworkv1.IPSetNetwork), rNet)
 	}
@@ -112,5 +133,21 @@ func genNodeset(tRole *types.TripleoRole) (EDPMNodesetConfigMap, error) {
 		hosts[rHost.HostName] = rHost
 	}
 
+	nova := make(map[string]interface{})
+	nodeset["nova"] = nova
+	compute := make(map[string]interface{})
+	nova["compute"] = compute
+
+	serviceVars := types.GetServiceVars(tRole, "nova")
+	for varName, varVal := range serviceVars {
+		compute[varName] = varVal
+	}
+
 	return VANodeDef, nil
+}
+
+func mapEDPM(ansibleVars map[string]interface{}, tRole *types.TripleoRole, varNames []string) {
+	for _, varName := range varNames {
+		ansibleVars[varName] = types.EDPMVarMap(varName, tRole)
+	}
 }
