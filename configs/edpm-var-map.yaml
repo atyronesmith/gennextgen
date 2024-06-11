@@ -1006,7 +1006,7 @@ edpm_iscsid_volumes: ""
 # File: 
 # Example: 
 
-edpm_kernel_args: tripleo_kernel_args
+edpm_kernel_args:  tripleo_kernel_args
 # Type: str
 # Description: Grub kernel args.
 # Required: false
@@ -3129,7 +3129,9 @@ edpm_ovs_dpdk_handler_cores: tripleo_ovs_dpdk_handler_cores
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: ''
 
-edpm_ovs_dpdk_lcore_list: tripleo_ovs_dpdk_lcore_list
+edpm_ovs_dpdk_lcore_list: 
+ - tripleo_ovs_dpdk_lcore_list
+ - OvsDpdkCoreList
 # Type: str
 # Description: (Optional) List of lcores for DPDK. Its a comma-separated string of logical cores.
 #   All ovs-vswitchd threads will be pinned to the first core declared in the mask.
