@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -56,12 +57,14 @@ func YamlToStruct[T any](filename string, obj *T) error {
 }
 
 func StructToYaml(obj interface{}) ([]byte, error) {
-	yaml, err := yaml.Marshal(obj)
+	var b bytes.Buffer
+	enc := yaml.NewEncoder(&b)
+	enc.SetIndent(2)
+	err := enc.Encode(obj)
 	if err != nil {
-		fmt.Printf("Error while Marshaling %T: %v", obj, err)
-		return nil, err
+		return nil, fmt.Errorf("Error while Marshaling %T: %v", obj, err)
 	}
-	return yaml, nil
+	return b.Bytes(), nil
 }
 
 func StructToYamlK8s(obj interface{}) ([]byte, error) {

@@ -40,26 +40,61 @@ ceilometer::agent::service_credentials::user_domain_name:
   type: string
   path: ceilometer.agent.service_credentials.user_domain_name
   target: edpm-nodeset-values.data.ceilometer.agent.conf.service_credentials.user_domain_name
-ceilometer::amqp_notify_address_prefix: ''
-ceilometer::amqp_rpc_address_prefix: ''
-ceilometer::host: '%{hiera(''fqdn_canonical'')}'
+ceilometer::amqp_notify_address_prefix:
+  type: 
+  path:
+  target:
+ceilometer::amqp_rpc_address_prefix:
+  type: 
+  path:
+  target:
+ceilometer::host: 
+  type: 
+  path:
+  target:
 ceilometer::logging::debug:
   type: boolean
   path: ceilometer.logging.debug
   target: edpm-nodeset-values.data.nova.compute.conf.logging
 ceilometer::notification_driver:
-- messagingv2
-ceilometer::rabbit_heartbeat_in_pthread: false
-ceilometer::snmpd_readonly_user_password: eB2uNC14I618IbNlF50uNf0m
-ceilometer::snmpd_readonly_username: ro_snmp_user
-ceilometer::telemetry_secret: n2emdodF9Qpg3oueiltJCA9fa
-ceilometer_redis_password: wsdmn8tXD4hKbpA44CqypAjqC
-cold_migration_ssh_inbound_addr: '%{hiera(''internal_api'')}'
-compute_disable_irqbalance: false
+  type: 
+  path:
+  target:
+  deprecated: true
+ceilometer::rabbit_heartbeat_in_pthread:
+  type: bool
+  path:
+  target:
+ceilometer::snmpd_readonly_user_password:
+  type: string
+  path:
+  target:
+ceilometer::snmpd_readonly_username: 
+  type: string
+  path:
+  target:
+ceilometer::telemetry_secret: 
+  type: string
+  path:
+  target:
+ceilometer_redis_password:
+  type: string
+  ignore: true
+cold_migration_ssh_inbound_addr: 
+  type: string
+  ignore: true
+compute_disable_irqbalance:
+  type: bool
+  ooo: NovaComputeDisableIrqBalance
+  default: false
 compute_enable_ksm: false
 compute_namespace: true
 container_cpuset_cpus: ''
-live_migration_ssh_inbound_addr: '%{hiera(''internal_api'')}'
+live_migration_ssh_inbound_addr:
+  type: string
+  path: nova.live_migration_ssh_inbound_addr
+  target: edpm-nodeset-values.data.nova.compute.conf.live_migration_ssh_inbound_addr
+  ignore: true
 
 neutron::agents::ml2::sriov::exclude_devices: []
 neutron::agents::ml2::sriov::extensions:
@@ -169,7 +204,10 @@ neutron::rabbit_heartbeat_timeout_threshold:
   type: integer
   path: neutron.oslo_messaging_rabbit.heartbeat_timeout_threshold
   target: service-values.data.neutron.customServiceConfig.oslo_messaging_rabbit.heartbeat_timeout_threshold
-neutron::report_interval: 300
+neutron::report_interval:
+  type: integer
+  path: nova.report_interval
+  target: edpm-nodeset-values.data.nova.compute.conf.report_interval
 neutron::service_plugins:
   type: list
   path: neutron.service_plugins
@@ -254,14 +292,15 @@ nova::compute::consecutive_build_service_disable_threshold:
 nova::compute::cpu_dedicated_set:
   type: string
   path: nova.compute.cpu_dedicated_set
-  target: edpm-nodeset-values.data.nova.compute.conf.compute.cpu_dedicated_set
-  tripleo: NovaComputeCpuDedicatedSet
+  target: edpm-nodeset-values.data.nova.compute.conf.compute.DEFAULT.cpu_dedicated_set
+  ooo: NovaComputeCpuDedicatedSet
 #   (optional) Mask of host CPUs that can be used for ``VCPU`` resources and
 #   offloaded emulator threads.
 nova::compute::cpu_shared_set:
   type: string
   path: nova.compute.cpu_shared_set
   target: edpm-nodeset-values.data.nova.compute.conf.compute.cpu_shared_set
+  ooo: NovaComputeCpuSharedSet
 #   (optional) Force backing images to raw format.
 nova::compute::force_raw_images:
   type: boolean
@@ -491,7 +530,7 @@ nova::compute::rbd::rbd_keyring:
 nova::compute::reserved_host_memory: 
   type: integer
   path: nova.compute.reserved_host_memory
-  target: edpm-nodeset-values.data.nova.compute.conf.compute
+  target: edpm-nodeset-values.data.nova.compute.conf.DEFAULT.reserved_host_memory
 nova::compute::reserved_huge_pages:
   type: integer
   path: nova.compute.reserved_huge_pages
@@ -513,6 +552,7 @@ nova::compute::vcpu_pin_set:
   depricated: true
   path: nova.compute.vcpu_pin_set
   target: edpm-nodeset-values.data.nova.compute.conf.compute
+  ooo: NovaVcpuPinSet
 nova::compute::verify_glance_signatures:
   type: boolean
   path: nova.compute.verify_glance_signatures
@@ -642,7 +682,9 @@ nova::network::neutron::valid_interfaces:
   path: nova.network.neutron.valid_interfaces
   target: edpm-nodeset-values.data.nova.network.conf.neutron.valid_interfaces
 nova::notification_driver:
-- messagingv2
+  type: list
+  path: nova.rabbit_heartbeat_timeout_threshold
+  target: edpm-nodeset-values.data.nova.compute.conf.oslo_messaging_rabbit.heartbeat_timeout_threshold 
 nova::notification_format: unversioned
 nova::notify_on_state_change: vm_and_task_state
 nova::os_region_name: tb8

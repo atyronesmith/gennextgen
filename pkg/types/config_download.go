@@ -448,10 +448,9 @@ func (cdl *ConfigDownload) ProcessTripleoAnsibleInventory() error {
 
 			for roleVarName, roleVarValue := range v.(map[string]interface{}) {
 				if strings.HasPrefix(roleVarName, "tripleo_") {
-					if role.ConfigSettings[roleVarName] == nil {
-						role.ConfigSettings[roleVarName] = roleVarValue
-					} else {
-						return fmt.Errorf("ProcessTripleoAnsibleInventory: <%s> already exists for role %s", roleVarName, role.Name)
+					err = SetConfigSetting(role, roleVarName, roleVarValue)
+					if err != nil {
+						return err
 					}
 				}
 			}
@@ -743,18 +742,17 @@ func (cdl *ConfigDownload) ProcessTripleoOvercloudEnvironment() error {
 
 	mapTypes := []string{"ExtraConfig", "ExtraGroupVars", "Parameters"}
 
-	for roleIndex, role := range cdl.Roles {
+	for _, role := range cdl.Roles {
 		for _, mapType := range mapTypes {
 			key := fmt.Sprintf("%s%s", role.Name, mapType)
 			if roleParams, ok := defaults[key]; ok {
 				fmt.Printf("Processing %s\n", key)
 				for k, v := range roleParams.(map[string]interface{}) {
 					varName := strings.ReplaceAll(k, "::", ".")
-					if cdl.Roles[roleIndex].ConfigSettings[varName] != nil {
-						fmt.Printf("ProcessTripleoOvercloudEnvironment: <%s> already exists for role %s", varName, role.Name)
-						fmt.Printf("\t%+v:%+v\n", cdl.Roles[roleIndex].ConfigSettings[varName], v)
+					err = SetConfigSetting(role, varName, v)
+					if err != nil {
+						return err
 					}
-					cdl.Roles[roleIndex].ConfigSettings[varName] = v
 				}
 			}
 		}
@@ -894,4 +892,28 @@ func GetServiceVars(role *TripleoRole, service string) map[string]interface{} {
 	}
 
 	return serviceVars
+}
+
+func SetConfigSetting(role *TripleoRole, key string, value interface{}) error {
+	strVal := fmt.Sprintf("%v", value)
+	if len(strVal) == 0 {
+		fmt.Printf("\tSetConfigSetting: <%s> value is empty, skipping...\n", key)
+
+		return nil
+	}
+	if strings.ContainsAny(strVal, "{}&:*#?|<>=!%@\\") {
+		fmt.Printf("\tSetConfigSetting: <%s> value contains a special char <%s>, skipping...\n", key, strVal)
+
+		return nil
+	}
+	if role.ConfigSettings[key] != nil {
+		if role.ConfigSettings[key] != value {
+			fmt.Printf("\tSetConfigSetting: <%s> already exists for role %s\n", key, role.Name)
+			fmt.Printf("\t<%+v> != <%+v>\n", role.ConfigSettings[key], value)
+		}
+	}
+
+	role.ConfigSettings[key] = value
+
+	return nil
 }
