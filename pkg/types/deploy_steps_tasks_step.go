@@ -54,10 +54,9 @@ func processGetDeployStepsTasksStep(cdl *ConfigDownload, fileName string) error 
 		for _, stepValue := range dsts {
 			if stepValue.IncludeRole != nil {
 				for k, v := range stepValue.Vars {
-					if cdl.Roles[roleIndex].ConfigSettings[k] == nil {
-						cdl.Roles[roleIndex].ConfigSettings[k] = v
-					} else {
-						return fmt.Errorf("processGetDeployStepsTasksStep: %s already exists for role %s", k, role.Name)
+					err = SetConfigSetting(cdl.Roles[roleIndex], k, v)
+					if err != nil {
+						return fmt.Errorf("processGetDeployStepsTasksStep: %s", err)
 					}
 				}
 			}

@@ -27,7 +27,7 @@ func GenEdpmNodesetValues(outDir string, configs embed.FS, cdl *types.ConfigDown
 		if err != nil {
 			return err
 		}
-		yaml, err := utils.StructToYamlK8s(cfMap)
+		yaml, err := utils.StructToYaml(cfMap)
 		if err != nil {
 			return err
 		}
@@ -43,7 +43,7 @@ func GenEdpmNodesetValues(outDir string, configs embed.FS, cdl *types.ConfigDown
 
 // https://github.com/openstack-k8s-operators/dataplane-operator/blob/main/docs/assemblies/ref_example-OpenStackDataPlaneNodeSet-CR-for-preprovisioned-nodes.adoc
 
-func genNodeset(tRole *types.TripleoRole) (EDPMNodesetConfigMap, error) {
+func genNodeset(tRole *types.TripleoRole) (*EDPMNodesetConfigMap, error) {
 
 	var VANodeDef = EDPMNodesetConfigMap{}
 
@@ -139,11 +139,14 @@ func genNodeset(tRole *types.TripleoRole) (EDPMNodesetConfigMap, error) {
 	nova["compute"] = compute
 
 	serviceVars := types.GetServiceVars(tRole, "nova")
-	for varName, varVal := range serviceVars {
-		compute[varName] = varVal
+	configMap, err := utils.GenOSPConfig(serviceVars)
+	if err != nil {
+		return nil, err
 	}
 
-	return VANodeDef, nil
+	compute["conf"] = string(configMap)
+
+	return &VANodeDef, nil
 }
 
 func mapEDPM(ansibleVars map[string]interface{}, tRole *types.TripleoRole, varNames []string) {

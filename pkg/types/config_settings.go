@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -9,7 +8,7 @@ import (
 )
 
 func ProcessConfigSettings(cdl *ConfigDownload) error {
-	for roleIndex, role := range cdl.Roles {
+	for _, role := range cdl.Roles {
 		configPath := filepath.Join("config-download", "overcloud", role.Name, "config_settings.yaml")
 		cfgSet, err := utils.YamlToMap(utils.GetFullPath(configPath))
 		if err != nil {
@@ -18,10 +17,10 @@ func ProcessConfigSettings(cdl *ConfigDownload) error {
 
 		for k, v := range cfgSet {
 			varName := strings.ReplaceAll(k, "::", ".")
-			if _, ok := cdl.Roles[roleIndex].ConfigSettings[varName]; ok {
-				return fmt.Errorf("ProcessConfigSettings: <%s> already exists for role %s", varName, role.Name)
+			err := SetConfigSetting(role, varName, v)
+			if err != nil {
+				return err
 			}
-			cdl.Roles[roleIndex].ConfigSettings[varName] = v
 		}
 	}
 

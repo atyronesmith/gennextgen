@@ -46,7 +46,11 @@ func main() {
 	cmd := flag.Arg(0)
 	switch cmd {
 	case "find-configmaps":
-		findConfigMaps(flag.Arg(1))
+		err := findConfigMaps("/tmp", "archvars.yaml", flag.Arg(1))
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	case "process-kustomize":
 		processKustomize(flag.Arg(1))
 	case "gen-nodeset":
@@ -149,12 +153,26 @@ func traverseKustomizeFiles(baseDir string, resources map[string]interface{}) {
 	fmt.Println(string(out))
 }
 
-func findConfigMaps(baseDir string) {
+func findConfigMaps(outDir string, fileName string, baseDir string) error {
 	fileList, err := utils.SearchFileRegex(baseDir, "*.yaml")
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
+
+	_, err = os.Stat(outDir)
+	if os.IsNotExist(err) {
+		if err = os.MkdirAll(outDir, 0755); err != nil {
+			return fmt.Errorf("unable to mkdir: %s", outDir)
+		}
+	}
+	file := filepath.Join(outDir, fileName)
+	dFile, err := os.Create(file)
+	if err != nil {
+		fmt.Printf("unable to create/open file: %s", file)
+	}
+	defer dFile.Close()
+
+	fmt.Printf("Writing %s...\n", file)
 
 	for _, file := range fileList {
 		y, err := utils.YamlToMap(file)
@@ -162,55 +180,63 @@ func findConfigMaps(baseDir string) {
 			if val, ok := y["kind"]; ok {
 				if val == "ConfigMap" {
 					fmt.Printf("configmap: %s\n", file)
-					findcustomServiceConfig(y)
+					findcustomServiceConfig(y, dFile)
 				}
 			}
 		}
 	}
-
+	return nil
 }
 
-func findcustomServiceConfig(configMap map[string]interface{}) {
+func findcustomServiceConfig(configMap map[string]interface{}, file *os.File) {
 	if data, ok := configMap["data"]; ok {
-		mapTraverse(data, "data")
+		mapTraverse(data, "data", file)
 	}
 }
 
-func mapTraverse(m interface{}, addr string) {
+func mapTraverse(m interface{}, addr string, file *os.File) {
 	switch v := m.(type) {
 	case map[string]interface{}:
 		for k, v := range v {
 			switch v := v.(type) {
 			case map[string]interface{}:
-				mapTraverse(v, fmt.Sprintf("%s.%s", addr, k))
+				mapTraverse(v, fmt.Sprintf("%s.%s", addr, k), file)
 			case string:
-				if k == "customServiceConfig" {
-					err := parseCustomServiceConfig(v)
+				if k == "customServiceConfig" || k == "conf" {
+					err := parseCustomServiceConfig(v, addr, file)
+					if err != nil {
+						fmt.Printf("Cannot parse INI file...%s\n", err)
+					}
+				} else {
+					_, err := file.WriteString(fmt.Sprintf("%s.%s.[%s]\n", addr, k, v))
 					if err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
-				} else {
-					fmt.Printf("%s.%s.[%s]\n", addr, k, v)
 				}
 			}
 		}
 	case []interface{}:
 		for i, v := range v {
-			mapTraverse(v, fmt.Sprintf("%s[%d].", addr, i))
+			mapTraverse(v, fmt.Sprintf("%s[%d].", addr, i), file)
 		}
+	default:
+		fmt.Printf("unhandled map type %s=%v\n", addr, v)
 	}
 }
 
-func parseCustomServiceConfig(cfg string) error {
+func parseCustomServiceConfig(cfg string, addr string, file *os.File) error {
 	ini, err := ini.Load([]byte(cfg))
 	if err != nil {
 		return err
 	}
 	for _, section := range ini.Sections() {
-		fmt.Printf("\t[%s]\n", section.Name())
+		//		fmt.Printf("\t[%s]\n", section.Name())
 		for _, key := range section.Keys() {
-			fmt.Printf("\t%s=%s\n", key.Name(), key.Value())
+			_, err := file.WriteString(fmt.Sprintf("%s.%s.%s=%s\n", addr, section.Name(), key.Name(), key.Value()))
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
