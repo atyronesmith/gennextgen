@@ -50,7 +50,6 @@ func main() {
 	}
 
 	edpmRepo := flag.Arg(0)
-
 	// Sort argDefs alphabetically
 	// fileEntires, err := os.ReadDir(filepath.Join(configDownloadDir, "overcloud"))
 	// if err != nil {

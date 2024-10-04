@@ -1,15 +1,22 @@
 package types
 
-import "github.com/atyronesmith/gennextgen/pkg/utils"
+import (
+	"github.com/atyronesmith/gennextgen/pkg/utils"
+)
 
 type TripleoOvercloudEnvironment struct {
-	ParmaterDefaults TOEParameterDefaults `yaml:"parameter_defaults"`
+	EncryptedParamNames []string               `yaml:"encrypted_param_names"`
+	EventSinks          []string               `yaml:"event_sinks"`
+	Parameters          map[string]interface{} `yaml:"parameters"`
+	ParmaterDefaults    TOEParameterDefaults   `yaml:"parameter_defaults"`
+	ResourceRegistry    map[string]interface{} `yaml:"resource_registry"`
 }
 
 type TOEParameterDefaults struct {
 	CtlplaneNetworkAttributes  TOECtlplaneNetworkAttributes  `yaml:"CtlplaneNetworkAttributes"`
 	DeployedNetworkEnvironment TOEDeployedNetworkEnvironment `yaml:"DeployedNetworkEnvironment"`
 	ControlPlaneVipData        TOEControlPlaneVipData        `yaml:"ControlPlaneVipData"`
+	Params                     map[string]interface{}        `yaml:",inline"`
 }
 
 type TOECtlplaneNetworkAttributes struct {
@@ -92,10 +99,14 @@ type TOEControlPlaneVipDataSubnet struct {
 
 var tripleoOvercloudEnvironment *TripleoOvercloudEnvironment
 
-func GetTripleoOvercloudEnvironment() (*TripleoOvercloudEnvironment, error) {
+func GetTripleoOvercloudEnvironment(path string) (*TripleoOvercloudEnvironment, error) {
+	if path == "" {
+		path = utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_ENVIRONMENT)
+	}
+
 	if tripleoOvercloudEnvironment == nil {
 		tripleoOvercloudEnvironment = &TripleoOvercloudEnvironment{}
-		err := utils.YamlToStruct(utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_ENVIRONMENT), &tripleoOvercloudEnvironment)
+		err := utils.YamlToStruct(path, &tripleoOvercloudEnvironment)
 		if err != nil {
 			return nil, err
 		}

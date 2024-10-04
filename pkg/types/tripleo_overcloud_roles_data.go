@@ -22,10 +22,14 @@ type TripleoOvercloudRolesDataEntry struct {
 
 var tripleoOvercloudRolesData TripleoOvercloudRolesData
 
-func GetTripleoOvercloudRolesData() (*TripleoOvercloudRolesData, error) {
+func GetTripleoOvercloudRolesData(path string) (*TripleoOvercloudRolesData, error) {
+	if path == "" {
+		path = utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_ROLES_DATA)
+	}
+
 	if len(tripleoOvercloudRolesData) == 0 {
 		tripleoOvercloudRolesData = TripleoOvercloudRolesData{}
-		err := utils.YamlToStruct(utils.GetFullPath(utils.TRIPLEO_OVERCLOUD_ROLES_DATA), &tripleoOvercloudRolesData)
+		err := utils.YamlToStruct(path, &tripleoOvercloudRolesData)
 		if err != nil {
 			return nil, err
 		}

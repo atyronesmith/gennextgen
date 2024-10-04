@@ -42,10 +42,14 @@ type TOBDInstances struct {
 
 var tripleoOvercloudBaremetalDeployment TripleoOvercloudBaremetalDeployment
 
-func GetTripleoOvercloudBaremetalDeployment() (*TripleoOvercloudBaremetalDeployment, error) {
+func GetTripleoOvercloudBaremetalDeployment(path string) (*TripleoOvercloudBaremetalDeployment, error) {
+	if path == "" {
+		path = utils.GetFullPath(utils.BAREMETAL_DEPLOY)
+	}
+
 	if len(tripleoOvercloudBaremetalDeployment) == 0 {
 		tripleoOvercloudBaremetalDeployment = TripleoOvercloudBaremetalDeployment{}
-		err := utils.YamlToStruct(utils.GetFullPath(utils.BAREMETAL_DEPLOY), &tripleoOvercloudBaremetalDeployment)
+		err := utils.YamlToStruct(path, &tripleoOvercloudBaremetalDeployment)
 		if err != nil {
 			return nil, err
 		}
