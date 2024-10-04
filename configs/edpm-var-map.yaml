@@ -1,4 +1,7 @@
-edpm_bond_interface_ovs_options: bond_interface_ovs_options
+edpm_bond_interface_ovs_options: 
+  - BondInterfaceOvsOptions
+  - bond_interface_ovs_options
+  -
 # Type: str
 # Description: Binding options to be rendered in a template
 # Required: false
@@ -486,7 +489,10 @@ edpm_ddp_module: ""
 # File: 
 # Example: 
 
-edpm_ddp_package: ddp_package
+edpm_ddp_package: 
+  - DdpPackage
+  - ddp_package
+  - 
 # Type: str
 # Description: Required DDP package.
 # Required: false
@@ -510,7 +516,7 @@ edpm_debug: debug
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/upgrade_steps_playbook.yaml
 # Example: False
 
-edpm_deploy_identifier: deploy_identifier
+edpm_deploy_identifier: [ "deploy_identifier", "DeployIdenfier" ]
 # Type: str
 # Description: Sets `EDPM_DEPLOY_IDENTIFIER` environment variable.
 # Required: false
@@ -642,7 +648,10 @@ edpm_frr_bgp: tripleo_frr_bgp
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/pre_deploy_step_tasks.yaml
 # Example: true
 
-edpm_frr_bgp_asn: tripleo_frr_bgp_asn
+edpm_frr_bgp_asn: 
+  - FrrBgpAsn
+  - 
+  - tripleo_frr_bgp_asn
 # Type: int
 # Description: Default BGP ASN. Verify that it is correct for your use case.
 # Required: false
@@ -779,6 +788,9 @@ edpm_frr_bgp_peers: ""
 # Default: []
 # File: 
 # Example: 
+              # - 100.64.0.1
+              # - 100.65.0.1
+
 
 edpm_frr_bgp_uplinks: tripleo_frr_bgp_uplinks
 # Type: list
@@ -804,7 +816,7 @@ edpm_frr_conf_custom_globals: ""
 # File: 
 # Example: 
 
-edpm_frr_conf_custom_ipv4: ""
+edpm_frr_conf_custom_ipv4: tripleo_frr_conf_custom_ipv4
 # Type: str
 # Description: 
 # Required: false
@@ -812,7 +824,7 @@ edpm_frr_conf_custom_ipv4: ""
 # File: 
 # Example: 
 
-edpm_frr_conf_custom_ipv6: ""
+edpm_frr_conf_custom_ipv6: tripleo_frr_conf_custom_ipv6
 # Type: str
 # Description: 
 # Required: false
@@ -1078,7 +1090,8 @@ edpm_kernel_hugepages_remove: tripleo_kernel_hugepages_remove
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: false
 
-edpm_kernel_sysctl_extra_settings: ""
+edpm_kernel_sysctl_extra_settings: 
+  - tripleo_kernel_sysctl_extra_settings
 # Type: dict
 # Description: Additional sysctl settings.
 # Required: false
@@ -1478,13 +1491,22 @@ edpm_network_config_nmstate: ""
 # File: 
 # Example: 
 
-edpm_network_config_os_net_config_mappings: tripleo_network_config_os_net_config_mappings
+edpm_network_config_os_net_config_mappings: 
+  download: tripleo_network_config_os_net_config_mappings
+
 # Type: dict
 # Description: Per node and/or per node group configuration map. Used by the edpm_os_net_config_mappings module.
 # Required: false
 # Default: map[]
 # File: 
 # Example: 
+          # edpm-compute-0:
+          #   nic2: 6a:fe:54:3f:8a:02  # CHANGEME
+          # edpm-compute-1:
+          #   nic2: 6b:fe:54:3f:8a:02  # CHANGEME
+          # edpm-compute-2:
+          #   nic2: 6c:fe:54:3f:8a:02  # CHANGEME
+
 
 edpm_network_config_safe_defaults: ""
 # Type: bool
@@ -2804,7 +2826,10 @@ edpm_ovn_bgp_agent_debug: ""
 # File: 
 # Example: 
 
-edpm_ovn_bgp_agent_driver: ""
+edpm_ovn_bgp_agent_driver: 
+  - FrrOvnBgpAgentDriver
+  - ovn_bgp_agent_bgp_as
+  - 
 # Type: str
 # Description: 
 # Required: false
@@ -2855,7 +2880,11 @@ edpm_ovn_bgp_agent_expose_ipv6_gua_tenant_networks: ""
 # File: 
 # Example: 
 
-edpm_ovn_bgp_agent_expose_tenant_networks: ""
+edpm_ovn_bgp_agent_expose_tenant_networks: 
+- FrrOvnBgpAgentExposeTenantNetworks
+- ovn_bgp_agent_expose_tenant_networks
+- tripleo_frr_ovn_bgp_agent_expose_tenant_networks
+
 # Type: bool
 # Description: Exposing tenant networks.
 # Required: false
@@ -2863,7 +2892,7 @@ edpm_ovn_bgp_agent_expose_tenant_networks: ""
 # File: 
 # Example: 
 
-edpm_ovn_bgp_agent_image: ""
+edpm_ovn_bgp_agent_image: []
 # Type: str
 # Description: OVN BGP agent image.
 # Required: false
@@ -2871,7 +2900,7 @@ edpm_ovn_bgp_agent_image: ""
 # File: 
 # Example: 
 
-edpm_ovn_bgp_agent_images_download_delay: ""
+edpm_ovn_bgp_agent_images_download_delay: []
 # Type: int
 # Description: The seconds between retries for failed download tasks
 # Required: false
@@ -2887,7 +2916,10 @@ edpm_ovn_bgp_agent_images_download_retries: ""
 # File: 
 # Example: 
 
-edpm_ovn_bgp_agent_internal_tls_enable: ""
+edpm_ovn_bgp_agent_internal_tls_enable: 
+  - EnableInternalTLS
+  -
+  - tripleo_frr_ovn_bgp_agent_internal_tls_enable
 # Type: bool
 # Description: Enable internal TLS.
 # Required: false
@@ -2919,7 +2951,10 @@ edpm_ovn_bgp_agent_private_key: ""
 # File: 
 # Example: 
 
-edpm_ovn_bgp_agent_reconcile_interval: ""
+edpm_ovn_bgp_agent_reconcile_interval: 
+  - FrrOvnBgpAgentReconcileInterval
+  -
+  - tripleo_frr_ovn_bgp_agent_reconcile_interval
 # Type: int
 # Description: Reconciliation interval in seconds
 # Required: false
@@ -3104,7 +3139,11 @@ edpm_ovs_dpdk_emc_insertion_probablity: tripleo_ovs_dpdk_emc_insertion_probablit
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: ''
 
-edpm_ovs_dpdk_enable_tso: tripleo_ovs_dpdk_enable_tso
+edpm_ovs_dpdk_enable_tso: 
+  - OvsDpdkEnableTSO
+  - enable_tso
+  - tripleo_ovs_dpdk_enable_tso
+
 # Type: bool
 # Description: (Optional) Enable TSO support in OVS DPDK datapath.
 # Required: false
@@ -3120,7 +3159,11 @@ edpm_ovs_dpdk_extra: ""
 # File: 
 # Example: 
 
-edpm_ovs_dpdk_handler_cores: tripleo_ovs_dpdk_handler_cores
+edpm_ovs_dpdk_handler_cores: 
+  - OvsHandlerCores
+  - handler
+  - tripleo_ovs_dpdk_handler_cores
+
 # Type: str
 # Description: Optional) Number of cores to be used for handler threads. Its a string with a number, specifying 
 #  the count of logical cores to be used as handler threads.
@@ -3130,8 +3173,9 @@ edpm_ovs_dpdk_handler_cores: tripleo_ovs_dpdk_handler_cores
 # Example: ''
 
 edpm_ovs_dpdk_lcore_list: 
- - tripleo_ovs_dpdk_lcore_list
  - OvsDpdkCoreList
+ - lcore
+ - tripleo_ovs_dpdk_lcore_list
 # Type: str
 # Description: (Optional) List of lcores for DPDK. Its a comma-separated string of logical cores.
 #   All ovs-vswitchd threads will be pinned to the first core declared in the mask.
@@ -3140,7 +3184,11 @@ edpm_ovs_dpdk_lcore_list:
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: ''
 
-edpm_ovs_dpdk_memory_channels: tripleo_ovs_dpdk_memory_channels
+edpm_ovs_dpdk_memory_channels: 
+  - OvsDpdkMemoryChannels
+  - memory_channels
+  - tripleo_ovs_dpdk_memory_channels
+
 # Type: int
 # Description: (Optional) Number of memory channels in the memory architecture. 
 # Required: false
@@ -3148,7 +3196,11 @@ edpm_ovs_dpdk_memory_channels: tripleo_ovs_dpdk_memory_channels
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
 # Example: 4
 
-edpm_ovs_dpdk_pmd_auto_lb: tripleo_ovs_dpdk_pmd_auto_lb
+edpm_ovs_dpdk_pmd_auto_lb: 
+  - OvsPmdAutoLb
+  - pmd_auto_lb
+  - tripleo_ovs_dpdk_pmd_auto_lb
+
 # Type: bool
 # Description: OvS DPDK PMD auto load balance enable or not
 # Required: false
@@ -3156,7 +3208,11 @@ edpm_ovs_dpdk_pmd_auto_lb: tripleo_ovs_dpdk_pmd_auto_lb
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: false
 
-edpm_ovs_dpdk_pmd_core_list: tripleo_ovs_dpdk_pmd_core_list
+edpm_ovs_dpdk_pmd_core_list: 
+  - OvsPmdCoreList
+  - pmd
+  - tripleo_ovs_dpdk_pmd_core_list
+
 # Type: str
 # Description: (Mandatory) List of PMD Cores for DPDK. Its a comma-separated 
 #  string of logical cores. These core should be part of isolcpus kernel parameter 
@@ -3166,7 +3222,11 @@ edpm_ovs_dpdk_pmd_core_list: tripleo_ovs_dpdk_pmd_core_list
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud/@role/deploy_steps_tasks_step0.yaml
 # Example: 4-7,68-71
 
-edpm_ovs_dpdk_pmd_improvement_threshold: tripleo_ovs_dpdk_pmd_improvement_threshold
+edpm_ovs_dpdk_pmd_improvement_threshold: 
+  - OvsPmdImprovementThreshold
+  - pmd_improvement_threshold
+  - tripleo_ovs_dpdk_pmd_improvement_threshold
+
 # Type: str
 # Description: OvS DPDK PMD improvement threshold
 # Required: false
@@ -3174,15 +3234,25 @@ edpm_ovs_dpdk_pmd_improvement_threshold: tripleo_ovs_dpdk_pmd_improvement_thresh
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: ''
 
-edpm_ovs_dpdk_pmd_load_threshold: tripleo_ovs_dpdk_pmd_load_threshold
+edpm_ovs_dpdk_pmd_load_threshold: 
+  - OvsPmdLoadThreshold
+  - pmd_load_threshold
+  - tripleo_ovs_dpdk_pmd_load_threshold
+
 # Type: str
 # Description: OvS DPDK PMD load threshold
+#  Minimum percentage of evaluated improvement across the non-isolated PMD threads that triggers a PMD auto load balance. Integer, range 0-100.
+#  To calculate the estimated improvement, a dry run of the reassignment is done and the estimated load variance is compared with the current variance. The default is 25%.
 # Required: false
 # Default: 
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: ''
 
-edpm_ovs_dpdk_pmd_rebal_interval: tripleo_ovs_dpdk_pmd_rebal_interval
+edpm_ovs_dpdk_pmd_rebal_interval: 
+  - OvsPmdRebalInterval
+  - pmd_rebal_interval
+  - tripleo_ovs_dpdk_pmd_rebal_interval
+
 # Type: str
 # Description: (Optional) PMD auto load balancing interval, in range 0 to 20,000. Its a string with a number, 
 #  specifies the minimum time (in minutes) between 2 consecutive PMD Auto Load Balancing iterations. The 
@@ -3192,7 +3262,8 @@ edpm_ovs_dpdk_pmd_rebal_interval: tripleo_ovs_dpdk_pmd_rebal_interval
 # File: /home/nextgen/dev/overcloud-deploy/overcloud/config-download/overcloud@role/deploy_steps_tasks_step0.yaml
 # Example: ''
 
-edpm_ovs_dpdk_pmd_sleep_max: ""
+edpm_ovs_dpdk_pmd_sleep_max: 
+  deploy: pmd_sleep_max
 # Type: str
 # Description: PMD maximum sleep time
 # Required: false
@@ -3200,7 +3271,11 @@ edpm_ovs_dpdk_pmd_sleep_max: ""
 # File: 
 # Example: 
 
-edpm_ovs_dpdk_revalidator_cores: tripleo_ovs_dpdk_revalidator_cores
+edpm_ovs_dpdk_revalidator_cores: 
+  - OvsRevalidatorCores
+  - revalidator
+  - tripleo_ovs_dpdk_revalidator_cores
+
 # Type: str
 # Description: (Optional) Number of cores to he used for revalidator threads. Its a string with a number, 
 #  specifying the count of logical cores to be used as revalidator threads.
@@ -3217,7 +3292,11 @@ edpm_ovs_dpdk_shared_mem_pool: ""
 # File: 
 # Example: 
 
-edpm_ovs_dpdk_socket_memory: tripleo_ovs_dpdk_socket_memory
+edpm_ovs_dpdk_socket_memory: 
+  - OvsDpdkSocketMemory
+  - socket_mem
+  - tripleo_ovs_dpdk_socket_memory
+
 # Type: str
 # Description: (Mandatory) Memory in MB to be allocated on each NUMA node for DPDK. 
 #  Its a comma-separated string of memory in MB.

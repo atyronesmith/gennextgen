@@ -223,7 +223,7 @@ func (cdl *ConfigDownload) Process(outDir string, configs embed.FS, serviceMap s
 		return err
 	}
 
-	tor, err := GetTripleoOvercloudRolesData()
+	tor, err := GetTripleoOvercloudRolesData("")
 	if err != nil {
 		return err
 	}
@@ -695,7 +695,7 @@ func (cdl *ConfigDownload) ProcessTripleoOvercloudNetworkData(networkData *Tripl
 // The Control Plane network is defined as part of the undercloud
 func (cdl *ConfigDownload) ProcessTripleoOvercloudEnvironment() error {
 
-	environment, err := GetTripleoOvercloudEnvironment()
+	environment, err := GetTripleoOvercloudEnvironment("")
 	if err != nil {
 		return err
 	}
@@ -788,7 +788,7 @@ func (cdl *ConfigDownload) ProcessConfigSettings(cfgSet map[string]interface{}, 
 }
 
 func (cdl *ConfigDownload) ProcessTripleoOvercloudBaremetalDeployment() error {
-	bmd, err := GetTripleoOvercloudBaremetalDeployment()
+	bmd, err := GetTripleoOvercloudBaremetalDeployment("")
 	if err != nil {
 		return err
 	}
