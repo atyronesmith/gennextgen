@@ -32,6 +32,7 @@ func main() {
 	}
 
 	if flag.NArg() != 1 && flag.NArg() != 3 {
+		fmt.Println("Error: Incorrect number of arguments.")
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -50,7 +51,6 @@ func main() {
 			fmt.Println("Error: Path is not a directory.")
 			os.Exit(1)
 		}
-		fmt.Printf("Directory: %s\n", flag.Arg(0))
 		genUtils.SetRootDir(flag.Arg(0))
 	} else {
 		toeFile = flag.Arg(0)
