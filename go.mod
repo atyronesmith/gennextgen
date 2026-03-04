@@ -6,7 +6,7 @@ toolchain go1.22.2
 
 require (
 	github.com/go-git/go-git/v5 v5.12.0
-	github.com/k8snetworkplumbingwg/network-attachment-definition-client v1.7.5
+	github.com/k8snetworkplumbingwg/network-attachment-definition-client v1.7.7
 	github.com/k8snetworkplumbingwg/whereabouts v0.7.0
 	github.com/openstack-k8s-operators/dataplane-operator/api v0.3.1-0.20240523171901-e556179f4d44
 	github.com/wasilibs/go-re2 v1.5.2
