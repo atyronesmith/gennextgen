@@ -64,7 +64,7 @@ require (
 	github.com/openstack-k8s-operators/glance-operator/api v0.3.1-0.20240522202242-daeab50a9031 // indirect
 	github.com/openstack-k8s-operators/heat-operator/api v0.3.1-0.20240520005136-22ce42e2173f // indirect
 	github.com/openstack-k8s-operators/horizon-operator/api v0.3.1-0.20240515093015-9d2609bb0015 // indirect
-	github.com/openstack-k8s-operators/infra-operator/apis v0.3.1-0.20240429104248-25176c735750
+	github.com/openstack-k8s-operators/infra-operator/apis v0.6.0
 	github.com/openstack-k8s-operators/ironic-operator/api v0.3.1-0.20240523093522-7a25580a799d // indirect
 	github.com/openstack-k8s-operators/keystone-operator/api v0.3.1-0.20240523092718-53aebcc693a5 // indirect
 	github.com/openstack-k8s-operators/lib-common/modules/common v0.5.1-0.20250228124213-cd63da392f97 // indirect
@@ -87,7 +87,7 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.53.0 // indirect
 	github.com/prometheus/procfs v0.15.0 // indirect
-	github.com/rabbitmq/cluster-operator/v2 v2.6.0 // indirect
+	github.com/rabbitmq/cluster-operator/v2 v2.9.0 // indirect
 	github.com/rhobs/obo-prometheus-operator/pkg/apis/monitoring v0.69.0-rhobs1 // indirect
 	github.com/rhobs/observability-operator v0.0.28 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
