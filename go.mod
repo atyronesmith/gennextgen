@@ -8,7 +8,7 @@ require (
 	github.com/k8snetworkplumbingwg/whereabouts v0.7.0
 	github.com/openstack-k8s-operators/dataplane-operator/api v0.3.1-0.20240523171901-e556179f4d44
 	github.com/wasilibs/go-re2 v1.10.0
-	gopkg.in/ini.v1 v1.67.0
+	gopkg.in/ini.v1 v1.67.1
 	k8s.io/api v0.30.1
 	k8s.io/apimachinery v0.30.1
 	sigs.k8s.io/yaml v1.6.0
