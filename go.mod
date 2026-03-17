@@ -59,7 +59,7 @@ require (
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/metal3-io/baremetal-operator/apis v0.6.3 // indirect
+	github.com/metal3-io/baremetal-operator/apis v0.8.1 // indirect
 	github.com/metal3-io/baremetal-operator/pkg/hardwareutils v0.6.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/openshift/api v3.9.0+incompatible // indirect
