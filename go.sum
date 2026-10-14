@@ -121,8 +121,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/k8snetworkplumbingwg/network-attachment-definition-client v1.7.7 h1:z4P744DR+PIpkjwXSEc6TvN3L6LVzmUquFgmNm8wSUc=
 github.com/k8snetworkplumbingwg/network-attachment-definition-client v1.7.7/go.mod h1:CM7HAH5PNuIsqjMN0fGc1ydM74Uj+0VZFhob620nklw=
-github.com/k8snetworkplumbingwg/whereabouts v0.9.3 h1:DbI2Xyst/FTZONuZ/O5EjHw/DaddrzSW2g/jmMXxWdQ=
-github.com/k8snetworkplumbingwg/whereabouts v0.9.3/go.mod h1:AmftIOLGlWE/HjRnPIAPAw8B+Pk/jSCNbUogB6i1AVQ=
+github.com/k8snetworkplumbingwg/whereabouts v0.9.4 h1:P45pLCyZ7iXLPBtlczbzSYV+AQCPCa9j7qfULKJ4ARM=
+github.com/k8snetworkplumbingwg/whereabouts v0.9.4/go.mod h1:AmftIOLGlWE/HjRnPIAPAw8B+Pk/jSCNbUogB6i1AVQ=
 github.com/kevinburke/ssh_config v1.2.0 h1:x584FjTGwHzMwvHx18PXxbBVzfnxogHaAReU4gf13a4=
 github.com/kevinburke/ssh_config v1.2.0/go.mod h1:CT57kijsi8u/K/BOFA39wgDQJ9CxiF4nAY/ojJ6r6mM=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
