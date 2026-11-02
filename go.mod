@@ -10,7 +10,7 @@ require (
 	github.com/wasilibs/go-re2 v1.13.0
 	gopkg.in/ini.v1 v1.67.3
 	k8s.io/api v0.34.1
-	k8s.io/apimachinery v0.37.1
+	k8s.io/apimachinery v0.37.2
 	sigs.k8s.io/yaml v1.6.0
 )
 
